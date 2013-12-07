@@ -1,0 +1,6 @@
+{
+  "name": "jquery",
+  "version": "1.10.2",
+  "main": "jquery.js",
+  "scripts": ["jquery.js"]
+}

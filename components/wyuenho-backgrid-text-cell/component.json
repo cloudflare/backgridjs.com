@@ -1,0 +1,23 @@
+{
+  "name": "backgrid-text-cell",
+  "repo": "wyuenho/backgrid-text-cell",
+  "description": "Backgrid.js extension for long texts.",
+  "version": "0.3.0",
+  "keywords": [
+    "backbone",
+    "backgrid"
+  ],
+  "main": "backgrid-text-cell.js",
+  "scripts": [
+    "backgrid-text-cell.js"
+  ],
+  "styles": [
+    "backgrid-text-cell.css"
+  ],
+  "dependencies": {
+    "jashkenas/underscore": "*",
+    "jashkenas/backbone": "*",
+    "wyuenho/backgrid": "*"
+  },
+  "license": "MIT"
+}

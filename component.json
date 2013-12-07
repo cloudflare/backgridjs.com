@@ -1,0 +1,34 @@
+{
+  "name": "backgridjs-com",
+  "repo": "wyuenho/backgridjs-com",
+  "main": "js/main.js",
+  "styles": [
+    "css/main.css"
+  ],
+  "scripts": [
+    "js/main.js"
+  ],
+  "local": [
+    "jquery",
+    "bootstrap",
+    "codemirror"
+  ],
+  "dependencies": {
+    "jquery": "*",
+    "bootstrap": "*",
+    "codemirror": "*",
+    "jashkenas/underscore": "*",
+    "jashkenas/backbone": "*",
+    "wyuenho/backbone-pageable": "*",
+    "wyuenho/backgrid": "*",
+    "wyuenho/backgrid-paginator": "*",
+    "wyuenho/backgrid-filter": "*",
+    "wyuenho/backgrid-select-all": "*",
+    "wyuenho/backgrid-text-cell": "*",
+    "wyuenho/backgrid-moment-cell": "*",
+    "wyuenho/backgrid-select2-cell": "*"
+  },
+  "paths": [
+    "components"
+  ]
+}

@@ -1,0 +1,102 @@
+#social-media {
+  padding: 14px 0;
+}
+
+#social-media .g-plusone {
+  display: inline-block;
+}
+
+#social-media * {
+  vertical-align: middle !important;
+}
+
+#social-media > a {
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.page-header {
+  margin: 30px 0;
+}
+
+h1,h2,h3,h4,h5,h6,.navbar-brand {
+  font-family: 'Hoefler Text', Baskerville, Times, Georgia, 'Times New Roman', serif;
+  font-weight: normal;
+}
+
+.note {
+  color: #777;
+  font-style: italic;
+  font-family: Baskerville, serif;
+  font-size: 15px;
+}
+
+.note h1,
+.note h2,
+.note h3,
+.note h4,
+.note h5,
+.note h6 {
+  font-size: 15px;
+  margin: 20px 0 0;
+}
+
+.jumbotron {
+  margin-top: 70px;
+}
+
+.jumbotron h1 {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.nav.nav-stacked > li > a {
+  padding: 0;
+}
+
+.backgrid-container {
+  margin-bottom: 20px;
+}
+
+#example-2-result {
+  height: 592px;
+}
+
+#example-4-result .backgrid {
+  table-layout: fixed;
+}
+
+.CodeMirror {
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  height: auto;
+}
+
+.CodeMirror-scroll {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+@media (max-width: 767px) {
+
+  .navbar.navbar-fixed-top {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .jumbotron h1 {
+    font-size: 48px;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 479px) {
+  .jumbotron {
+    padding: 10px;
+  }
+}

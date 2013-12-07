@@ -1,0 +1,30 @@
+{
+  "name": "backgridjs.com",
+  "version": "0.3.0",
+  "author": "Jimmy Yuen Ho Wong and contributors <wyuenho@gmail.com>",
+  "description": "Documentation site for Backgrid",
+  "homepage": "http://backgridjs.com/",
+  "keywords": [
+    "backgrid",
+    "backbone"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/wyuenho/backgridjs.com"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
+    "grunt-component-build": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-recess": "~0.3.3"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "private": true
+}

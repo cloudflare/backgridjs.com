@@ -1,0 +1,18 @@
+{
+  "name": "bootstrap",
+  "version": "3.0.2",
+  "main": "js/bootstrap.js",
+  "scripts": ["js/bootstrap.js"],
+  "styles": [
+    "css/bootstrap.css",
+    "css/bootstrap-theme.css"
+  ],
+  "fonts": [
+    "fonts/glyphicons-halflings-regular.eot",
+    "fonts/glyphicons-halflings-regular.svg",
+    "fonts/glyphicons-halflings-regular.ttf",
+    "fonts/glyphicons-halflings-regular.woff"
+  ],
+  "local": ["jquery"],
+  "paths": ["components"]
+}

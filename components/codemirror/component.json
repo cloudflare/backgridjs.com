@@ -1,0 +1,12 @@
+{
+  "name": "codemirror",
+  "version": "3.20.0",
+  "main": "codemirror-compressed.js",
+  "scripts": [
+    "codemirror-compressed.js"
+  ],
+  "styles": [
+    "codemirror.css",
+    "eclipse.css"
+  ]
+}
