@@ -1,0 +1,73 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Column{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-2">
+        <h2>Columns</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Column" title="Backgrid.Column">Backgrid.Column</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Columns" title="Backgrid.Columns">Backgrid.Columns</a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <h3>Column Defaults</h3>
+        <p>Column defaults and required parameters are defined in
+          the <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Column-method-initialize">Backgrid.Column#initialize</a>
+          method.</p>
+        <h3>Column Definition</h3>
+        <p>A Column is a placeholder for a column definition.</p>
+        <p>You usually don&apos;t need to create an instance of this class
+          yourself, as a collection of column instances will be created for
+          you from a list of column object literals you provide to the
+          Backgrid view class constructors.</p>
+        <p>Internally, columns are stored as a collection in the form of
+          Backgrid.Columns. In addition, all parent views will convert the
+          column definition into
+          a <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Columns">Backgrid.Columns</a>
+          collection and pass a reference to any subviews that require
+          it.</p>
+        <h3>Listening to Column Attribute Changes</h3>
+        <p>Occasionally, you may want to listen to column attribute change
+          events. In that case, you can choose to initialize a
+          Backgrid.Columns collection and listen to events from the
+          individual models.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var myColumns = new Backgrid.Columns({
+            name: "id", label: "ID", cell: "string"
+          }, {
+            // ...
+          });
+
+          myColumns.on("change:renderable", function (col, colAttr) {
+            if (!colAttr) {
+              // hide the column
+            }
+          });
+
+          var myGrid = new Backgrid.Grid({
+            columns: myColumns,
+            collection: someCollection
+          });
+
+          //...</textarea>
+        <h3>Getting the Column Definitions from the Server</h3>
+        <p>Since Backgrid.Columns is also a Backbone.Collection, you can
+          dynamically load and store your column definition via your server.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var MyColumns = Backgrid.Columns.extend({
+            url: "http://www.example.com/columns"
+          });
+
+          var columns = new MyColumns();
+          column.fetch().done(function () {
+            var grid = new Backgrid.Grid({
+              columns: columns,
+              collection: someCollection
+            });
+
+            $("#grid-container").append(grid.render().el);
+          });</textarea>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

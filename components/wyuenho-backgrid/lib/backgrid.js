@@ -523,6 +523,11 @@ _.extend(EmailFormatter.prototype, {
 /**
    Formatter for SelectCell.
 
+   If the type of a model value is not a string, it is expected that a subclass
+   of this formatter is provided to the SelectCell, with #toRaw overridden to
+   convert the string value returned from the DOM back to whatever value is
+   expected in the model.
+
    @class Backgrid.SelectFormatter
    @extends Backgrid.CellFormatter
    @constructor
@@ -543,7 +548,6 @@ _.extend(SelectFormatter.prototype, {
     return _.isArray(rawValue) ? rawValue : rawValue != null ? [rawValue] : [];
   }
 });
-
 
 /*
   backgrid
@@ -1591,23 +1595,23 @@ var Column = Backgrid.Column = Backbone.Model.extend({
      @cfg {string|Backgrid.HeaderCell} [defaults.headerCell] The default header
      cell type.
 
-     @cfg {boolean|string} [defaults.sortable=true] Whether this column is
-     sortable. If the value is a string, a method will the same name will be
-     looked up from the column instance to determine whether the column should
-     be sortable. The method's signature must be `function (Backgrid.Column,
-     Backbone.Model): boolean`.
+     @cfg {boolean|string|function(): boolean} [defaults.sortable=true] Whether
+     this column is sortable. If the value is a string, a method will the same
+     name will be looked up from the column instance to determine whether the
+     column should be sortable. The method's signature must be `function
+     (Backgrid.Column, Backbone.Model): boolean`.
 
-     @cfg {boolean|string} [defaults.editable=true] Whether this column is
-     editable. If the value is a string, a method will the same name will be
-     looked up from the column instance to determine whether the column should
-     be editable. The method's signature must be `function (Backgrid.Column,
-     Backbone.Model): boolean`.
+     @cfg {boolean|string|function(): boolean} [defaults.editable=true] Whether
+     this column is editable. If the value is a string, a method will the same
+     name will be looked up from the column instance to determine whether the
+     column should be editable. The method's signature must be `function
+     (Backgrid.Column, Backbone.Model): boolean`.
 
-     @cfg {boolean|string} [defaults.renderable=true] Whether this column is
-     renderable. If the value is a string, a method will the same name will be
-     looked up from the column instance to determine whether the column should
-     be renderable. The method's signature must be `function (Backrid.Column,
-     Backbone.Model): boolean`.
+     @cfg {boolean|string|function(): boolean} [defaults.renderable=true]
+     Whether this column is renderable. If the value is a string, a method will
+     the same name will be looked up from the column instance to determine
+     whether the column should be renderable. The method's signature must be
+     `function (Backrid.Column, Backbone.Model): boolean`.
 
      @cfg {Backgrid.CellFormatter | Object | string} [defaults.formatter] The
      formatter to use to convert between raw model values and user input.
@@ -1655,11 +1659,11 @@ var Column = Backgrid.Column = Backbone.Model.extend({
 
      @param {string|Backgrid.HeaderCell} [attrs.headerCell]
 
-     @param {boolean|string} [attrs.sortable=true]
+     @param {boolean|string|function(): boolean} [attrs.sortable=true]
 
-     @param {boolean|string} [attrs.editable=true]
+     @param {boolean|string|function(): boolean} [attrs.editable=true]
 
-     @param {boolean|string} [attrs.renderable=true]
+     @param {boolean|string|function(): boolean} [attrs.renderable=true]
 
      @param {Backgrid.CellFormatter | Object | string} [attrs.formatter]
 
@@ -1678,7 +1682,7 @@ var Column = Backgrid.Column = Backbone.Model.extend({
      - Backgrid.Cell
      - Backgrid.CellFormatter
    */
-  initialize: function (attrs) {
+  initialize: function () {
     if (!this.has("label")) {
       this.set({ label: this.get("name") }, { silent: true });
     }
@@ -1738,6 +1742,8 @@ _.each(["sortable", "renderable", "editable"], function (key) {
   Column.prototype[key] = function () {
     var value = this.get(key);
     if (_.isString(value)) return this[value];
+    else if (_.isFunction(value)) return value;
+
     return !!value;
   };
 });
@@ -1884,14 +1890,14 @@ var EmptyRow = Backgrid.EmptyRow = Backbone.View.extend({
   /** @property */
   tagName: "tr",
 
-  /** @property */
+  /** @property {string|function(): string} */
   emptyText: null,
 
   /**
      Initializer.
 
      @param {Object} options
-     @param {string} options.emptyText
+     @param {string|function(): string} options.emptyText
      @param {Backbone.Collection.<Backgrid.Column>|Array.<Backgrid.Column>|Array.<Object>} options.columns Column metadata.
    */
   initialize: function (options) {
@@ -1907,7 +1913,7 @@ var EmptyRow = Backgrid.EmptyRow = Backbone.View.extend({
 
     var td = document.createElement("td");
     td.setAttribute("colspan", this.columns.length);
-    td.textContent = this.emptyText;
+    td.textContent = _.result(this, "emptyText");
 
     this.el.setAttribute("class", "empty");
     this.el.appendChild(td);
@@ -1990,7 +1996,7 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
       var direction = this.column.get('direction');
       if (direction) this.$el.removeClass(direction);
       if (dir) this.$el.addClass(dir);
-      this.column.set('direction', dir)
+      this.column.set('direction', dir);
     }
 
     return this.column.get('direction');
@@ -2176,7 +2182,7 @@ var Body = Backgrid.Body = Backbone.View.extend({
      @param {Backbone.Collection.<Backgrid.Column>|Array.<Backgrid.Column>|Array.<Object>} options.columns
      Column metadata.
      @param {Backgrid.Row} [options.row=Backgrid.Row] The Row class to use.
-     @param {string} [options.emptyText] The text to display in the empty row.
+     @param {string:function(): string} [options.emptyText] The text to display in the empty row.
 
      @throws {TypeError} If options.columns or options.collection is undefined.
 

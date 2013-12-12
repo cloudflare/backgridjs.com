@@ -1,0 +1,63 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Text Cell{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-3">
+        <h2>TextCell</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="api/index.html#!/api/Backgrid.Extension.TextCell">Backgrid.Extension.TextCell</a></li>
+          <li><a href="api/index.html#!/api/Backgrid.Extension.TextareaEditor">Backgrid.Extension.TextareaEditor</a></li>
+        </ul>
+        <h4>Best Used On</h4>
+        <ul>
+          <li>Desktop</li>
+          <li>Mobile</li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <h3>When to Use</h3>
+        <p>TextCell is a string cell type that renders a form with a text
+          area in a modal dialog instead of
+          an <code>&lt;input type="text" /&gt;</code> editor. It
+          is best suited for entering a large body of text.</p>
+        <h3>Prerequisites</h3>
+        <p>TextCell requires <a
+          href="http://twitter.github.com/bootstrap/javascript.html#modals"
+          title="bootstrap-modal.js">bootstrap-modal.js</a> to render
+          it&apos;s modal dialog. TextCell is tested against Bootstrap
+          version 2.2.2. Bootstrap version 2.3.x is not recommended due to
+          a number of critical bugs.</p>
+        <textarea class="code-snippet" data-mode="htmlmixed">
+          &lt;link rel="stylesheet" href="assets/css/bootstrap.css" /&gt;
+          <!-- include this if you want to use TextCell on mobile browsers -->
+          &lt;link rel="stylesheet" href="assets/css/bootstrap-responsive.css" /&gt;
+          &lt;link rel="stylesheet" href="lib/extensions/text-cell/backgrid-text-cell.css" /&gt;
+          &lt;script src="assets/js/bootstrap.js"&gt;&lt;/script&gt;
+          &lt;script src="lib/extensions/text-cell/backgrid-text-cell.js"&gt;&lt;/script&gt;</textarea>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          var Book = Backbone.Model.extend({});
+          var Books = Backbone.Collection.extend({
+            model: Book
+          });
+          var books = new Books([{ description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed nibh tortor, nec mollis diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi venenatis sollicitudin vulputate. Aenean dapibus ultrices odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id molestie erat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut nec erat quis massa gravida facilisis. Ut at nisi ac tortor consectetur ullamcorper id nec purus. Fusce condimentum, lacus vitae convallis condimentum, velit orci auctor dui, et mattis dui est sed purus. Praesent pharetra, metus sit amet lacinia adipiscing, purus dolor sodales orci, non malesuada orci orci sit amet dolor. Sed id nisl et neque sollicitudin condimentum eget in nisl." }]);
+
+          var grid = new Backgrid.Grid({
+            columns: [{
+              name: "description",
+              label: "Description",
+              // You can use Backgrid.Extension.TextCell.extend() too.
+              // See the JSDoc for a list of configurable options.
+              cell: "text"
+            }],
+
+            collection: books
+          });
+
+          $("#text-cell-example-result").append(grid.render().el);
+        </textarea>
+        <h3>Result</h3>
+        <div id="text-cell-example-result" class="backgrid-container" style="height: auto;"></div>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

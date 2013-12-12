@@ -1,0 +1,255 @@
+<!doctype html>
+<!--
+  backgrid
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="keywords" content="backgrid,backgrid.js,backbone,backbone.js,datagrid,grid,paginator,javascript" />
+    <meta name="description" content="A powerful widget set for building data grids with Backbone.js" />
+
+    <title>Backgrid.js - Extension Development</title>
+
+    <link rel="canonical" href="http://backgridjs.com" />
+
+    <link rel="stylesheet" href="/build/build.min.css" />
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+        <![endif]-->
+  </head>
+  <body>
+    <div id="main">
+      <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="/"
+                 class="navbar-brand" title="A powerful widget set for building data grids with Backbone.js">Backgrid.js</a>
+              <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+            </div>
+            <div class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Introduction
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/index.html#features">Features</a></li>
+                    <li><a href="/index.html#getting-started">Getting Started</a></li>
+                    <li><a href="/index.html#basic-example">Basic Example</a></li>
+                    <li><a href="/index.html#complete-example">Complete Example</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Core API
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="/ref/forewords.html">Forewords</a>
+                      <div class="divider"></div>
+                    </li>
+                    <li><a href="/ref/grid.html">Grid</a></li>
+                    <li><a href="/ref/column.html">Column</a></li>
+                    <li><a href="/ref/cell.html">Cell</a></li>
+                    <li><a href="/ref/formatter.html">Formatter</a></li>
+                    <li><a href="/ref/header.html">Header</a></li>
+                    <li><a href="/ref/row.html">Row</a></li>
+                    <li><a href="/ref/body.html">Body</a></li>
+                    <li><a href="/ref/footer.html">Footer</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Extensions
+                    <b class="caret"></b>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="/ref/extensions/development.html">Development Guide</a>
+                        <div class="divider"></div>
+                      </li>
+                      <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
+                      <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
+                      <li><a href="/ref/extensions/filter.html">Filter</a></li>
+                      <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
+                      <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
+                      <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
+                    </ul>
+                  </a>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    More Info
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/misc/styling.html">Styling</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/misc/faq.html">FAQ</a></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/releases">Change Log</a></li>
+                    <li><a href="/misc/license.html">License</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right visible-md visible-lg">
+                <li id="social-media">
+                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://backgridjs.com" data-via="wong_jim" data-hashtags="backgridjs,backbone_js">Tweet</a>
+                  <div class="g-plusone" data-size="medium"></div>
+                  <iframe src="http://ghbtns.com/github-btn.html?user=wyuenho&amp;repo=backgrid&amp;type=watch&amp;count=true"
+                          allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                  <a href="https://coderwall.com/wyuenho"><img alt="Endorse wyuenho on Coderwall" width="110" height="20" src="http://api.coderwall.com/wyuenho/endorsecount.png" /></a>
+                  <iframe allowtransparency="true" frameborder="0" scrolling="no"
+                          style="border: 0; margin: 0 0 0 15px; padding: 0;"
+                          src="https://www.gittip.com/wyuenho/widget.html" width="48pt" height="22pt"></iframe>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <a class="visible-md visible-lg" href="https://github.com/wyuenho/backgrid">
+            <img style="position: absolute; top: 0; right: 0; border: 0;" width="149" height="149" src="/img/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
+          </a>
+        </div>
+      </header>
+      <div class="container content">
+        
+    <div class="page-header">
+      <h1>Extensions</h1>
+      <p>It is not necessary to create an extension project if you simply
+        want to customize or extend some Backgrid.js classes for your own
+        private use; however, if you have one or more Backgrid.js
+        components that add new features to the core, you may consider
+        packaging them up to share with the world.</p>
+      <p>A Backgrid.js extension is a directory structure that packages
+        the necessary JS, CSS, tests, and document files.</p>
+      <p>To create an extension, clone the tree into your file system and
+        type:</p>
+      <textarea class="code-snippet" data-mode="shell">
+        $ cd backgrid
+        $ make extension</textarea>
+      <p>A new extension directory structure should have been created for
+        you under <code>src/extensions</code>. The current implementation
+        of <code>make extension</code> only creates a blank directory
+        filled with a number of blank files for you. You should take a
+        look at other extensions to copy what you need. e.g. Makefile,
+        .gitignore.</p>
+      <h2>Extension Development Guide</h2>
+      <p>The following is a guideline for extension development:</p>
+      <ul>
+        <li>There should be 1 .js file and 1 .css file. If your code base
+          gets too large, consider breaking it into multiple extensions.</li>
+        <li>There should be 1 .min.js file and 1 .min.css file produced
+          for distribution.</li>
+        <li>Your Makefile should emulate other extensions as closely
+          as possible. Specifically, you should have a <code>dist</code>
+          rule that will take a <code>DIST_DIR</code> variable from
+          top-level make invocations and copy the output files to the
+          destination directory.</li>
+        <li>You should use recess to lint your CSS file(s).</li>
+        <li>You should follow the JS coding style defined <a
+          href="https://github.com/wyuenho/backgrid/blob/gh-pages/CONTRIBUTING.md#coding-style">here</a>.</li>
+        <li>Your .gitignore file inside the extension directory should
+          ignore all output files.</li>
+        <li>You should wrap your JS file in an immediately invoked
+          anonymous function that lists out your dependencies in the
+          parameter list.</li>
+        <li>Your extension should live under
+          the <code>Backgrid.Extension</code> module.</li>
+        <li>You should clearly specify your dependencies in the README
+          file if your extension relies on any libraries other than
+          Backgrid.js and its dependencies.</li>
+        <li>When in doubt, look at the other extensions for clues in
+          organizing your code.</li>
+      </ul>
+    </div>
+  
+      </div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <p class="text-muted">
+          Copyright &copy; 2013 <a href="mailto:wyuenho@gmail.com" title="Jimmy Yuen Ho Wong">Jimmy
+          Yuen Ho Wong</a> and contributors. <a href="/misc/license" title="License">MIT Licensed.</a>
+        </p>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36403214-1']);
+      _gaq.push(['_setDomainName', 'backgridjs.com']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <script src="/build/build.min.js"></script>
+    <script>
+      $ = require("jquery");
+      require("bootstrap");
+      _ = require("underscore");
+      Backbone = require("backbone");
+      Backbone.$ = $;
+      require("backbone-pageable");
+      Backgrid = require("backgrid");
+      require("backgrid-paginator");
+      require("backgrid-filter");
+      require("backgrid-select-all");
+      require("backgrid-select2-cell");
+      require("backgrid-moment-cell");
+      require("backgrid-text-cell");
+      require("codemirror");
+      require("backgridjs-com").setUpCodeMirror();
+      $(document).ready(function () {
+        $("a[href^='/#']").click(function (e) {
+          e.preventDefault();
+          var target = this.hash;
+          if (target) {
+            var $target = $(target);
+            $("html, body").stop().animate({
+              "scrollTop": $target.offset().top - 55
+            }, 500, "swing", function() {
+              window.location.hash = target;
+            });
+          }
+        });
+      });
+    </script>
+    <script>
+      // Google +1
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+
+      // Tweet Button
+      !function(d,s,id) {
+        var js,fjs=d.getElementsByTagName(s)[0];
+        if(!d.getElementById(id)){
+          js=d.createElement(s);
+          js.id=id;
+          js.src="//platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js,fjs);
+        }
+      }(document,"script","twitter-wjs");
+    </script>
+    
+  </body>
+</html>
+

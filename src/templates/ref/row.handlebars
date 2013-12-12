@@ -1,0 +1,47 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Row{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-2">
+        <h2>Row</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Row">Backgrid.Row</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.EmptyRow">Backgrid.EmptyRow</a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <h3>Customizing Row</h3>
+        <p class="label label-warning">Advanced Usage</p>
+        <p>A row is simply an intermediary view class that constructs the
+          appropriate Cell class instances for rendering the model
+          columns.</p>
+        <p>If you would like to override how a row is rendered, you may
+          define your own Row subclass and give it to the Grid constructor
+          as an option:</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          // Suppose you want to highlight the entire row when an editable field is focused
+          var FocusableRow = Backgrid.Row.extend({
+            highlightColor: 'lightYellow',
+            events: {
+              focusin: 'rowFocused',
+              focusout: 'rowLostFocus'
+            },
+            rowFocused: function() {
+              this.$el.css('background-color', this.highlightColor);
+            },
+            rowLostFocus: function() {
+              this.$el.removeAttr('style');
+            }
+          });
+
+          var grid = new Backgrid.Grid({
+            row: FocusableRow, // <-- Tell the Body class to use FocusableRow to render rows.
+            columns: [{
+              //...
+            }],
+            collection: col
+          });</textarea>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

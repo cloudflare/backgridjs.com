@@ -1,0 +1,86 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Moment Cell{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-3">
+        <h2>MomentCell</h2>
+        <h4>Best Used On</h4>
+        <ul>
+          <li>Desktop</li>
+          <li>Mobile</li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <h3>When to Use</h3>
+        <p>While the core DatetimeCell is light-weight and does the job of
+          formatting IS0-8601 datetime strings fairly well, it may not be
+          well suited when the datatime strings are not in ISO
+          format.</p>
+        <h3>Prerequisites</h3>
+        <p>MomentCell uses <a href="http://momentjs.com/"
+          title="Moment.js">Moment.js</a> to render a very powerful
+          datetime cell. MomentCell is tested against Moment.js version
+          1.7.2.</p>
+        <textarea class="code-snippet" data-mode="htmlmixed">
+          &lt;link rel="stylesheet" href="lib/extensions/moment-cell/backgrid-moment-cell.css" /&gt;
+          &lt;script src="assets/js/moment/moment-with-langs.js"&gt;&lt;/script&gt;
+          &lt;script src="lib/extensions/moment-cell/backgrid-moment-cell.js"&gt;&lt;/script&gt;</textarea>
+        <h3>Usage</h3>
+        <p>The default MomentCell acts just like DatetimeCell, so if you
+          have a column with datetime values, the default MomentCell is
+          almost a drop-in replacement, with the only difference being
+          that an offset is always present in the output.</p>
+        <p>In addition to the ability to read and write ISO-8601 datetime
+          strings. By specifying the model and display formats, MomentCell
+          can convert and validated any datetime values moment.js
+          understands.
+        <p>Like the core cell types, you can configure MomentCell
+          simply by extending it.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          var Datum = Backbone.Model.extend({});
+
+          var Data = Backbone.Collection.extend({
+            model: Datum
+          });
+
+          var data = new Data([{
+            date: "270/3/1",
+            time: "12:34:56.789",
+            datetime: "1911-10-10T07:00:00"
+          }]);
+
+          var grid = new Backgrid.Grid({
+            columns: [{
+              name: "datetime",
+              // You can use a default MomentCell by just writing a name
+              cell: "moment"
+            }, {
+              name: "date",
+              cell: Backgrid.Extension.MomentCell.extend({
+                modelFormat: "YYYY/M/D",
+                // You can specify the locales of the model and display formats too
+                displayLang: "zh-tw",
+                displayFormat: "YYYY-MMM-DD"
+              })
+            }, {
+              name: "time",
+              cell: Backgrid.Extension.MomentCell.extend({
+                modelInUTC: true,
+                modelFormat: "HH:mm:ss.SSS",
+                displayFormat: "H:m:s",
+                // By default all the values are presumed to be in UTC,
+                // you can convert it to the browser's local time if you
+                // want
+                displayInUTC: false
+              })
+            }],
+            collection: data
+          });
+
+          $("#moment-cell-example-result").append(grid.render().el);</textarea>
+        <h3>Result</h3>
+        <div id="moment-cell-example-result" class="backgrid-container" style="height: auto;"></div>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

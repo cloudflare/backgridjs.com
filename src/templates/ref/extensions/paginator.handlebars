@@ -1,0 +1,145 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Paginator{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-3">
+        <h2>Paginator</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="api/index.html#!/api/Backgrid.Extension.Paginator">Backgrid.Extension.Paginator</a></li>
+        </ul>
+        <h4>Best Used On</h4>
+        <ul>
+          <li>Desktop</li>
+          <li>Mobile</li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <h3>When to Use</h3>
+        <p>When you have more data than your grid can fit, you can use
+          Paginator to break the display of your data into pages.</p>
+        <h3>Prerequisites</h3>
+        <p>Backgrid.Extension.Paginator needs a Backbone.Collection
+          subclass that supports pagination. Luckily, there is already one
+          available specially written for this purpose
+          - <a href="https://github.com/wyuenho/backbone-pageable"
+          title="backbone-pageable">Backbone.PageableCollection</a>.</p>
+        <p>Backbone.PageableCollection is a strict superset of the vanilla
+          Backbone.Collection with additional pagination and sorting
+          functionality. If you like, you can use
+          Backbone.PageableCollection throughout your application and it
+          will work exactly the same as Backbone.Collection.</p>
+        <textarea class="code-snippet" data-mode="htmlmixed">
+          &lt;link rel="stylesheet" href="lib/extensions/paginator/backgrid-paginator.css" /&gt;
+          &lt;script src="assets/js/backbone-pageable.js"&gt;&lt;/script&gt;
+          &lt;script src="lib/extensions/paginator/backgrid-paginator.js"&gt;&lt;/script&gt;</textarea>
+        <h3>Backbone.PageableCollection</h3>
+        <p>Out of the box, Backbone.PageableCollection works with RESTful
+          APIs that accept Ruby's will_paginate pagination query
+          parameters but you are able to configure the query string
+          mapping anyway you like. The following example works with
+          <a href="http://developer.github.com/v3/" title="GitHub API
+          v3">Github's API</a>:</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          var Issue = Backbone.Model.extend({});
+
+          // Works exactly like Backbone.Collection.
+          var Issues = Backbone.PageableCollection.extend({
+            model: Issue,
+
+            // Enable infinite paging
+            mode: "infinite",
+
+            url: "https://api.github.com/repos/jashkenas/backbone/issues?state=closed",
+
+            // Initial pagination states
+            state: {
+              pageSize: 15,
+              sortKey: "updated",
+              order: 1
+            },
+
+            // You can remap the query parameters from `state` keys from
+            // the default to those your server supports
+            queryParams: {
+              totalPages: null,
+              totalRecords: null,
+              sortKey: "sort",
+              order: "direction",
+              directions: {
+                "-1": "asc",
+                "1": "desc"
+              }
+            }
+          });
+
+          var issues = new Issues();</textarea>
+        <h3>Configuring Backgrid.Extension.Paginator</h3>
+        <p>Backgrid.Extension.Paginator supports a few configuration
+          options to adjust to the size of the result set.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          var issueGrid = new Backgrid.Grid({
+
+            columns: [{
+              name: "number",
+              cell: Backgrid.IntegerCell.extend({ orderSeparator: '' }),
+              editable: false,
+              sortable: false
+            }, {
+              name: "title",
+              cell: "string",
+              sortable: false
+            }, {
+              name: "body",
+              cell: "text", // See the TextCell extension in the next section
+              sortable: false
+            }, {
+              name: "updated_at",
+              cell: "datetime",
+              editable: false,
+              sortable: false
+            }, {
+              name: "closed_at",
+              cell: "datetime",
+              editable: false,
+              sortable: false
+            }],
+
+            collection: issues
+          });
+
+          var $paginatorExample = $("#paginator-example-result");
+          $paginatorExample.append(issueGrid.render().el);
+
+          var GithubPaginator = Backgrid.Extension.Paginator.extend({
+
+            // If you anticipate a large number of pages, you can adjust
+            // the number of page handles to show. The sliding window
+            // will automatically show the next set of page handles when
+            // you click next at the end of a window.
+            windowSize: 20, // Default is 10
+
+            // If you anticipate a small number of pages, you can choose
+            // to disable the rendering of fast forward handles to save
+            // space.
+            hasFastForward: true, // true is the default
+
+            fastForwardHandleLabels: {
+              prev: "<",
+              next: ">"
+            }
+          });
+
+          var paginator = new GithubPaginator({
+            collection: issues
+          });
+          $paginatorExample.append(paginator.render().el);
+
+          issues.getFirstPage();</textarea>
+      </div>
+      <div class="col-md-12">
+        <h3>Result</h3>
+        <div id="paginator-example-result" class="backgrid-container" style="height: auto"></div>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

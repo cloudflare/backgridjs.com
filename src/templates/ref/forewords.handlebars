@@ -1,0 +1,84 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Core{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="page-header">
+          <h1>Backgrid Core</h1>
+        </div>
+        <p>Backgrid aims to be a highly modular and flexible library that aims
+          to provide you with a set of basic building blocks for creating all
+          kinds of data grids.</p>
+        <h2>Architecture</h2>
+        <p>Backgrid is primarily comprised of a set of hightly reusable <a
+          href="http://backbonejs.org/#View"
+          title="Backbone.View">Backbone.View</a> subclasses and a number of
+          internal <a href="/ref/column.html" title="Column">models</a> and <a
+          href="/ref/formatter.html" title="Formatter">helper classes</a>. In
+          practical terms, this architecture ensures that if you are already
+          familiar with Backbone, you can carry that knowledge over and apply to
+          Backgrid directly.</p>
+        <h2>Laying out Components</h2>
+        <p>Backgrid's View components are, borrowing from <a
+          href="http://marionettejs.com/" title="Marionette">Marionette</a>'s
+          parlance, primarily <em>CollectionView</em> and <em>ItemView</em>
+          components, meaning that are meant to be layed out
+          sequentially. However, the Grid's root element itself can be inserted
+          to any where in the DOM.
+          <aside class="note">
+            <h5>Note:</h5>
+            <p>You can use Backgrid with or without Marionette, Backgrid does
+              not depend on Marionette at all.</p>
+          </aside>
+        </p>
+        <h2>Customization</h2>
+        <p>If you are coming from a jQuery background, you'd notice that most of
+          the jQuery plugins, no matter how "good" that are, for some measure of
+          "goodness", are extremely difficult to customize. Most jQuery plugins
+          with a modicum of complexity will give you at least dozens of
+          options. The general rule of thumb is, if it doesn't work the way you
+          want it, ask the author to throw more options at the problem. Failing
+          that, spend an inordinate amount of time to source for another similar
+          plugin. If all else failed, you have to roll your own plugin.</p>
+        <p>Your laziness has backfired, but that doesn't have to be the case.</p>
+        <p>The inherant problem with the jQuery plugin model is that it doesn't
+          offer you any help other than giving you a namespace, and the combined
+          laziness of plugin authors and users have created an ecosystem full of
+          opaque plugins that produce DOM structures that are hard to
+          comprehend, hard to style and behaviors impossible to alter, no matter
+          how trivial they should be.</p>
+        <p>
+          Backgrid offers 3 levels of customization:
+          <ul>
+            <li>
+              Options to the Grid constructor - Used for required parameters and
+              generic behavior provide by Backgrid that you want to switch on or
+              off.
+            </li>
+            <li>
+              Styling via CSS - Backgrid's generated DOM structure consists
+              solely of your plain old<code>&lt;table&gt;</code> HTML elements,
+              just style them as such.
+            </li>
+            <li>
+              Inheritance - Subclass a Backgrid component, give it your
+              preferred behavior, give the new class to the Grid constructor and
+              voila.
+            </li>
+          </ul>
+        </p>
+        <p>Go on to the Core API reference to find out more:</p>
+        <ul>
+          <li><a href="/ref/grid.html">Grid</a></li>
+          <li><a href="/ref/column.html">Column</a></li>
+          <li><a href="/ref/cell.html">Cell</a></li>
+          <li><a href="/ref/formatter.html">Formatter</a></li>
+          <li><a href="/ref/header.html">Header</a></li>
+          <li><a href="/ref/row.html">Row</a></li>
+          <li><a href="/ref/body.html">Body</a></li>
+          <li><a href="/ref/footer.html">Footer</a></li>
+        </ul>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

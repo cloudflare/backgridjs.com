@@ -1,0 +1,41 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Footer{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-2">
+        <h2>Footer</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Footer">Backgrid.Footer</a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <h3>Putting Things at The End of a Table</h3>
+        <p>The default Footer class is an abstract class that only defines
+          a number of required constructor parameters. If you wish to
+          append additional information to the end of a table you must
+          subclass Footer and supply the class to the Grid
+          constructor.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var CaptionFooter = Backgrid.Footer.extend({
+
+            render: function () {
+              this.$el.html("&lt;tr&gt;&lt;td colspan=&apos;6&apos;&gt;Hello World!&lt;/td&gt;&lt;/tr&gt;");
+              return this;
+            }
+
+          });
+
+          var grid = new Backgrid.Grid({
+            columns: [{
+              //...
+            }],
+            collection: col,
+            footer: CaptionFooter // <--
+          });</textarea>
+        <p>Very often, you&apos;ll want to append a paginator to the end
+          of your table if there are too many rows. For this, there&apos;s already
+          a <a href="#api-paginator">paginator extension</a> provided for you.</p>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

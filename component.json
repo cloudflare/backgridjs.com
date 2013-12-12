@@ -26,9 +26,12 @@
     "wyuenho/backgrid-select-all": "*",
     "wyuenho/backgrid-text-cell": "*",
     "wyuenho/backgrid-moment-cell": "*",
-    "wyuenho/backgrid-select2-cell": "*"
+    "wyuenho/backgrid-select2-cell": "*",
+    "fgnass/spin.js": "gh-pages",
+    "ivaynberg/select2": "*"
   },
   "paths": [
     "components"
-  ]
+  ],
+  "remotes": []
 }

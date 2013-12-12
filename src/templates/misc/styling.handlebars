@@ -1,0 +1,89 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Styling{{/replace}}
+  {{#replace "content"}}
+    <div class="page-header">
+      <h1>Styling</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p>Out of the box, Backgrid.js generates simple semantic HTML
+          table elements that you can style with pure CSS. This section is
+          only going to briefly describe some of the more important
+          classes, and things that you should be aware of when
+          styling.</p>
+
+        <div class="row">
+          <div class="col-md-6">
+            <h2>.backgrid-container</h2>
+            <p>This is the class that you should put into any container
+              element that will hold the generated table. By default, it
+              has a fixed maximum height and 100% width with no borders
+              and paddings. It also serves as a <em>positioned</em>
+              element so if you need to absolutely position any elements
+              inside your custom table element classes, you can position
+              them against this container.</p>
+          </div>
+          <div class="col-md-6">
+            <h2>&nbsp;</h2>
+            <textarea class="code-snippet" data-mode="css">
+              .backgrid-container {
+                position: relative;
+                display: block;
+                width: 100%;
+                height: 494px;
+                padding: 0;
+                overflow: auto;
+                border: 0;
+              }</textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h2>.backgrid</h2>
+            <p>This is the class that will be applied to every Backgrid.js
+              generated table. All other Backgrid.js default styles on
+              table elements will only apply to descendents
+              of tables of this class.</p>
+            <textarea class="code-snippet" data-mode="css">
+              /* Say you want to give some shiny gradient background colors
+                 to your table header */
+              .backgrid th {
+                background-image: linear-gradient(#2F2727, #1a82f7);
+              }
+              /* Or maybe you enjoy zebra stripes */
+              .backgrid tbody tr:nth-child(even) {
+                background-color: #f9f9f9;
+              }
+            </textarea>
+          </div>
+          <div class="col-md-6">
+            <h2>&nbsp;</h2>
+            <p>Although usually unnecessary, if you want to completely
+              remove all Backgrid.js styles, you can supply
+              a <code>className</code> attribute to
+              the <code>Backgrid.Grid</code> constructor:</p>
+            <textarea class="code-snippet" data-mode="javascript">
+              var grid = new Backgrid.Grid({
+                className: "my-awesome-css-animated-grid",
+                ...
+              });</textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>.backgrid .*-cell</h2>
+            <p>Every cell class Backgrid.js defines has a CSS class
+              applied to them of the same, but dasherized name. The
+              default styles apply a <code>text-align: left</code> to text
+              cells and <code>text-align: right</code> to numeric and
+              datetime cells. All cell editor that uses
+              the <code>&lt;input&gt;</code> element is absolutely
+              positioned against the table cell.</p>
+            <p>See the relevant <a href="#api-cell">cell classes</a> for
+              details.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

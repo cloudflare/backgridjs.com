@@ -1,0 +1,96 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Select All{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-3">
+        <h2>SelectAll</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectRowCell">Backgrid.Extension.SelectRowCell</a></li>
+          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell">Backgrid.Extension.SelectAllHeaderCell</a></li>
+        </ul>
+        <h3>Events</h3>
+        <ul class="nav nav-stacked">
+          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell-method-initialize">backgrid:select</a></li>
+          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell-method-initialize">backgrid:selected</a></li>
+        </ul>
+        <h4>Best Used On</h4>
+        <ul>
+          <li>Desktop</li>
+          <li>Mobile</li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <h3>When to Use</h3>
+        <p>When you want to select multiple models at a time for batch operations.</p>
+        <textarea class="code-snippet" data-mode="htmlmixed">
+          &lt;link rel="stylesheet" href="lib/extensions/select-all/backgrid-select-all.css" /&gt;
+          &lt;script src="lib/extensions/select-all/backgrid-select-all.js"&gt;&lt;/script&gt;</textarea>
+        <h3>Usage</h3>
+        <p>To enable the SelectAll extension, you simply have to add a new
+        column to your column definition like so:</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          var grid = new Backgrid.Grid({
+            columns: [{
+
+              // name is a required parameter, but you don't really want one on a select all column
+              name: "",
+
+              // Backgrid.Extension.SelectRowCell lets you select individual rows
+              cell: "select-row",
+
+              // Backgrid.Extension.SelectAllHeaderCell lets you select all the row on a page
+              headerCell: "select-all",
+
+            }].concat(columns),
+
+            collection: new Backbone.Collection([
+              {"name": "Afghanistan", "url": "http://en.wikipedia.org/wiki/Afghanistan", "pop": 25500100, "date": "2013-01-01", "percentage": 0.36, "id": 1},
+              {"name": "Albania", "url": "http://en.wikipedia.org/wiki/Albania", "pop": 2831741, "date": "2011-10-01", "percentage": 0.04, "id": 2}
+            ])
+          });
+
+          $("#select-all-example-result").append(grid.render().el);</textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        <h3>Result</h3>
+        <div id="select-all-example-result" class="backgrid-container" style="height: auto"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        <h3>Manipulating Selections Programatically</h3>
+        <p>At any point during the lifetime of your program, if you'd like
+        to get an array of the currently selected models after you've
+        rendered your grid, you can easily do so:</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          // This method is only available on Backgrid.Grid after you've
+          // include the SelectAll extension.
+          var selectedModels = grid.getSelectedModels();
+
+          // To deselect selected models
+          _.each(selectedModels, function (model) {
+            model.trigger("backgrid:select", model, false);
+          });
+
+          // Selecting even numbered rows
+          grid.collection.each(function (model, i) {
+            if (i % 2 == 0) model.trigger("backgrid:select", model, true);
+          });</textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        <p class="label label-info">Pro Tip</p>
+        <p>Each SelectRowCell will trigger a <code>backgrid:select</code>
+        event directly from the selected models when its checkbox value
+        changes, so if you want to react to those events, you can attach
+        your event handlers on the collection.</p>
+        <p>See the <a
+        href="api/index.html#!/api/Backgrid.Extension.SelectRowCell">API
+        documentation</a> for details.</p>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

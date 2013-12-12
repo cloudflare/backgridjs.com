@@ -1,0 +1,96 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Filters{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-3">
+        <h2>Filter</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="api/index.html#!/api/Backgrid.Extension.ServerSideFilter">Backgrid.Extension.ServerSideFilter</a></li>
+          <li><a href="api/index.html#!/api/Backgrid.Extension.ClientSideFilter">Backgrid.Extension.ClientSideFilter</a></li>
+          <li><a href="api/index.html#!/api/Backgrid.Extension.LunrFilter">Backgrid.Extension.LunrFilter</a></li>
+        </ul>
+        <h4>Best Used On</h4>
+        <ul>
+          <li>Desktop</li>
+          <li>Mobile</li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <h3>When to Use</h3>
+        <p>When you have lots of rows with lots of text, and you just want
+        to quickly get to the row that only contain certain keywords.</p>
+        <h3>Prerequisites</h3>
+        <p>All three Filter classes have an optional dependency
+          on <a href="http://twitter.github.com/bootstrap/"
+                title="Twitter Bootstrap">Twitter Bootstrap's CSS</a>.
+          This dependency is optional because the filter extension only
+          uses its CSS for rendering. You are free to override the default
+          template and CSS if you don't like it.</p>
+        <p>For LunrFilter, it has a hard dependency on <a
+          href="http://lunrjs.com/" title="lunr.js">lunr.js</a> for
+          full-text searching.</p>
+        <textarea class="code-snippet" data-mode="htmlmixed">
+          &lt;link rel="stylesheet" href="assets/css/bootstrap.css" /&gt;
+          &lt;link rel="stylesheet" href="lib/extensions/filter/backgrid-filter.css" /&gt;
+          &lt;script src="assets/js/lunr.js"&gt;&lt;/script&gt;
+          &lt;script src="lib/extensions/filter/backgrid-filter.js"&gt;&lt;/script&gt;</textarea>
+        <h3>Usage</h3>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+
+          // ServerSideFilter delegates the searching to the server by submitting a query.
+          var serverSideFilter = new Backgrid.Extension.ServerSideFilter({
+            collection: issues,
+            name: "labels", // the name of the URL query parameter
+            placeholder: "Search on the server" // HTML5 placeholder for the search box
+          });
+
+          $("#filter-example-result").append(serverSideFilter.render().el);
+
+          // ClientSideFilter performs a case-insensitive regular
+          // expression search on the client side by OR-ing the keywords in
+          // the search box together.
+          var clientSideFilter = new Backgrid.Extension.ClientSideFilter({
+            collection: pageableTerritories.fullCollection,
+            placeholder: "Search in the browser",
+            // The model fields to search for matches
+            fields: ['name'],
+            // How long to wait after typing has stopped before searching can start
+            wait: 150
+          });
+
+          $("#filter-example-result").append(clientSideFilter.render().el);
+
+          // LunrFilter is a specialized ClientSideFilter that uses
+          // lunr.js to perform full-text searching on the client side.
+          var lunrFilter = new Backgrid.Extension.LunrFilter({
+            collection: pageableTerritories.fullCollection,
+            placeholder: "Full-text searching",
+            // lunr.js field name and boost value
+            fields: {
+              name: 10
+            },
+            // lunr.js document key for indexing
+            ref: 'id',
+            wait: 150
+          });
+
+          $("#filter-example-result").append(lunrFilter.render().el);</textarea>
+        <div id="filter-example-result"></div>
+        <p class="label label-info">Pro Tip</p>
+        <p>The client-side filters won't work unless the collection
+          contains all the data for filtering at the time the filters are
+          initialized. If you are fetching data after the filters were
+          initialized and using Backbone 1.0.0+, you should pass
+          <code>{remove: true}</code> or <code>{reset: true}</code> to
+          <code>Collection#fetch()</code> due to the change to
+          <code>Collection#set()</code>
+          after <a href="http://backbonejs.org/#Collection-fetch"
+                   title="Backbone.Collection#fetch">fetching</a> in Backbone
+          1.0.0+. For this reason, the examples above may or may not work
+          due to the asynchronous nature of fetching. To see a working
+          example, scroll up to
+        <a href="#example-2-result" title="Example 2">example 2</a>.</p>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

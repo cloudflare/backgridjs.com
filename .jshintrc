@@ -12,16 +12,12 @@
   "unused": true,
   "eqnull": true,
   "-W018": true,
+  "-W085": true,
+  "evil": true,
 
   "browser": true,
   "node": true,
   "devel": true,
   "jquery": true,
-  "nonstandard": true,
-
-  "globals": {
-    "Backgrid": false,
-    "Backbone": false,
-    "_": false
-  }
+  "nonstandard": true
 }

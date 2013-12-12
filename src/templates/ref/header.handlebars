@@ -1,0 +1,77 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Header{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-2">
+        <h2>Header</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Header">Backgrid.Header</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.HeaderRow">Backgrid.HeaderRow</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.HeaderCell">Backgrid.HeaderCell</a></li>
+        </ul>
+        <h3>Events</h3>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.HeaderCell-method-sort">backgrid:sort</a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <h3>Understanding the Default Header</h3>
+        <p>Backgrid comes with a default header section, a header row and a
+          header cell implementation that renders a sorter if the column is
+          sortable. The text inside the header cells comes from the column
+          definitions. If a <em>label</em> is not defined in a
+          column definition, its name is used as the label instead.</p>
+        <p>The default header cell implementation supports sorting in ascending
+          or descending order, using the column&apos;s natural ordering. The
+          sorter will also allow cycling back to the table&apos;s default
+          sorting order, which is sorting by the model <a href="http://backbonejs.org/#Model-cid"
+          title="Backbone.Model#cid">client IDs</a>.</p>
+        <h3>Customizing the Header</h3>
+        <p>If you want to change the default sort behavior to only toggle
+          between sorting in ascending or descending order, you do this by
+          passing <code>sortType: "toggle"</code> as part of your column
+          definition.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var grid = new Backgrid.Grid({
+            columns: [{
+              name: "id",
+              label: "ID"
+            },{
+              name: "name",
+              label: "Name"
+            },{
+              name: "age",
+              label: "Age",
+              sortType: "toggle"
+            }]
+          });</textarea>
+        <p class="label label-warning">Advanced Usage</p>
+        <p>You are allow to use a different header cell class on
+          columns. There is no restriction on what a header cell must do. In fact,
+          any <a href="http://backbonejs.org/#View"
+          title="Backbone.View">Backbone.View</a> class can be
+          used. However, if you wish to modify how the sorter behaves, you
+          must implement the sorting protocol. See
+          the <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.HeaderCell"
+          title="Backgrid.HeaderCell API">JSDoc</a> for details.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var SelectAllHeaderCell = Backgrid.HeaderCell.extend({
+            // Implement your "select all" logic here
+          });
+
+          var grid = new Backgrid.Grid({
+
+            columns: [{
+              name: "selected",
+              label: "",
+              sortable: false,
+              cell: "boolean",
+              headerCell: SelectAllHeaderCell
+            }],
+
+            collection: col
+          });</textarea>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}

@@ -1,0 +1,79 @@
+{{#extend "layout"}}
+  {{#replace "title"}}Select2 Cell{{/replace}}
+  {{#replace "content"}}
+    <div class="row">
+      <div class="col-md-3">
+        <h2>Select2Cell</h2>
+        <ul class="nav nav-stacked">
+          <li><a href="api/index.html#!/api/Backgrid.Extension.Select2Cell">Backgrid.Extension.Select2Cell</a></li>
+          <li><a href="api/index.html#!/api/Backgrid.Extension.Select2CellEditor">Backgrid.Extension.Select2CellEditor</a></li>
+        </ul>
+        <h4>Best Used On</h4>
+        <ul>
+          <li>Desktop</li>
+          <li>Mobile</li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <h3>When to Use</h3>
+        <p>When you have a relatively large number of available options
+        for a column, or want to use a select box with autocomplete
+        capability.</p>
+        <h3>Prerequisites</h3>
+        <p>Select2Cell uses the <a
+          href="http://ivaynberg.github.com/select2/"
+          title="select2">Select2</a> jQuery plugin to render its select
+          box. Select2Cell is tested with Select2 version 3.2.</p>
+        <textarea class="code-snippet" data-mode="htmlmixed">
+          &lt;link rel="stylesheet" href="assets/css/select2.css" /&gt;
+          &lt;link rel="stylesheet" href="lib/extensions/select2-cell/backgrid-select2-cell.css" /&gt;
+          &lt;script src="assets/js/select2.js"&gt;&lt;/script&gt;
+          &lt;script src="lib/extensions/select2-cell/backgrid-select2-cell.js"&gt;&lt;/script&gt;</textarea>
+        <h3>Usage</h3>
+        <p>Select2Cell is a very simple extension of the default
+        SelectCell. You can configure individual instances by supplying
+        a <code>select2Options</code> object hash during extension, in
+        addition to the options SelectCell supports.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+
+          var data = new Backbone.Collection([{number: 5, another: 1}]);
+
+          // Just like SelectCell, Select2Cell supports option lists and groups
+          var numbers = [{name: 10, values: [
+            [1, 1], [2, 2], [3, 3], [4, 4], [5, 5],
+            [6, 6], [7, 7], [8, 8], [9, 9], [10, 10]
+          ]}];
+
+          var MySelect2Cell = Backgrid.Extension.Select2Cell.extend({
+            select2Options: {
+              // any options specific to `select2` goes here
+            },
+            optionValues: numbers,
+            // since the value obtained from the underlying `select` element will always be a string,
+            // you'll need to provide a `toRaw` formatting method to convert the string back to a
+            // type suitable for your model, which is an integer in this case.
+            formatter: _.extend({}, Backgrid.SelectFormatter.prototype, {
+              toRaw: function (formattedValue) {
+                return parseInt(formattedValue);
+              }
+            })
+          });
+
+          var grid = new Backgrid.Grid({
+            columns: [{
+              name: "number",
+              cell: MySelect2Cell
+            }, {
+              name: "another",
+              cell: MySelect2Cell
+            }],
+            collection: data
+          });
+
+          $("#select2-cell-example-result").append(grid.render().el);</textarea>
+        <h3>Result</h3>
+        <div id="select2-cell-example-result" class="backgrid-container" style="height: auto;"></div>
+      </div>
+    </div>
+  {{/replace}}
+{{/extend}}
