@@ -73,8 +73,10 @@
       var self = this;
       this.$el
         .on("select2-blur", function (e) {
-          e.type = "blur";
-          self.close(e);
+          if (!self.multiple) {
+            e.type = "blur";
+            self.close(e);
+          }
           self.select2Focused = false;
         })
         .on("select2-focus", function (e) {
@@ -84,7 +86,7 @@
         .on("keydown", this.close)
         .on("focusout", function (e) {
           if (!self.select2Focused) {
-            e.type = "blur"
+            e.type = "blur";
             self.close(e);
           }
         })

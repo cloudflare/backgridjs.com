@@ -32,10 +32,10 @@
     tagName: "div",
 
     /** @property */
-    className: "modal hide fade",
+    className: "modal fade",
 
     /** @property {function(Object, ?Object=): string} template */
-    template: _.template('<form><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3><%- column.get("label") %></h3></div><div class="modal-body"><textarea cols="<%= cols %>" rows="<%= rows %>"><%- content %></textarea></div><div class="modal-footer"><input class="btn" type="submit" value="Save"/></div></form>', null, {variable: null}),
+    template: _.template('<div class="modal-dialog"><div class="modal-content"><form><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3><%- column.get("label") %></h3></div><div class="modal-body"><textarea cols="<%= cols %>" rows="<%= rows %>"><%- content %></textarea></div><div class="modal-footer"><input class="btn btn-primary" type="submit" value="Save"/></div></form></div></div>', null, {variable: null}),
 
     /** @property */
     cols: 80,
@@ -47,9 +47,9 @@
     events: {
       "keydown textarea": "clearError",
       "submit": "saveOrCancel",
-      "hide": "saveOrCancel",
-      "hidden": "close",
-      "shown": "focus"
+      "hide.bs.modal": "saveOrCancel",
+      "hidden.bs.modal": "close",
+      "shown.bs.modal": "focus"
     },
 
     /**
