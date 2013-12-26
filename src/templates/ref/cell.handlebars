@@ -11,6 +11,7 @@
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.TimeCell">Backgrid.TimeCell</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.NumberCell">Backgrid.NumberCell</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.IntegerCell">Backgrid.IntegerCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.PercentCell">Backgrid.PercentCell</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.StringCell">Backgrid.StringCell</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.UriCell">Backgrid.UriCell</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.EmailCell">Backgrid.EmailCell</a></li>
@@ -177,7 +178,8 @@
          age: new Date().getFullYear() - 270,
          birthday: "0270-03-01",
          gender: "m",
-         alive: true
+         alive: true,
+         deliveryRate: 50
        });
 
        var santa2 = new Backbone.Model({
@@ -211,6 +213,10 @@
          cell: "boolean",
          label: "Alive (BooleanCell)"
        }, {
+         name: "deliveryRate",
+         cell: "percent",
+         label: "Percent Delivered"
+       }, {
          name: "url",
          cell: "uri",
          label: "URL (UriCell)"
@@ -233,7 +239,7 @@
        }];
 
        var cellDemoGrid1 = new Backgrid.Grid({
-         columns: columns.slice(0, 5),
+         columns: columns.slice(0, 6),
          collection: new Backbone.Collection([santa1])
        });
 

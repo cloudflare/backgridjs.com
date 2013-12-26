@@ -14923,7 +14923,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
 });
 require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(exports, require, module){
 /*
-  backbone-pageable 1.4.2
+  backbone-pageable 1.4.1
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -15349,11 +15349,7 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
               fullIndex;
           }
 
-          if (!options.onRemove) {
-            ++state.totalRecords;
-            delete options.onRemove;
-          }
-
+          ++state.totalRecords;
           pageCol.state = pageCol._checkState(state);
 
           if (colToAdd) {
@@ -15364,8 +15360,9 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
               pageCol.at(pageSize) :
               null;
             if (modelToRemove) {
+              var popOptions = {onAdd: true};
               runOnceAtLastHandler(collection, event, function () {
-                pageCol.remove(modelToRemove, {onAdd: true});
+                pageCol.remove(modelToRemove, popOptions);
               });
             }
           }
@@ -15390,16 +15387,16 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
             if (collection == pageCol) {
               if (nextModel = fullCol.at(pageEnd)) {
                 runOnceAtLastHandler(pageCol, event, function () {
-                  pageCol.push(nextModel, {onRemove: true});
+                  pageCol.push(nextModel);
                 });
               }
               fullCol.remove(model);
             }
             else if (removedIndex >= pageStart && removedIndex < pageEnd) {
               pageCol.remove(model);
-              var at = removedIndex + 1;
+              var at = removedIndex + 1
               nextModel = fullCol.at(at) || fullCol.last();
-              if (nextModel) pageCol.add(nextModel, {at: at, onRemove: true});
+              if (nextModel) pageCol.add(nextModel, {at: at});
             }
           }
           else delete options.onAdd;
@@ -16604,6 +16601,76 @@ _.extend(NumberFormatter.prototype, {
 });
 
 /**
+   A number formatter that converts a floating point number, optionally
+   multiplied by a multiplier, to a percentage string and vice versa.
+
+   @class Backgrid.PercentFormatter
+   @extends Backgrid.NumberFormatter
+   @constructor
+   @throws {RangeError} If decimals < 0 or > 20.
+ */
+var PercentFormatter = Backgrid.PercentFormatter = function () {
+  Backgrid.NumberFormatter.apply(this, arguments);
+};
+
+PercentFormatter.prototype = new Backgrid.NumberFormatter(),
+
+_.extend(PercentFormatter.prototype, {
+
+  /**
+     @member Backgrid.PercentFormatter
+     @cfg {Object} options
+
+     @cfg {number} [options.multiplier=1] The number used to multiply the model
+     value for display.
+
+     @cfg {string} [options.symbol='%'] The symbol to append to the percentage
+     string.
+   */
+  defaults: _.extend({}, NumberFormatter.prototype.defaults, {
+    multiplier: 1,
+    symbol: "%"
+  }),
+
+  /**
+     Takes a floating point number, where the number is first multiplied by
+     `multiplier`, then converted to a formatted string like
+     NumberFormatter#fromRaw, then finally append `symbol` to the end.
+
+     @member Backgrid.PercentFormatter
+     @param {number} rawValue
+     @param {Backbone.Model} model Used for more complicated formatting
+     @return {string}
+  */
+  fromRaw: function (number, model) {
+    var args = [].slice.call(arguments, 1);
+    args.unshift(number * this.multiplier);
+    return (NumberFormatter.prototype.fromRaw.apply(this, args) || "0") + this.symbol;
+  },
+
+  /**
+     Takes a string, possibly appended with `symbol` and/or `decimalSeparator`,
+     and convert it back to a number for the model like NumberFormatter#toRaw,
+     and then dividing it by `multiplier`.
+
+     @member Backgrid.PercentFormatter
+     @param {string} formattedData
+     @param {Backbone.Model} model Used for more complicated formatting
+     @return {number|undefined} Undefined if the string cannot be converted to
+     a number.
+  */
+  toRaw: function (formattedValue, model) {
+    var tokens = formattedValue.split(this.symbol);
+    if (tokens && tokens[0] && tokens[1] === "" || tokens[1] == null) {
+      var rawValue = NumberFormatter.prototype.toRaw.call(this, tokens[0]);
+      if (_.isUndefined(rawValue)) return rawValue;
+      return rawValue / this.multiplier;
+    }
+  }
+
+});
+
+/**
    Formatter to converts between various datetime formats.
 
    This class only understands ISO-8601 formatted datetime strings and UNIX
@@ -16924,7 +16991,7 @@ var InputCellEditor = Backgrid.InputCellEditor = CellEditor.extend({
      exists.
   */
   render: function () {
-    var model = this.model
+    var model = this.model;
     this.$el.val(this.formatter.fromRaw(model.get(this.column.get("name")), model));
     return this;
   },
@@ -17074,9 +17141,9 @@ var Cell = Backgrid.Cell = Backbone.View.extend({
                     }
                   });
 
-    if (column.get("editable")) $el.addClass("editable");
-    if (column.get("sortable")) $el.addClass("sortable");
-    if (column.get("renderable")) $el.addClass("renderable");
+    if (Backgrid.callByNeed(column.editable(), column, model)) $el.addClass("editable");
+    if (Backgrid.callByNeed(column.sortable(), column, model)) $el.addClass("sortable");
+    if (Backgrid.callByNeed(column.renderable(), column, model)) $el.addClass("renderable");
   },
 
   /**
@@ -17327,6 +17394,43 @@ var IntegerCell = Backgrid.IntegerCell = NumberCell.extend({
      @property {number} decimals Must be an integer.
   */
   decimals: 0
+});
+
+/**
+   A PercentCell is another Backgrid.NumberCell that takes a floating number,
+   optionally multiplied by a multiplier and display it as a percentage.
+
+   @class Backgrid.PercentCell
+   @extends Backgrid.NumberCell
+ */
+var PercentCell = Backgrid.PercentCell = NumberCell.extend({
+
+  /** @property */
+  className: "percent-cell",
+
+  /** @property {number} [multiplier=1] */
+  multiplier: PercentFormatter.prototype.defaults.multiplier,
+
+  /** @property {string} [symbol='%'] */
+  symbol: PercentFormatter.prototype.defaults.symbol,
+
+  /** @property {Backgrid.CellFormatter} [formatter=Backgrid.PercentFormatter] */
+  formatter: PercentFormatter,
+
+  /**
+     Initializes this cell and the percent formatter.
+
+     @param {Object} options
+     @param {Backbone.Model} options.model
+     @param {Backgrid.Column} options.column
+  */
+  initialize: function () {
+    PercentCell.__super__.initialize.apply(this, arguments);
+    var formatter = this.formatter;
+    formatter.multiplier = this.multiplier;
+    formatter.symbol = this.symbol;
+  }
+
 });
 
 /**
@@ -17674,10 +17778,7 @@ var SelectCellEditor = Backgrid.SelectCellEditor = CellEditor.extend({
              command.moveUp() || command.moveDown() || e.type == "blur") {
       e.preventDefault();
       e.stopPropagation();
-      if (e.type == "blur" && this.$el.find("option").length === 1) {
-        model.set(column.get("name"), this.formatter.toRaw(this.$el.val(), model));
-      }
-      model.trigger("backgrid:edited", model, column, new Command(e));
+      this.save(e);
     }
   }
 
@@ -18237,9 +18338,7 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
       this.column = new Column(this.column);
     }
 
-    this.listenTo(this.collection, "backgrid:sort", this._resetCellDirection);
-
-    var column = this.column, $el = this.$el;
+    var column = this.column, collection = this.collection, $el = this.$el;
 
     this.listenTo(column, "change:editable change:sortable change:renderable",
                   function (column) {
@@ -18253,9 +18352,11 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
 
     this.listenTo(column, "change:name change:label", this.render);
 
-    if (column.get("editable")) $el.addClass("editable");
-    if (column.get("sortable")) $el.addClass("sortable");
-    if (column.get("renderable")) $el.addClass("renderable");
+    if (Backgrid.callByNeed(column.editable(), column, collection)) $el.addClass("editable");
+    if (Backgrid.callByNeed(column.sortable(), column, collection)) $el.addClass("sortable");
+    if (Backgrid.callByNeed(column.renderable(), column, collection)) $el.addClass("renderable");
+
+    this.listenTo(collection, "backgrid:sort", this._resetCellDirection);
   },
 
   /**
@@ -18457,7 +18558,7 @@ var Body = Backgrid.Body = Backbone.View.extend({
      @param {Backbone.Collection.<Backgrid.Column>|Array.<Backgrid.Column>|Array.<Object>} options.columns
      Column metadata.
      @param {Backgrid.Row} [options.row=Backgrid.Row] The Row class to use.
-     @param {string:function(): string} [options.emptyText] The text to display in the empty row.
+     @param {string|function(): string} [options.emptyText] The text to display in the empty row.
 
      @throws {TypeError} If options.columns or options.collection is undefined.
 
@@ -19052,7 +19153,7 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
@@ -19062,13 +19163,11 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
                              require("backbone-pageable"));
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backbone !== "undefined" &&
-           typeof Backgrid !== "undefined") {
-    factory(_, Backbone, Backgrid);
+  else {
+    factory(root._, root.Backbone, root.Backgrid);
   }
 
-}(function (_, Backbone, Backgrid) {
+}(this, function (_, Backbone, Backgrid) {
 
   "use strict";
 
@@ -19251,7 +19350,7 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
 
      @class Backgrid.Extension.Paginator
   */
-  Backgrid.Extension.Paginator = Backbone.View.extend({
+  var Paginator = Backgrid.Extension.Paginator = Backbone.View.extend({
 
     /** @property */
     className: "backgrid-paginator",
@@ -19260,8 +19359,25 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
     windowSize: 10,
 
     /**
+       @property {number} slideScale the number used by #slideHowMuch to scale
+       `windowSize` to yield the number of pages to slide when half of the pages
+       from within a window have been reached. For example, the default
+       windowSize(10) * slideScale(0.5) yields 5, which means the window will
+       slide forward 5 pages as soon as you've reached page 6. The smaller the
+       scale factor the less pages to slide, and vice versa.
+
+       Also See:
+
+       - #slideMaybe
+       - #slideHowMuch
+    */
+    slideScale: 0.5,
+
+    /**
        @property {Object.<string, Object.<string, string>>} controls You can
-       disable specific control handles by omitting certain keys.
+       disable specific control handles by setting the keys in question to
+       null. The defaults will be merged with your controls object, with your
+       changes taking precedent.
     */
     controls: {
       rewind: {
@@ -19282,6 +19398,9 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       }
     },
 
+    /** @property */
+    renderIndexedPageHandles: true,
+
     /**
        @property {Backgrid.Extension.PageHandle} pageHandle. The PageHandle
        class to use for rendering individual handles
@@ -19301,19 +19420,67 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
        @param {boolean} [options.goBackFirstOnSort=true]
     */
     initialize: function (options) {
-      this.controls = options.controls || this.controls;
-      this.pageHandle = options.pageHandle || this.pageHandle;
+      var self = this;
+      self.controls = _.defaults(options.controls || {}, self.controls,
+                                 Paginator.prototype.controls);
+      self.pageHandle = options.pageHandle || self.pageHandle;
+      self.slideScale = options.slideScale != null ?
+          options.slideScale :
+          self.slideScale;
+      self.goBackFirstOnSort = options.goBackFirstOnSort != null ?
+          options.goBackFirstOnSort :
+          self.goBackFirstOnSort;
+      self.renderIndexedPageHandles = options.renderIndexedPageHandles != null ?
+          options.renderIndexedPageHandles :
+          self.renderIndexedPageHandles;
 
-      var collection = this.collection;
-      this.listenTo(collection, "add", this.render);
-      this.listenTo(collection, "remove", this.render);
-      this.listenTo(collection, "reset", this.render);
-      if ((options.goBackFirstOnSort || this.goBackFirstOnSort) &&
-          collection.fullCollection) {
-        this.listenTo(collection.fullCollection, "sort", function () {
-          collection.getFirstPage();
+      var collection = self.collection;
+      self.listenTo(collection, "add", self.render);
+      self.listenTo(collection, "remove", self.render);
+      self.listenTo(collection, "reset", self.render);
+      if (collection.fullCollection) {
+        self.listenTo(collection.fullCollection, "sort", function () {
+          if (self.goBackFirstOnSort) collection.getFirstPage();
         });
       }
+    },
+
+    /**
+      Decides whether the window should slide. This method should return 1 if
+      sliding should occur and 0 otherwise. The default is sliding should occur
+      if half of the pages in a window has been reached.
+
+      __Note__: All the parameters have been normalized to be 0-based.
+
+      @param {number} firstPage
+      @param {number} lastPage
+      @param {number} currentPage
+      @param {number} windowSize
+      @param {number} slideScale
+
+      @return {0|1}
+     */
+    slideMaybe: function (firstPage, lastPage, currentPage, windowSize, slideScale) {
+      return Math.round(currentPage % windowSize / windowSize);
+    },
+
+    /**
+      Decides how many pages to slide when sliding should occur. The default
+      simply scales the `windowSize` to arrive at a fraction of the `windowSize`
+      to increment.
+
+      __Note__: All the parameters have been normalized to be 0-based.
+
+      @param {number} firstPage
+      @param {number} lastPage
+      @param {number} currentPage
+      @param {number} windowSize
+      @param {number} slideScale
+
+      @return {number}
+     */
+    slideThisMuch: function (firstPage, lastPage, currentPage, windowSize, slideScale) {
+      return ~~(windowSize * slideScale);
     },
 
     _calculateWindow: function () {
@@ -19326,8 +19493,14 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       lastPage = Math.max(0, firstPage ? lastPage - 1 : lastPage);
       var currentPage = Math.max(state.currentPage, state.firstPage);
       currentPage = firstPage ? currentPage - 1 : currentPage;
-      var windowStart = Math.floor(currentPage / this.windowSize) * this.windowSize;
-      var windowEnd = Math.min(lastPage + 1, windowStart + this.windowSize);
+      var windowSize = this.windowSize;
+      var slideScale = this.slideScale;
+      var windowStart = Math.floor(currentPage / windowSize) * windowSize;
+      if (currentPage <= lastPage - this.slideMaybe()) {
+        windowStart += (this.slideMaybe(firstPage, lastPage, currentPage, windowSize, slideScale) *
+                        this.slideThisMuch(firstPage, lastPage, currentPage, windowSize, slideScale));
+      }
+      var windowEnd = Math.min(lastPage + 1, windowStart + windowSize);
       return [windowStart, windowEnd];
     },
 
@@ -19344,11 +19517,13 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       var window = this._calculateWindow();
       var winStart = window[0], winEnd = window[1];
 
-      for (var i = winStart; i < winEnd; i++) {
-        handles.push(new this.pageHandle({
-          collection: collection,
-          pageIndex: i
-        }));
+      if (this.renderIndexedPageHandles) {
+        for (var i = winStart; i < winEnd; i++) {
+          handles.push(new this.pageHandle({
+            collection: collection,
+            pageIndex: i
+          }));
+        }
       }
 
       var controls = this.controls;
@@ -21166,24 +21341,25 @@ require.register("wyuenho-backgrid-filter/backgrid-filter.js", function(exports,
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
-    module.exports = factory(require("underscore"),
-                             require("backbone"),
-                             require("backgrid"),
-                             require("lunr"));
+    (function () {
+      var lunr;
+      try { lunr = require("lunr"); } catch (e) {}
+      module.exports = factory(require("underscore"),
+                               require("backbone"),
+                               require("backgrid"),
+                               lunr);
+    }());
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backbone !== "undefined" &&
-           typeof Backgrid !== "undefined" &&
-           typeof lunr !== "undefined") {
-    factory(_, Backbone, Backgrid, lunr);
+  else {
+    factory(root._, root.Backbone, root.Backgrid, root.lunr);
   }
 
-}(function (_, Backbone, Backgrid, lunr) {
+}(this, function (_, Backbone, Backgrid, lunr) {
 
   "use strict";
 
@@ -21658,9 +21834,9 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
 
     /** @property */
     events: {
-      "keydown :checkbox": "onKeydown",
-      "change :checkbox": "onChange",
-      "click :checkbox": "enterEditMode"
+      "keydown input[type=checkbox]": "onKeydown",
+      "change input[type=checkbox]": "onChange",
+      "click input[type=checkbox]": "enterEditMode"
     },
 
     /**
@@ -21678,30 +21854,30 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
         this.column = new Backgrid.Column(this.column);
       }
 
-      this.listenTo(this.model, "backgrid:select", function (model, selected) {
-        this.$el.find(":checkbox").prop("checked", selected).change();
-      });
-
-      var column = this.column, $el = this.$el;
+      var column = this.column, model = this.model, $el = this.$el;
       this.listenTo(column, "change:renderable", function (column, renderable) {
         $el.toggleClass("renderable", renderable);
       });
 
-      if (column.get("renderable")) $el.addClass("renderable");
+      if (Backgrid.callByNeed(column.renderable(), column, model)) $el.addClass("renderable");
+
+      this.listenTo(model, "backgrid:select", function (model, selected) {
+        this.$el.find("input[type=checkbox]").prop("checked", selected).change();
+      });
     },
 
     /**
        Focuses the checkbox.
     */
     enterEditMode: function () {
-      this.$el.find(":checkbox").focus();
+      this.$el.find("input[type=checkbox]").focus();
     },
 
     /**
        Unfocuses the checkbox.
     */
     exitEditMode: function () {
-      this.$el.find(":checkbox").blur();
+      this.$el.find("input[type=checkbox]").blur();
     },
 
     /**
@@ -21712,7 +21888,7 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
       if (command.passThru()) return true; // skip ahead to `change`
       if (command.cancel()) {
         e.stopPropagation();
-        this.$el.find(":checkbox").blur();
+        this.$el.find("input[type=checkbox]").blur();
       }
       else if (command.save() || command.moveLeft() || command.moveRight() ||
                command.moveUp() || command.moveDown()) {
@@ -21728,8 +21904,8 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
        checkbox's `checked` value.
     */
     onChange: function (e) {
-      var checked = $(e.target).prop('checked');
-      this.$el.parent().toggleClass('selected', checked);
+      var checked = $(e.target).prop("checked");
+      this.$el.parent().toggleClass("selected", checked);
       this.model.trigger("backgrid:selected", this.model, checked);
     },
 
@@ -21785,24 +21961,30 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
 
       var collection = this.collection;
       var selectedModels = this.selectedModels = {};
-      this.listenTo(collection, "backgrid:selected", function (model, selected) {
+      this.listenTo(collection.fullCollection || collection,
+                    "backgrid:selected", function (model, selected) {
         if (selected) selectedModels[model.id || model.cid] = model;
         else {
           delete selectedModels[model.id || model.cid];
-          this.$el.find(":checkbox").prop("checked", false);
+          this.$el.find("input[type=checkbox]").prop("checked", false);
         }
       });
 
-      this.listenTo(collection, "remove", function (model) {
+      this.listenTo(collection.fullCollection || collection, "remove", function (model) {
         delete selectedModels[model.id || model.cid];
       });
 
+      var self = this;
       this.listenTo(collection, "backgrid:refresh", function () {
-        this.$el.find(":checkbox").prop("checked", false);
+        var mode = collection.mode;
+        var checked = self.$el.find("input[type=checkbox]").prop("checked");
         for (var i = 0; i < collection.length; i++) {
           var model = collection.at(i);
-          if (selectedModels[model.id || model.cid]) {
-            model.trigger('backgrid:select', model, true);
+          if (mode == "server" && checked) {
+            model.trigger("backgrid:select", model, true);
+          }
+          else if (selectedModels[model.id || model.cid]) {
+            model.trigger("backgrid:select", model, true);
           }
         }
       });
@@ -21812,29 +21994,33 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
         $el.toggleClass("renderable", renderable);
       });
 
-      if (column.get("renderable")) $el.addClass("renderable");
+      if (Backgrid.callByNeed(column.renderable(), column, collection)) $el.addClass("renderable");
     },
 
     /**
-       Progagates the checked value of this checkbox to all the models of the
+       Propagates the checked value of this checkbox to all the models of the
        underlying collection by triggering a Backbone `backgrid:select` event on
        the models themselves, passing each model and the current `checked` value
-       of the checkbox in each event.
+       of the checkbox in each event. Also triggers a 'backgrid:select-all'
+       event on the collection afterwards.
     */
     onChange: function (e) {
       var checked = $(e.target).prop("checked");
 
-      var collection = this.collection;
+      var collection = this.collection.fullCollection || this.collection;
       collection.each(function (model) {
         model.trigger("backgrid:select", model, checked);
       });
+
+      this.collection.trigger("backgrid:select-all", this.collection, checked);
     }
 
   });
 
   /**
      Convenient method to retrieve a list of selected models. This method only
-     exists when the `SelectAll` extension has been included.
+     exists when the `SelectAll` extension has been included. Selected models
+     are retained across pagination.
 
      @member Backgrid.Grid
      @return {Array.<Backbone.Model>}
@@ -21852,8 +22038,9 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
 
     var result = [];
     if (selectAllHeaderCell) {
-      for (var modelId in selectAllHeaderCell.selectedModels) {
-        result.push(this.collection.get(modelId));
+      var selectedModels = selectAllHeaderCell.selectedModels;
+      for (var modelId in selectedModels) {
+        result.push(selectedModels[modelId]);
       }
     }
 
@@ -21898,10 +22085,10 @@ require.register("wyuenho-backgrid-text-cell/backgrid-text-cell.js", function(ex
     tagName: "div",
 
     /** @property */
-    className: "modal hide fade",
+    className: "modal fade",
 
     /** @property {function(Object, ?Object=): string} template */
-    template: _.template('<form><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3><%- column.get("label") %></h3></div><div class="modal-body"><textarea cols="<%= cols %>" rows="<%= rows %>"><%- content %></textarea></div><div class="modal-footer"><input class="btn" type="submit" value="Save"/></div></form>', null, {variable: null}),
+    template: _.template('<div class="modal-dialog"><div class="modal-content"><form><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3><%- column.get("label") %></h3></div><div class="modal-body"><textarea cols="<%= cols %>" rows="<%= rows %>"><%- content %></textarea></div><div class="modal-footer"><input class="btn btn-primary" type="submit" value="Save"/></div></form></div></div>', null, {variable: null}),
 
     /** @property */
     cols: 80,
@@ -21913,9 +22100,9 @@ require.register("wyuenho-backgrid-text-cell/backgrid-text-cell.js", function(ex
     events: {
       "keydown textarea": "clearError",
       "submit": "saveOrCancel",
-      "hide": "saveOrCancel",
-      "hidden": "close",
-      "shown": "focus"
+      "hide.bs.modal": "saveOrCancel",
+      "hidden.bs.modal": "close",
+      "shown.bs.modal": "focus"
     },
 
     /**
@@ -24622,8 +24809,10 @@ require.register("wyuenho-backgrid-select2-cell/backgrid-select2-cell.js", funct
       var self = this;
       this.$el
         .on("select2-blur", function (e) {
-          e.type = "blur";
-          self.close(e);
+          if (!self.multiple) {
+            e.type = "blur";
+            self.close(e);
+          }
           self.select2Focused = false;
         })
         .on("select2-focus", function (e) {
@@ -24633,7 +24822,7 @@ require.register("wyuenho-backgrid-select2-cell/backgrid-select2-cell.js", funct
         .on("keydown", this.close)
         .on("focusout", function (e) {
           if (!self.select2Focused) {
-            e.type = "blur"
+            e.type = "blur";
             self.close(e);
           }
         })
@@ -29357,20 +29546,18 @@ module.exports = {
       if ($elm.data("mode") === "javascript") {
         var value = $elm.val();
         cm.setValue(unpad(value));
+        if ($elm.data("eval") === "yes") {
+          eval.call(window, value);
+          cm.on("change", function () {
+            eval.call(window, cm.doc.getValue());
+          });
+        }
       }
       else {
         var lineCount = cm.doc.lineCount();
         for (var i = 0; i < lineCount; i++) {
           cm.indentLine(i);
         }
-      }
-
-      // TODO
-      if ($elm.data("eval") === "yes") {
-
-        cm.on("change", function () {
-          
-        });
       }
 
       $elm.data("codemirror", cm);

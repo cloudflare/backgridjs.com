@@ -53,24 +53,30 @@
         <textarea class="code-snippet" data-mode="javascript">
           // Insert a few new columns. Make sure your model has these attributes though.
           grid.insertColumn([{
-
-              name: "selected",
-              label: "",
-              cell: "boolean",
-              sortable: false,
-              headerCell: MySelectAllCell
-
-            }, {
-
-              name: "address",
-              label: "Address",
-              cell: "string"
-
-            }]);
+            name: "lastUpdated",
+            label: "Last Updated",
+            cell: "datetime",
+            editable: false
+          }, {
+            name: "lastModifiedBy",
+            label: "Last Modified By",
+            cell: "string"
+          }]);
 
           // Remove a column
-          var genderCol = grid.columns.where({ name: "gender" });
-          grid.removeColumn(genderCol);</textarea>
+          var idCol = grid.columns.where({ name: "id" });
+          grid.removeColumn(idCol);</textarea>
+        <h3>Sorting Programmatically</h3>
+        <p>Sometimes, you might want to set the grid to a sorted state before
+          display it, you can do that by calling <code>Grid#sort()</code> with a
+          column name and a direction:</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          // You must render first to have the grid construct all the DOM elements
+          // before you can set the sorting state
+          grid.render().sort("lastUpdated", "descending");
+
+          // now you can display it
+          $("#grid-container").append(grid.el);</textarea>
         <h3>Empty Message</h3>
         <p>If you want to display a message when the grid is empty. You can pass
           an<code>emptyMessage</code> string to the <code>options</code> object

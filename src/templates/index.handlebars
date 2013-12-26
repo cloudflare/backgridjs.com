@@ -214,7 +214,7 @@
               default. ID cells are not editable, and all other cell types
               have reasonable validation built in. If the table gets too
               large, you get a scroll bar.</p>
-            <p>Backgrid.js comes with <a href="/ref/cell.html" title="Cells">10
+            <p>Backgrid.js comes with <a href="/ref/cell.html" title="Cells">11
               basic cell types</a> in the core and <a
               href="https://github.com/wyuenho/backgrid/wiki#extensions"
               title="Backgrid extensions">many others as extensions</a>. Cell
@@ -303,19 +303,5 @@
         </div>
       </div>
     </div>
-    {{#append "endscripts"}}
-    <script>
-      $(function () {
-        var code = "";
-        $("textarea.code-snippet[data-eval=yes]").each(function () {
-          code = code + "\n" + this.value;
-        });
-       /* eval(code); */
-       var script = document.createElement("script");
-       script.appendChild(document.createTextNode(code));
-       document.body.appendChild(script);
-      });
-    </script>
-    {{/append}}
   {{/replace}}
 {{/extend}}

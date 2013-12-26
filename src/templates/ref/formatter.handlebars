@@ -8,6 +8,7 @@
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.CellFormatter">Backgrid.CellFormatter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.DatetimeFormatter">Backgrid.DatetimeFormatter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.NumberFormatter">Backgrid.NumberFormatter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.PercentFormatter">Backgrid.PercentFormatter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.StringFormatter">Backgrid.StringFormatter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.EmailFormatter">Backgrid.EmailFormatter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.SelectFormatter">Backgrid.SelectFormatter</a></li>
@@ -27,10 +28,10 @@
         <p>Any formatters must have the following two methods defined:</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
           var formatter = {
-            // function (*): string
-            fromRaw: function (rawData) { },
-            // function (string): *|undefined
-            toRaw: function (formattedData) { }
+            // function (*, Backbone.Model): string
+            fromRaw: function (rawData, model) { },
+            // function (string, Backbone.Model): *|undefined
+            toRaw: function (formattedData, model) { }
           };</textarea>
         <p><code>fromRaw()</code> is called by Backgrid.Cell and its
           subclasses whenever a raw model value needs to be formatted into
@@ -38,6 +39,10 @@
         <p><code>toRaw()</code> is called by Backgrid.CellEditor and its
           subclasses whenever a user input string needs to be converted back
           to a raw JSON value for model persistence.</p>
+        <p>The <code>model</code> parameter is not used by any built-in
+          formatters, but sometimes you may want to decide how to format your
+          values depending on the other values in the model. You can use it in
+          your custom formatters if that's the case.</p>
         <h3>Validation</h3>
         <p>In addition to user input conversion, <code>toRaw()</code> also
           validates the user input during conversion. If the user input is
@@ -62,23 +67,57 @@
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
           var IntSelectFormatter = {
             fromRaw: Backgrid.SelectFormatter.fromRaw,
-            toRaw: function (formattedValue) {
-              try { return parseInt(formattedValue); } catch {}
+            toRaw: function (formattedValue, model) {
+              return parseInt(formattedValue);
+            }
+          };</textarea>
+        <p>If you want to use a SelectCell with multiple select, and if the type
+          of your model value is not string, you have to override
+          <code>toRaw</code> to return an array of values:</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          var MultipleIntSelectFormatter = {
+            fromRaw: Backgrid.SelectFormatter.fromRaw,
+            toRaw: function (formattedValue, model) {
+              return formattedValue == null ? [] : _.map(formattedValue, function (v) {
+                return parseInt(v);
+              });
             }
           };</textarea>
         <h3>Using Custom Formatters</h3>
-        <p>A custom formatter can be used instead of the cell's default by
-          extending the cell:</p>
+        <p>A custom formatter supplied to a column definition will be used
+          instead of the cell's default:</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
           var grid = new Backgrid.Grid({
             columns: [{
               name: "url",
               cell: "uri",
               formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
-                fromRaw: function (rawValue) {
+                fromRaw: function (rawValue, model) {
                   return rawValue.replace("http://", '');
                 }
               })
+            }],
+            collection: col
+          });</textarea>
+        <p>To make your custom cell and custom formatter reuseable, you can
+          package them up together and give your custom cell to a column
+          definition:</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          var MyUriFormatter = _.extend({}, Backgrid.CellFormatter.prototype, {
+            fromRaw: function (rawValue, model) {
+              return rawValue.replace("http://", '');
+            }
+          });
+
+          var MyUriCell = Backgrid.UriCell.extend({
+            // every cell class has a default formatter, which you can override
+            formatter: MyUriFormatter
+          });
+
+          var grid = new Backgrid.Grid({
+            columns: [{
+              name: "url",
+              cell: MyUriCell,
             }],
             collection: col
           });</textarea>

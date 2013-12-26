@@ -35,20 +35,18 @@ module.exports = {
       if ($elm.data("mode") === "javascript") {
         var value = $elm.val();
         cm.setValue(unpad(value));
+        if ($elm.data("eval") === "yes") {
+          eval.call(window, value);
+          cm.on("change", function () {
+            eval.call(window, cm.doc.getValue());
+          });
+        }
       }
       else {
         var lineCount = cm.doc.lineCount();
         for (var i = 0; i < lineCount; i++) {
           cm.indentLine(i);
         }
-      }
-
-      // TODO
-      if ($elm.data("eval") === "yes") {
-
-        cm.on("change", function () {
-          
-        });
       }
 
       $elm.data("codemirror", cm);
