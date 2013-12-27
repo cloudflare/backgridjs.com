@@ -21801,22 +21801,18 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
     module.exports = factory(require("backbone"), require("backgrid"));
   }
   // Browser
-  else if (typeof Backbone !== "undefined" && typeof Backgrid !== "undefined") {
-    factory(Backbone, Backgrid);
-  }
+  else factory(root.Backbone, root.Backgrid);
 
-}(function (Backbone, Backgrid)  {
+}(this, function (Backbone, Backgrid) {
 
   "use strict";
-
-  var $ = Backbone.$;
 
   /**
      Renders a checkbox for row selection.
@@ -21903,8 +21899,8 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
        `backgrid:selected` event with a reference of the model and the
        checkbox's `checked` value.
     */
-    onChange: function (e) {
-      var checked = $(e.target).prop("checked");
+    onChange: function () {
+      var checked = this.$el.find("input[type=checkbox]").prop("checked");
       this.$el.parent().toggleClass("selected", checked);
       this.model.trigger("backgrid:selected", this.model, checked);
     },
@@ -21963,7 +21959,7 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
       var selectedModels = this.selectedModels = {};
       this.listenTo(collection.fullCollection || collection,
                     "backgrid:selected", function (model, selected) {
-        if (selected) selectedModels[model.id || model.cid] = model;
+        if (selected) selectedModels[model.id || model.cid] = 1;
         else {
           delete selectedModels[model.id || model.cid];
           this.$el.find("input[type=checkbox]").prop("checked", false);
@@ -21974,16 +21970,11 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
         delete selectedModels[model.id || model.cid];
       });
 
-      var self = this;
       this.listenTo(collection, "backgrid:refresh", function () {
-        var mode = collection.mode;
-        var checked = self.$el.find("input[type=checkbox]").prop("checked");
+        var checked = this.$el.find("input[type=checkbox]").prop("checked");
         for (var i = 0; i < collection.length; i++) {
           var model = collection.at(i);
-          if (mode == "server" && checked) {
-            model.trigger("backgrid:select", model, true);
-          }
-          else if (selectedModels[model.id || model.cid]) {
+          if (checked || selectedModels[model.id || model.cid]) {
             model.trigger("backgrid:select", model, true);
           }
         }
@@ -22000,17 +21991,31 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
     /**
        Propagates the checked value of this checkbox to all the models of the
        underlying collection by triggering a Backbone `backgrid:select` event on
-       the models themselves, passing each model and the current `checked` value
-       of the checkbox in each event. Also triggers a 'backgrid:select-all'
-       event on the collection afterwards.
-    */
-    onChange: function (e) {
-      var checked = $(e.target).prop("checked");
+       the models on the current page, passing each model and the current
+       `checked` value of the checkbox in each event.
 
-      var collection = this.collection.fullCollection || this.collection;
+       A `backgrid:selected` event will also be triggered with the current
+       `checked` value on all the models regardless of whether they are on the
+       current page.
+
+       This method triggers a 'backgrid:select-all' event on the collection
+       afterwards.
+    */
+    onChange: function () {
+      var checked = this.$el.find("input[type=checkbox]").prop("checked");
+
+      var collection = this.collection;
       collection.each(function (model) {
         model.trigger("backgrid:select", model, checked);
       });
+
+      if (collection.fullCollection) {
+        collection.fullCollection.each(function (model) {
+          if (!collection.get(model.cid)) {
+            model.trigger("backgrid:selected", model, checked);
+          }
+        });
+      }
 
       this.collection.trigger("backgrid:select-all", this.collection, checked);
     }
@@ -22039,12 +22044,27 @@ require.register("wyuenho-backgrid-select-all/backgrid-select-all.js", function(
     var result = [];
     if (selectAllHeaderCell) {
       var selectedModels = selectAllHeaderCell.selectedModels;
+      var collection = this.collection.fullCollection || this.collection;
       for (var modelId in selectedModels) {
-        result.push(selectedModels[modelId]);
+        result.push(collection.get(modelId));
       }
     }
 
     return result;
+  };
+
+  /**
+     Convenient method to deselect the selected models. This method is only
+     available when the `SelectAll` extension has been included.
+
+     @member Backgrid.Grid
+   */
+  Backgrid.Grid.prototype.clearSelectedModels = function () {
+    var selectedModels = this.getSelectedModels();
+    for (var i = 0, l = selectedModels.length; i < l; i++) {
+      var model = selectedModels[i];
+      model.trigger("backgrid:select", model, false);
+    }
   };
 
 }));

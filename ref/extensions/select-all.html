@@ -128,13 +128,14 @@
       <div class="col-md-3">
         <h2>SelectAll</h2>
         <ul class="nav nav-stacked">
-          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectRowCell">Backgrid.Extension.SelectRowCell</a></li>
-          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell">Backgrid.Extension.SelectAllHeaderCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Extension.SelectRowCell">Backgrid.Extension.SelectRowCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell">Backgrid.Extension.SelectAllHeaderCell</a></li>
         </ul>
         <h3>Events</h3>
         <ul class="nav nav-stacked">
-          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell-method-initialize">backgrid:select</a></li>
-          <li><a href="api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell-method-initialize">backgrid:selected</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell-method-initialize">backgrid:select</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell-method-initialize">backgrid:selected</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Extension.SelectAllHeaderCell-method-onChange">backgrid:select-all</a></li>
         </ul>
         <h4>Best Used On</h4>
         <ul>
@@ -145,12 +146,9 @@
       <div class="col-md-9">
         <h3>When to Use</h3>
         <p>When you want to select multiple models at a time for batch operations.</p>
-        <textarea class="code-snippet" data-mode="htmlmixed">
-          &lt;link rel="stylesheet" href="lib/extensions/select-all/backgrid-select-all.css" /&gt;
-          &lt;script src="lib/extensions/select-all/backgrid-select-all.js"&gt;&lt;/script&gt;</textarea>
         <h3>Usage</h3>
         <p>To enable the SelectAll extension, you simply have to add a new
-        column to your column definition like so:</p>
+          column to your column definition like so:</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
           var grid = new Backgrid.Grid({
             columns: [{
@@ -164,21 +162,40 @@
               // Backgrid.Extension.SelectAllHeaderCell lets you select all the row on a page
               headerCell: "select-all",
 
-            }].concat(columns),
+            }, {
+              name: "id",
+              label: "ID",
+              cell: "string",
+              editable: false
+            }, {
+              name: "name",
+              label: "Territory",
+              cell: "string"
+            }],
 
             collection: new Backbone.Collection([
-              {"name": "Afghanistan", "url": "http://en.wikipedia.org/wiki/Afghanistan", "pop": 25500100, "date": "2013-01-01", "percentage": 0.36, "id": 1},
-              {"name": "Albania", "url": "http://en.wikipedia.org/wiki/Albania", "pop": 2831741, "date": "2011-10-01", "percentage": 0.04, "id": 2}
+              {"name": "Afghanistan", "id": 1},
+              {"name": "Albania", "id": 2}
             ])
           });
 
-          $("#select-all-example-result").append(grid.render().el);</textarea>
+          $("#select-all-example-1-result").append(grid.render().el);</textarea>
       </div>
     </div>
     <div class="row">
       <div class="col-md-9 col-md-offset-3">
         <h3>Result</h3>
-        <div id="select-all-example-result" class="backgrid-container" style="height: auto"></div>
+        <div id="select-all-example-1-result" class="backgrid-container" style="height: auto"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9 col-md-offset-3">
+        <p>You can also use this extension in concert with <a
+          href="https://github.com/wyuenho/backbone-pageable"
+          title="Backbone.PageableCollection">Backbone.PageableCollection</a>. In
+          which case SelectAll will select across all pages by default, whether
+          the PageableCollection is in server, client or infinite mode. See this
+          <a href="/index.html#complete-example">example</a>.</p>
       </div>
     </div>
     <div class="row">
@@ -193,9 +210,7 @@
           var selectedModels = grid.getSelectedModels();
 
           // To deselect selected models
-          _.each(selectedModels, function (model) {
-            model.trigger("backgrid:select", model, false);
-          });
+          grid.clearSelectedModels();
 
           // Selecting even numbered rows
           grid.collection.each(function (model, i) {
@@ -206,12 +221,12 @@
     <div class="row">
       <div class="col-md-9 col-md-offset-3">
         <p class="label label-info">Pro Tip</p>
-        <p>Each SelectRowCell will trigger a <code>backgrid:select</code>
-        event directly from the selected models when its checkbox value
-        changes, so if you want to react to those events, you can attach
-        your event handlers on the collection.</p>
+        <p>Each SelectRowCell will trigger a <code>backgrid:selected</code>
+          event directly from the selected models when its checkbox value
+          changes, so if you want to react to those events, you can attach
+          your event handlers on the collection.</p>
         <p>See the <a
-        href="api/index.html#!/api/Backgrid.Extension.SelectRowCell">API
+        href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Extension.SelectRowCell">API
         documentation</a> for details.</p>
       </div>
     </div>

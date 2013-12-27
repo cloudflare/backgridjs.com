@@ -263,7 +263,12 @@
 
               // Set up a grid to use the pageable collection
               var pageableGrid = new Backgrid.Grid({
-                columns: columns,
+                columns: [{
+                  // enable the select-all extension
+                  name: "",
+                  cell: "select-row",
+                  headerCell: "select-all"
+                }].concat(columns),
                 collection: pageableTerritories
               });
 
