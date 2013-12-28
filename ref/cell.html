@@ -324,7 +324,7 @@
       require("codemirror");
       require("backgridjs-com").setUpCodeMirror();
       $(document).ready(function () {
-        $("a[href^='/#']").click(function (e) {
+        $("a[href^='/#'], a[href^='#']").click(function (e) {
           e.preventDefault();
           var target = this.hash;
           if (target) {
