@@ -5,7 +5,7 @@
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
@@ -13,13 +13,9 @@
                              require("moment"));
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backgrid !== "undefined" &&
-           typeof moment !== "undefined") {
-    factory(_, Backgrid, moment);
-  }
+  else factory(root._, root.Backgrid, root.moment);
 
-}(function (_, Backgrid, moment) {
+}(this, function (_, Backgrid, moment) {
 
   /**
      MomentFormatter converts bi-directionally any datetime values in any format

@@ -111,36 +111,47 @@
        Upon search form submission, this event handler constructs a query
        parameter object and pass it to Collection#fetch for server-side
        filtering.
+
+       If the collection is a PageableCollection, searching will go back to the
+       first page.
     */
     search: function (e) {
       if (e) e.preventDefault();
 
       var data = {};
+      var query = this.searchBox().val();
+      if (query) data[this.name] = query;
+
+      var collection = this.collection;
 
       // go back to the first page on search
-      var collection = this.collection;
       if (Backbone.PageableCollection &&
-          collection instanceof Backbone.PageableCollection &&
-          collection.mode == "server") {
-        collection.state.currentPage = collection.state.firstPage;
+          collection instanceof Backbone.PageableCollection) {
+        collection.getFirstPage({data: data, reset: true, fetch: true});
       }
-      else {
-        var query = this.searchBox().val();
-        if (query) data[this.name] = query;
-      }
-
-      collection.fetch({data: data, reset: true});
+      else collection.fetch({data: data, reset: true});
     },
 
     /**
        Event handler for the clear button. Clears the search box and refetch the
        collection.
+
+       If the collection is a PageableCollection, clearing will go back to the
+       first page.
     */
     clear: function (e) {
       if (e) e.preventDefault();
       this.searchBox().val(null);
       this.showClearButtonMaybe();
-      this.collection.fetch({reset: true});
+
+      var collection = this.collection;
+
+      // go back to the first page on clear
+      if (Backbone.PageableCollection &&
+          collection instanceof Backbone.PageableCollection) {
+        collection.getFirstPage({reset: true, fetch: true});
+      }
+      else collection.fetch({reset: true});
     },
 
     /**
@@ -229,8 +240,7 @@
       });
       this.listenTo(collection, "reset", function (col, options) {
         options = _.extend({reindex: true}, options || {});
-        if (options.reindex && col === collection &&
-            options.from == null && options.to == null) {
+        if (options.reindex && options.from == null && options.to == null) {
           shadowCollection.reset(col.models);
         }
       });
@@ -304,20 +314,29 @@
        Takes the query from the search box, constructs a matcher with it and
        loops through collection looking for matches. Reset the given collection
        when all the matches have been found.
+
+       If the collection is a PageableCollection, searching will go back to the
+       first page.
     */
     search: function () {
       var matcher = _.bind(this.makeMatcher(this.searchBox().val()), this);
       var col = this.collection;
       if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
-      this.collection.reset(this.shadowCollection.filter(matcher), {reindex: false});
+      col.reset(this.shadowCollection.filter(matcher), {reindex: false});
     },
 
     /**
        Clears the search box and reset the collection to its original.
+
+       If the collection is a PageableCollection, clearing will go back to the
+       first page.
     */
     clear: function () {
       this.searchBox().val(null);
-      this.collection.reset(this.shadowCollection.models, {reindex: false});
+      this.showClearButtonMaybe();
+      var col = this.collection;
+      if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
+      col.reset(this.shadowCollection.models, {reindex: false});
     }
 
   });
@@ -439,15 +458,24 @@
        the client-side. The search result is returned by resetting the
        underlying collection to the models after interrogating the index for the
        query answer.
+
+       If the collection is a PageableCollection, searching will go back to the
+       first page.
     */
     search: function () {
+      var col = this.collection;
+      if (!this.searchBox().val()) {
+        col.reset(this.shadowCollection.models, {reindex: false});
+        return;
+      }
+
       var searchResults = this.index.search(this.searchBox().val());
       var models = [];
       for (var i = 0; i < searchResults.length; i++) {
         var result = searchResults[i];
         models.push(this.shadowCollection.get(result.ref));
       }
-      var col = this.collection;
+
       if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
       col.reset(models, {reindex: false});
     }

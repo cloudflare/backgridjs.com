@@ -128,52 +128,109 @@
       <div class="col-md-3">
         <h2>Filter</h2>
         <ul class="nav nav-stacked">
-          <li><a href="api/index.html#!/api/Backgrid.Extension.ServerSideFilter">Backgrid.Extension.ServerSideFilter</a></li>
-          <li><a href="api/index.html#!/api/Backgrid.Extension.ClientSideFilter">Backgrid.Extension.ClientSideFilter</a></li>
-          <li><a href="api/index.html#!/api/Backgrid.Extension.LunrFilter">Backgrid.Extension.LunrFilter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.ServerSideFilter">Backgrid.Extension.ServerSideFilter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.ClientSideFilter">Backgrid.Extension.ClientSideFilter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.LunrFilter">Backgrid.Extension.LunrFilter</a></li>
         </ul>
+        <hr/>
         <h4>Best Used On</h4>
         <ul>
           <li>Desktop</li>
           <li>Mobile</li>
         </ul>
+        <a class="btn btn-lg btn-success center-block" href="https://github.com/wyuenho/backgrid-filter" title="backgrid-filter">Download</a>
       </div>
       <div class="col-md-9">
         <h3>When to Use</h3>
         <p>When you have lots of rows with lots of text, and you just want
-        to quickly get to the row that only contain certain keywords.</p>
+          to quickly get to the row that only contain certain keywords.</p>
         <h3>Prerequisites</h3>
-        <p>All three Filter classes have an optional dependency
-          on <a href="http://twitter.github.com/bootstrap/"
-                title="Twitter Bootstrap">Twitter Bootstrap's CSS</a>.
-          This dependency is optional because the filter extension only
-          uses its CSS for rendering. You are free to override the default
-          template and CSS if you don't like it.</p>
-        <p>For LunrFilter, it has a hard dependency on <a
+        <p>There are no extra dependencies for <code>ServerSideFilter</code> and
+          <code>ClientSideFilter</code>.</p>
+        <p>For <code>LunrFilter</code>, it has a hard dependency on <a
           href="http://lunrjs.com/" title="lunr.js">lunr.js</a> for
           full-text searching.</p>
-        <textarea class="code-snippet" data-mode="htmlmixed">
-          &lt;link rel="stylesheet" href="assets/css/bootstrap.css" /&gt;
-          &lt;link rel="stylesheet" href="lib/extensions/filter/backgrid-filter.css" /&gt;
-          &lt;script src="assets/js/lunr.js"&gt;&lt;/script&gt;
-          &lt;script src="lib/extensions/filter/backgrid-filter.js"&gt;&lt;/script&gt;</textarea>
-        <h3>Usage</h3>
-        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+        <h3>ServerSideFilter</h3>
+        <p>ServerSideFilter is suitable if you have a server where you send the
+          search queries to get back a result. The follow example will create a
+          collection that uses Github's excellent API to search for Github
+          users. See <a
+          href="http://developer.github.com/v3/search/#search-users"
+          title="Github API - Search Users">here</a> for the valid search terms
+          to use.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          // Creates a Backbone.PageableCollection to talk to Github's API.
 
-          // ServerSideFilter delegates the searching to the server by submitting a query.
-          var serverSideFilter = new Backgrid.Extension.ServerSideFilter({
-            collection: issues,
-            name: "labels", // the name of the URL query parameter
-            placeholder: "Search on the server" // HTML5 placeholder for the search box
+          // While you don't have to use Backbone.PageableCollection, it is
+          // recommended that you do because of its good support for querying
+          // RESTful APIs that support pagination and sorting.
+
+          // See https://github.com/wyuenho/backbone-pageable
+          var GithubUsers = Backbone.PageableCollection.extend({
+            url: "https://api.github.com/search/users",
+
+            state: {
+              pageSize: 15,
+              sortKey: "updated",
+              order: 1
+            },
+
+            queryParams: {
+              firstPage: 0,
+              totalPages: null,
+              totalRecords: null,
+              sortKey: "followers",
+              order: "direction",
+              directions: {
+                "-1": "asc",
+                "1": "desc"
+              }
+            },
+
+            parseState: function (resp, queryParams, state, options) {
+              return {totalRecords: resp.total_count};
+            },
+
+            parseRecords: function (resp, options) {
+              return resp.items;
+            }
+
           });
 
-          $("#filter-example-result").append(serverSideFilter.render().el);
+          var githubUsers = new GithubUsers();
 
+          // ... and then give the collection instance to a grid as usual ...</textarea>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          // ServerSideFilter delegates the searching to the server by submitting a query.
+          var serverSideFilter = new Backgrid.Extension.ServerSideFilter({
+            collection: githubUsers,
+            // the name of the URL query parameter
+            name: "q",
+            placeholder: "ex: location:your country" // HTML5 placeholder for the search box
+          });
+
+          $("#server-side-filter-example-result .backgrid-container").before(serverSideFilter.render().el);</textarea>
+        <div id="server-side-filter-example-result">
+          <aside class="note">
+            <h3>Note:</h3>
+            <p>Github's API is <a
+              href="http://developer.github.com/v3/#rate-limiting" title="Github
+              API Rate Limit">rate limited</a>, if the example doesn't work, you
+              may want to try again at a later time.</p>
+          </aside>
+          <p>
+            <span class="label label-info">Tip</span>
+            <a href="http://developer.github.com/v3/search/#search-users" title="Github Search User API">Github Search User API</a>
+          </p>
+          <div class="backgrid-container"></div>
+        </div>
+        <h3>ClientSideFilter</h3>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
           // ClientSideFilter performs a case-insensitive regular
           // expression search on the client side by OR-ing the keywords in
           // the search box together.
           var clientSideFilter = new Backgrid.Extension.ClientSideFilter({
-            collection: pageableTerritories.fullCollection,
+            collection: clientTerritories,
             placeholder: "Search in the browser",
             // The model fields to search for matches
             fields: ['name'],
@@ -181,12 +238,16 @@
             wait: 150
           });
 
-          $("#filter-example-result").append(clientSideFilter.render().el);
-
+          $("#client-side-filter-example-result").prepend(clientSideFilter.render().el);</textarea>
+        <div id="client-side-filter-example-result">
+          <div class="backgrid-container"></div>
+        </div>
+        <h3>LunrFilter</h3>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
           // LunrFilter is a specialized ClientSideFilter that uses
           // lunr.js to perform full-text searching on the client side.
           var lunrFilter = new Backgrid.Extension.LunrFilter({
-            collection: pageableTerritories.fullCollection,
+            collection: lunrTerritories,
             placeholder: "Full-text searching",
             // lunr.js field name and boost value
             fields: {
@@ -197,22 +258,20 @@
             wait: 150
           });
 
-          $("#filter-example-result").append(lunrFilter.render().el);</textarea>
-        <div id="filter-example-result"></div>
+          $("#lunr-filter-example-result").prepend(lunrFilter.render().el);</textarea>
+        <div id="lunr-filter-example-result">
+          <div class="backgrid-container"></div>
+        </div>
         <p class="label label-info">Pro Tip</p>
-        <p>The client-side filters won't work unless the collection
+        <p>ClientSideFilter and LunrFilter won't work unless the collection
           contains all the data for filtering at the time the filters are
           initialized. If you are fetching data after the filters were
-          initialized and using Backbone 1.0.0+, you should pass
-          <code>{remove: true}</code> or <code>{reset: true}</code> to
+          initialized and using Backbone 1.0.0+, you should pass <code>{remove:
+          true}</code> or <code>{reset: true}</code> to
           <code>Collection#fetch()</code> due to the change to
-          <code>Collection#set()</code>
-          after <a href="http://backbonejs.org/#Collection-fetch"
-                   title="Backbone.Collection#fetch">fetching</a> in Backbone
-          1.0.0+. For this reason, the examples above may or may not work
-          due to the asynchronous nature of fetching. To see a working
-          example, scroll up to
-        <a href="#example-2-result" title="Example 2">example 2</a>.</p>
+          <code>Collection#set()</code> after <a
+          href="http://backbonejs.org/#Collection-fetch"
+          title="Backbone.Collection#fetch">fetching</a>.
       </div>
     </div>
   
@@ -257,7 +316,6 @@
       require("backgrid-moment-cell");
       require("backgrid-text-cell");
       require("codemirror");
-      require("backgridjs-com").setUpCodeMirror();
       $(document).ready(function () {
         $("a[href^='/#'], a[href^='#']").click(function (e) {
           e.preventDefault();
@@ -293,6 +351,189 @@
       }(document,"script","twitter-wjs");
     </script>
     
+    <script>
+      var GithubUsers = Backbone.PageableCollection.extend({
+        url: "https://api.github.com/search/users",
+
+        state: {
+          pageSize: 15,
+          sortKey: "updated",
+          order: 1
+        },
+
+        queryParams: {
+          firstPage: 0,
+          totalPages: null,
+          totalRecords: null,
+          sortKey: "followers",
+          order: "direction",
+          directions: {
+            "-1": "asc",
+            "1": "desc"
+          }
+        },
+
+        parseState: function (resp, queryParams, state, options) {
+          return {totalRecords: resp.total_count};
+        },
+
+        parseRecords: function (resp, options) {
+          return resp.items;
+        }
+
+      });
+
+      var githubUsers = new GithubUsers();
+
+      var serverGrid = new Backgrid.Grid({
+        columns: [{
+          name: "id",
+          cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+          }),
+          editable: false,
+          sortable: false
+        }, {
+          name: "login",
+          cell: "string",
+          editable: false,
+          sortable: false
+        }, {
+          name: "html_url",
+          cell: "uri",
+          editable: false,
+          sortable: false
+        }, {
+          name: "score",
+          cell: "number",
+          editable: false,
+          sortable: false
+        }],
+        collection: githubUsers
+      });
+
+      var serverExample = $("#server-side-filter-example-result");
+      serverExample.find(".backgrid-container").append(serverGrid.render().el);
+
+      var ServerPaginator = Backgrid.Extension.Paginator.extend({
+        renderIndexedPageHandles: false,
+        controls: {
+          rewind: null,
+          fastForward: null
+        }
+      });
+
+      var serverPaginator = new ServerPaginator({
+        collection: githubUsers
+      });
+      serverExample.append(serverPaginator.render().el);
+
+
+      var PageableTerritories = Backbone.PageableCollection.extend({
+        url: "/examples/pageable-territories.json",
+        state: {
+          pageSize: 15
+        },
+        mode: "client"
+      });
+
+      var clientTerritories = new PageableTerritories();
+
+      var clientGrid = new Backgrid.Grid({
+        columns: [{
+          name: "id",
+          label: "ID",
+          editable: false,
+          cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+          })
+        }, {
+          name: "name",
+          label: "Name",
+          cell: "string"
+        }, {
+          name: "pop",
+          label: "Population",
+          cell: "integer"
+        }, {
+          name: "percentage",
+          label: "% of World Population",
+          cell: "number"
+        }, {
+          name: "date",
+          label: "Date",
+          cell: "date",
+        }, {
+          name: "url",
+          label: "URL",
+          cell: "uri"
+        }],
+        collection: clientTerritories
+      });
+
+      var clientExample = $("#client-side-filter-example-result");
+      clientExample.find(".backgrid-container").append(clientGrid.render().$el)
+
+      var clientPaginator = new Backgrid.Extension.Paginator({
+        collection: clientTerritories
+      });
+
+      clientExample.append(clientPaginator.render().$el);
+
+      clientTerritories.fetch({reset: true});
+
+
+
+      var lunrTerritories = new PageableTerritories();
+
+      var lunrGrid = new Backgrid.Grid({
+        columns: [{
+          name: "id",
+          label: "ID",
+          editable: false,
+          cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+          })
+        }, {
+          name: "name",
+          label: "Name",
+          cell: "string"
+        }, {
+          name: "pop",
+          label: "Population",
+          cell: "integer"
+        }, {
+          name: "percentage",
+          label: "% of World Population",
+          cell: "number"
+        }, {
+          name: "date",
+          label: "Date",
+          cell: "date",
+        }, {
+          name: "url",
+          label: "URL",
+          cell: "uri"
+        }],
+        collection: lunrTerritories
+      });
+
+      var lunrExample = $("#lunr-filter-example-result");
+      lunrExample.find(".backgrid-container").append(lunrGrid.render().$el)
+
+      var lunrPaginator = new Backgrid.Extension.Paginator({
+        collection: lunrTerritories
+      });
+
+      lunrExample.append(lunrPaginator.render().$el);
+
+      lunrTerritories.fetch({reset: true});
+    </script>
+  
+
+    <script>
+      require("backgridjs-com").setUpCodeMirror();
+    </script>
   </body>
 </html>
 

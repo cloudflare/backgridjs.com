@@ -5,7 +5,8 @@
   "version": "0.3.0",
   "keywords": [
     "backbone",
-    "backgrid"
+    "backgrid",
+    "select2"
   ],
   "main": "backgrid-select2-cell.js",
   "scripts": [
@@ -16,7 +17,8 @@
   ],
   "dependencies": {
     "jashkenas/underscore": "*",
-    "wyuenho/backgrid": "*"
+    "wyuenho/backgrid": "*",
+    "ivaynberg/select2": "*"
   },
   "license": "MIT"
 }

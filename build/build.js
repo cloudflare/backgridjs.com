@@ -14923,7 +14923,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
 });
 require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(exports, require, module){
 /*
-  backbone-pageable 1.4.1
+  backbone-pageable 1.4.3
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -15349,7 +15349,11 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
               fullIndex;
           }
 
-          ++state.totalRecords;
+          if (!options.onRemove) {
+            ++state.totalRecords;
+            delete options.onRemove;
+          }
+
           pageCol.state = pageCol._checkState(state);
 
           if (colToAdd) {
@@ -15360,9 +15364,8 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
               pageCol.at(pageSize) :
               null;
             if (modelToRemove) {
-              var popOptions = {onAdd: true};
               runOnceAtLastHandler(collection, event, function () {
-                pageCol.remove(modelToRemove, popOptions);
+                pageCol.remove(modelToRemove, {onAdd: true});
               });
             }
           }
@@ -15387,16 +15390,18 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
             if (collection == pageCol) {
               if (nextModel = fullCol.at(pageEnd)) {
                 runOnceAtLastHandler(pageCol, event, function () {
-                  pageCol.push(nextModel);
+                  pageCol.push(nextModel, {onRemove: true});
                 });
               }
               fullCol.remove(model);
             }
             else if (removedIndex >= pageStart && removedIndex < pageEnd) {
+              if (nextModel = fullCol.at(pageEnd - 1)) {
+                runOnceAtLastHandler(pageCol, event, function() {
+                  pageCol.push(nextModel, {onRemove: true});
+                });
+              }
               pageCol.remove(model);
-              var at = removedIndex + 1
-              nextModel = fullCol.at(at) || fullCol.last();
-              if (nextModel) pageCol.add(nextModel, {at: at});
             }
           }
           else delete options.onAdd;
@@ -15502,8 +15507,6 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
         else if (currentPage < firstPage ||
                  (totalPages > 0 &&
                   (firstPage ? currentPage > totalPages : currentPage >= totalPages))) {
-          var op = firstPage ? ">=" : ">";
-
           throw new RangeError("`currentPage` must be firstPage <= currentPage " +
                                (firstPage ? ">" : ">=") +
                                " totalPages if " + firstPage + "-based. Got " +
@@ -16056,7 +16059,7 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
        then reset.
 
        The query string is constructed by translating the current pagination
-       state to your server API query parameter using #queryParams.  The current
+       state to your server API query parameter using #queryParams. The current
        page will reset after fetch.
 
        @param {Object} [options] Accepts all
@@ -16133,13 +16136,16 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
 
           var models = col.models;
           if (mode == "client") fullCol.reset(models, opts);
-          else fullCol.add(models, _extend({at: fullCol.length}, opts));
+          else {
+            fullCol.add(models, _extend({at: fullCol.length}, opts));
+            self.trigger("reset", self, opts);
+          }
 
           if (success) success(col, resp, opts);
         };
 
         // silent the first reset from backbone
-        return BBColProto.fetch.call(self, _extend({}, options, {silent: true}));
+        return BBColProto.fetch.call(this, _extend({}, options, {silent: true}));
       }
 
       return BBColProto.fetch.call(this, options);
@@ -19204,7 +19210,7 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
      If this page handle represents the current page, an `active` class will be
      placed on the root list element.
 
-     if this page handle is at the border of the list of pages, a `disabled`
+     If this page handle is at the border of the list of pages, a `disabled`
      class will be placed on the root list element.
 
      Only page handles that are neither `active` nor `disabled` will respond to
@@ -19295,7 +19301,8 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       this.pageIndex = pageIndex;
 
       if (((this.isRewind || this.isBack) && currentPage == firstPage) ||
-          ((this.isForward || this.isFastForward) && currentPage == lastPage)) {
+          ((this.isForward || this.isFastForward) &&
+           (currentPage == lastPage || collection.state.totalPages < 1))) {
         this.$el.addClass("disabled");
       }
       else if (!(this.isRewind ||
@@ -19496,7 +19503,7 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       var windowSize = this.windowSize;
       var slideScale = this.slideScale;
       var windowStart = Math.floor(currentPage / windowSize) * windowSize;
-      if (currentPage <= lastPage - this.slideMaybe()) {
+      if (currentPage <= lastPage - this.slideThisMuch()) {
         windowStart += (this.slideMaybe(firstPage, lastPage, currentPage, windowSize, slideScale) *
                         this.slideThisMuch(firstPage, lastPage, currentPage, windowSize, slideScale));
       }
@@ -21447,36 +21454,47 @@ require.register("wyuenho-backgrid-filter/backgrid-filter.js", function(exports,
        Upon search form submission, this event handler constructs a query
        parameter object and pass it to Collection#fetch for server-side
        filtering.
+
+       If the collection is a PageableCollection, searching will go back to the
+       first page.
     */
     search: function (e) {
       if (e) e.preventDefault();
 
       var data = {};
+      var query = this.searchBox().val();
+      if (query) data[this.name] = query;
+
+      var collection = this.collection;
 
       // go back to the first page on search
-      var collection = this.collection;
       if (Backbone.PageableCollection &&
-          collection instanceof Backbone.PageableCollection &&
-          collection.mode == "server") {
-        collection.state.currentPage = collection.state.firstPage;
+          collection instanceof Backbone.PageableCollection) {
+        collection.getFirstPage({data: data, reset: true, fetch: true});
       }
-      else {
-        var query = this.searchBox().val();
-        if (query) data[this.name] = query;
-      }
-
-      collection.fetch({data: data, reset: true});
+      else collection.fetch({data: data, reset: true});
     },
 
     /**
        Event handler for the clear button. Clears the search box and refetch the
        collection.
+
+       If the collection is a PageableCollection, clearing will go back to the
+       first page.
     */
     clear: function (e) {
       if (e) e.preventDefault();
       this.searchBox().val(null);
       this.showClearButtonMaybe();
-      this.collection.fetch({reset: true});
+
+      var collection = this.collection;
+
+      // go back to the first page on clear
+      if (Backbone.PageableCollection &&
+          collection instanceof Backbone.PageableCollection) {
+        collection.getFirstPage({reset: true, fetch: true});
+      }
+      else collection.fetch({reset: true});
     },
 
     /**
@@ -21565,8 +21583,7 @@ require.register("wyuenho-backgrid-filter/backgrid-filter.js", function(exports,
       });
       this.listenTo(collection, "reset", function (col, options) {
         options = _.extend({reindex: true}, options || {});
-        if (options.reindex && col === collection &&
-            options.from == null && options.to == null) {
+        if (options.reindex && options.from == null && options.to == null) {
           shadowCollection.reset(col.models);
         }
       });
@@ -21640,20 +21657,29 @@ require.register("wyuenho-backgrid-filter/backgrid-filter.js", function(exports,
        Takes the query from the search box, constructs a matcher with it and
        loops through collection looking for matches. Reset the given collection
        when all the matches have been found.
+
+       If the collection is a PageableCollection, searching will go back to the
+       first page.
     */
     search: function () {
       var matcher = _.bind(this.makeMatcher(this.searchBox().val()), this);
       var col = this.collection;
       if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
-      this.collection.reset(this.shadowCollection.filter(matcher), {reindex: false});
+      col.reset(this.shadowCollection.filter(matcher), {reindex: false});
     },
 
     /**
        Clears the search box and reset the collection to its original.
+
+       If the collection is a PageableCollection, clearing will go back to the
+       first page.
     */
     clear: function () {
       this.searchBox().val(null);
-      this.collection.reset(this.shadowCollection.models, {reindex: false});
+      this.showClearButtonMaybe();
+      var col = this.collection;
+      if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
+      col.reset(this.shadowCollection.models, {reindex: false});
     }
 
   });
@@ -21775,15 +21801,24 @@ require.register("wyuenho-backgrid-filter/backgrid-filter.js", function(exports,
        the client-side. The search result is returned by resetting the
        underlying collection to the models after interrogating the index for the
        query answer.
+
+       If the collection is a PageableCollection, searching will go back to the
+       first page.
     */
     search: function () {
+      var col = this.collection;
+      if (!this.searchBox().val()) {
+        col.reset(this.shadowCollection.models, {reindex: false});
+        return;
+      }
+
       var searchResults = this.index.search(this.searchBox().val());
       var models = [];
       for (var i = 0; i < searchResults.length; i++) {
         var result = searchResults[i];
         models.push(this.shadowCollection.get(result.ref));
       }
-      var col = this.collection;
+
       if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
       col.reset(models, {reindex: false});
     }
@@ -22078,7 +22113,7 @@ require.register("wyuenho-backgrid-text-cell/backgrid-text-cell.js", function(ex
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
@@ -22086,12 +22121,9 @@ require.register("wyuenho-backgrid-text-cell/backgrid-text-cell.js", function(ex
                              require("backgrid"));
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backgrid !== "undefined") {
-    factory(_, Backgrid);
-  }
+  else factory(root._, root.Backgrid);
 
-}(function (_, Backgrid)  {
+}(this, function (_, Backgrid)  {
 
   /**
      Renders a form with a text area and a save button in a modal dialog.
@@ -24569,7 +24601,7 @@ require.register("wyuenho-backgrid-moment-cell/backgrid-moment-cell.js", functio
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
@@ -24577,13 +24609,9 @@ require.register("wyuenho-backgrid-moment-cell/backgrid-moment-cell.js", functio
                              require("moment"));
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backgrid !== "undefined" &&
-           typeof moment !== "undefined") {
-    factory(_, Backgrid, moment);
-  }
+  else factory(root._, root.Backgrid, root.moment);
 
-}(function (_, Backgrid, moment) {
+}(this, function (_, Backgrid, moment) {
 
   /**
      MomentFormatter converts bi-directionally any datetime values in any format
@@ -24761,20 +24789,18 @@ require.register("wyuenho-backgrid-select2-cell/backgrid-select2-cell.js", funct
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
+    require("select2");
     module.exports = factory(require("underscore"),
                              require("backgrid"));
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backgrid !== "undefined") {
-    factory(_, Backgrid);
-  }
+  else factory(root._, root.Backgrid);
 
-}(function (_, Backgrid)  {
+}(this, function (_, Backgrid)  {
 
   /**
      Select2CellEditor is a cell editor that renders a `select2` select box
@@ -29820,6 +29846,51 @@ require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/und
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-underscore/index.js");
 require.alias("jashkenas-backbone/backbone.js", "jashkenas-backbone/index.js");
 require.alias("wyuenho-backgrid/lib/backgrid.js", "wyuenho-backgrid/index.js");
+require.alias("ivaynberg-select2/select2.js", "wyuenho-backgrid-select2-cell/deps/select2/select2.js");
+require.alias("ivaynberg-select2/select2_locale_ar.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ar.js");
+require.alias("ivaynberg-select2/select2_locale_bg.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_bg.js");
+require.alias("ivaynberg-select2/select2_locale_ca.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ca.js");
+require.alias("ivaynberg-select2/select2_locale_cs.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_cs.js");
+require.alias("ivaynberg-select2/select2_locale_da.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_da.js");
+require.alias("ivaynberg-select2/select2_locale_de.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_de.js");
+require.alias("ivaynberg-select2/select2_locale_el.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_el.js");
+require.alias("ivaynberg-select2/select2_locale_es.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_es.js");
+require.alias("ivaynberg-select2/select2_locale_et.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_et.js");
+require.alias("ivaynberg-select2/select2_locale_eu.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_eu.js");
+require.alias("ivaynberg-select2/select2_locale_fa.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_fa.js");
+require.alias("ivaynberg-select2/select2_locale_fi.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_fi.js");
+require.alias("ivaynberg-select2/select2_locale_fr.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_fr.js");
+require.alias("ivaynberg-select2/select2_locale_gl.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_gl.js");
+require.alias("ivaynberg-select2/select2_locale_he.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_he.js");
+require.alias("ivaynberg-select2/select2_locale_hr.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_hr.js");
+require.alias("ivaynberg-select2/select2_locale_hu.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_hu.js");
+require.alias("ivaynberg-select2/select2_locale_id.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_id.js");
+require.alias("ivaynberg-select2/select2_locale_is.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_is.js");
+require.alias("ivaynberg-select2/select2_locale_it.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_it.js");
+require.alias("ivaynberg-select2/select2_locale_ja.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ja.js");
+require.alias("ivaynberg-select2/select2_locale_ka.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ka.js");
+require.alias("ivaynberg-select2/select2_locale_ko.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ko.js");
+require.alias("ivaynberg-select2/select2_locale_lt.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_lt.js");
+require.alias("ivaynberg-select2/select2_locale_lv.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_lv.js");
+require.alias("ivaynberg-select2/select2_locale_mk.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_mk.js");
+require.alias("ivaynberg-select2/select2_locale_ms.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ms.js");
+require.alias("ivaynberg-select2/select2_locale_nl.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_nl.js");
+require.alias("ivaynberg-select2/select2_locale_no.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_no.js");
+require.alias("ivaynberg-select2/select2_locale_pl.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_pl.js");
+require.alias("ivaynberg-select2/select2_locale_pt-BR.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_pt-BR.js");
+require.alias("ivaynberg-select2/select2_locale_pt-PT.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_pt-PT.js");
+require.alias("ivaynberg-select2/select2_locale_ro.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ro.js");
+require.alias("ivaynberg-select2/select2_locale_ru.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ru.js");
+require.alias("ivaynberg-select2/select2_locale_sk.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_sk.js");
+require.alias("ivaynberg-select2/select2_locale_sv.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_sv.js");
+require.alias("ivaynberg-select2/select2_locale_th.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_th.js");
+require.alias("ivaynberg-select2/select2_locale_tr.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_tr.js");
+require.alias("ivaynberg-select2/select2_locale_ua.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_ua.js");
+require.alias("ivaynberg-select2/select2_locale_vi.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_vi.js");
+require.alias("ivaynberg-select2/select2_locale_zh-CN.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_zh-CN.js");
+require.alias("ivaynberg-select2/select2_locale_zh-TW.js", "wyuenho-backgrid-select2-cell/deps/select2/select2_locale_zh-TW.js");
+require.alias("ivaynberg-select2/select2.js", "wyuenho-backgrid-select2-cell/deps/select2/index.js");
+require.alias("ivaynberg-select2/select2.js", "ivaynberg-select2/index.js");
 require.alias("wyuenho-backgrid-select2-cell/backgrid-select2-cell.js", "wyuenho-backgrid-select2-cell/index.js");
 require.alias("fgnass-spin.js/spin.js", "backgridjs-com/deps/spin/spin.js");
 require.alias("fgnass-spin.js/spin.js", "backgridjs-com/deps/spin/index.js");

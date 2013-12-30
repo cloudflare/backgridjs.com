@@ -5,20 +5,18 @@
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
+    require("select2");
     module.exports = factory(require("underscore"),
                              require("backgrid"));
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backgrid !== "undefined") {
-    factory(_, Backgrid);
-  }
+  else factory(root._, root.Backgrid);
 
-}(function (_, Backgrid)  {
+}(this, function (_, Backgrid)  {
 
   /**
      Select2CellEditor is a cell editor that renders a `select2` select box

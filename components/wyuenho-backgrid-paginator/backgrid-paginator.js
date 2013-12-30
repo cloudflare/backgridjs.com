@@ -56,7 +56,7 @@
      If this page handle represents the current page, an `active` class will be
      placed on the root list element.
 
-     if this page handle is at the border of the list of pages, a `disabled`
+     If this page handle is at the border of the list of pages, a `disabled`
      class will be placed on the root list element.
 
      Only page handles that are neither `active` nor `disabled` will respond to
@@ -147,7 +147,8 @@
       this.pageIndex = pageIndex;
 
       if (((this.isRewind || this.isBack) && currentPage == firstPage) ||
-          ((this.isForward || this.isFastForward) && currentPage == lastPage)) {
+          ((this.isForward || this.isFastForward) &&
+           (currentPage == lastPage || collection.state.totalPages < 1))) {
         this.$el.addClass("disabled");
       }
       else if (!(this.isRewind ||
@@ -348,7 +349,7 @@
       var windowSize = this.windowSize;
       var slideScale = this.slideScale;
       var windowStart = Math.floor(currentPage / windowSize) * windowSize;
-      if (currentPage <= lastPage - this.slideMaybe()) {
+      if (currentPage <= lastPage - this.slideThisMuch()) {
         windowStart += (this.slideMaybe(firstPage, lastPage, currentPage, windowSize, slideScale) *
                         this.slideThisMuch(firstPage, lastPage, currentPage, windowSize, slideScale));
       }

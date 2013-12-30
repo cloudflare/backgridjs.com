@@ -5,7 +5,7 @@
   Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
   Licensed under the MIT @license.
 */
-(function (factory) {
+(function (root, factory) {
 
   // CommonJS
   if (typeof exports == "object") {
@@ -13,12 +13,9 @@
                              require("backgrid"));
   }
   // Browser
-  else if (typeof _ !== "undefined" &&
-           typeof Backgrid !== "undefined") {
-    factory(_, Backgrid);
-  }
+  else factory(root._, root.Backgrid);
 
-}(function (_, Backgrid)  {
+}(this, function (_, Backgrid)  {
 
   /**
      Renders a form with a text area and a save button in a modal dialog.

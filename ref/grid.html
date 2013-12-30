@@ -254,7 +254,6 @@
       require("backgrid-moment-cell");
       require("backgrid-text-cell");
       require("codemirror");
-      require("backgridjs-com").setUpCodeMirror();
       $(document).ready(function () {
         $("a[href^='/#'], a[href^='#']").click(function (e) {
           e.preventDefault();
@@ -290,6 +289,10 @@
       }(document,"script","twitter-wjs");
     </script>
     
+
+    <script>
+      require("backgridjs-com").setUpCodeMirror();
+    </script>
   </body>
 </html>
 
