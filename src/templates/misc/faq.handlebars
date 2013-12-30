@@ -6,33 +6,33 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h2>How do I add a column of computed values?</h2>
+        <h2 id="computed-values">How do I add a column of computed values?</h2>
         <p>The easiest way to do it is to extend your models from a
           <code>Backbone.Model</code> subclass that supports computed
           properties <i>and</i> accessing them via the same <i>get/set</i>
           interface. There are a <a
-          href="https://github.com/gmac/backbone.epoxy"
-          title="backbone.epoxy">number</a> <a
-          href="https://github.com/rhysbrettbowen/Backbone.ModelMorph"
-          title="Backbone.ModelMorph">of</a> <a
-          href="https://github.com/alexanderbeletsky/backbone-computedfields"
-          title="backbone-computedfields">Backbone</a> <a
-          href="https://github.com/DreamTheater/Backbone.Schema"
-          title="Backbone.Schema">plugins</a> readily available for
+            href="https://github.com/gmac/backbone.epoxy"
+            title="backbone.epoxy">number</a> <a
+            href="https://github.com/rhysbrettbowen/Backbone.ModelMorph"
+            title="Backbone.ModelMorph">of</a> <a
+            href="https://github.com/alexanderbeletsky/backbone-computedfields"
+            title="backbone-computedfields">Backbone</a> <a
+            href="https://github.com/DreamTheater/Backbone.Schema"
+            title="Backbone.Schema">plugins</a> readily available for
           this. Should all else failed, you can <a
-          href="http://kilon.org/blog/2012/02/backbone-calculated-fields/"
-          title="Backbone.js computed properties">roll your own</a> fairly
+            href="http://kilon.org/blog/2012/02/backbone-calculated-fields/"
+            title="Backbone.js computed properties">roll your own</a> fairly
           easily.</p>
         <h2>How do I add or remove a row?</h2>
         <p>You can either use <a
-        href="http://backbonejs.org/#Collection-add"
-        title="Backbone.Collection#add">Backbone.Collection#add</a> or <a
-        href="#api-grid" title="Grid#insertRow">Grid#insertRow</a> for
-        insertion. Similarly, use <a
-        href="http://backbonejs.org/#Collection-remove"
-        title="Backbone.Collection#remove">Backbone.Collection#remove</a>
-        or <a href="#api-grid" title="Grid#removeRow">Grid#removeRow</a>
-        to remove rows.</p>
+          href="http://backbonejs.org/#Collection-add"
+          title="Backbone.Collection#add">Backbone.Collection#add</a> or <a
+          href="#api-grid" title="Grid#insertRow">Grid#insertRow</a> for
+          insertion. Similarly, use <a
+          href="http://backbonejs.org/#Collection-remove"
+          title="Backbone.Collection#remove">Backbone.Collection#remove</a>
+          or <a href="#api-grid" title="Grid#removeRow">Grid#removeRow</a>
+          to remove rows.</p>
         <h2>How do I validate user input?</h2>
         <p>See <a href="#api-formatter" title="Formatter">Formatter</a>.</p>
         <h2>How do I save my row changes to the server immediately?</h2>
@@ -41,7 +41,7 @@
             initialize: function () {
               Backbone.Model.prototype.initialize.apply(this, arguments);
               this.on("change", function (model, options) {
-                if (options && options.save === false) return;
+              if (options && options.save === false) return;
                 model.save();
               });
             }
@@ -53,7 +53,7 @@
             <li>Search this document for the keywords you are looking for.</li>
             <li>Pay your tribute to the almighty <a href="https://www.google.com/" title="Google">Google</a>.</li>
             <li>
-              Go to <a href="http://stackoverflow.com/questions/tagged/backgrid" title="Stackoverflow">Stackoverflow</a>
+              Go to <a href="http://stackoverflow.com/questions/tagged/backgrid" title="StackOverflow">StackOverflow</a>
               or as a last resort, <a href="https://github.com/wyuenho/backgrid/issues" title="Github">Github</a>.
             </li>
           </ol>
@@ -70,20 +70,23 @@
           effect with much cleaner code -
           <a href="#api-paginator">paginator extension</a>, which
           uses <a href="https://github.com/wyuenho/backbone-pageable/"
-          title="backbone-pageable">backbone-pageable</a>. The paginator
+                  title="backbone-pageable">backbone-pageable</a>. The paginator
           supports both paging on the server-side, or preloading all the
           models and paging purely through the browser. Paginated
           Backgrid.Grid instances only render one page of DOM nodes at a
           time to save memory and keep your web page responsive.</p>
         <h2>Does Backgrid.js support function aggregates?</h2>
         <p>No, because it is not the goal of this project to produce a
-          full-fledged web-based spreadsheet. However, doing aggregation
-          is trivial using Underscore.js methods</p>
+          full-fledged web-based spreadsheet. However, doing aggregation is
+          trivial using Underscore.js methods.</p>
         <textarea class="code-snippet" data-mode="javascript">
           // sum all the values of a column
           var sum = collection.reduce(function (accum, num) {
             return accum + num;
           });</textarea>
+        <p>If you use a Backbone plugin that supports <a href="#computed-values"
+                                                         title="Computed Values">computed values</a>, you may also treat the
+          computed values as a column as well.</p>
         <h2>Does Backgrid.js support multi-user editing?</h2>
         <p>Inside a Backgrid grid, every cell listens to the change event
           for its model value. The cells will rerender themselves during
@@ -108,30 +111,28 @@
         <h2 id="contribute">How do I contribute?</h2>
         <p><a href="https://github.com/wyuenho/backgrid/blob/gh-pages/CONTRIBUTING.md" title="Contributing">See Contributing.</a></p>
         <h2>Why doesn&apos;t Backgrid.js support AMD (or NPM)?</h2>
-        <p>The same question can be asked for volo, bower, ender,
-          browserify and many other competing solutions. The number one
-          reason Backgrid.js does not support AMD is because of the
-          barrier it presents to writing extensions that require
-          third-party libraries that don&apos;t support AMD. In addition
-          to this, Underscore.js and Backbone.js also do not support AMD
-          at this time.</p>
-        <p>The problem with supporting any package manager is that
-          Backgrid.js is a highly modular project, and that deciding to
-          use any package manager presupposes all its submodules and
-          dependency is compatible with such a package manager and its
-          importing mechanism. The Javascript ecosystem has gotten so
-          diverse now that there is still not yet a clear packaging winner
-          that everybody uses and works well under most situations, it is
-          also not clear that ES Harmony&apos;s module system will be
-          backward compatible with AMD.</p>
-        <p>Having said that, Backgrid.js doesn&apos;t do anything to
-          prevent you from adding support to your favorite package
-          manager. You are encouraged to fork and maintain your own
-          Backgrid.js packages.</p>
-        <p>You are also more than welcomed to convince me
-          on <a href="https://github.com/wyuenho/backgrid/issues">Github</a>
-          as you may probably know more than I do about packaging
-          Javascripts.</p>
+        <p>The same question can be asked for volo, bower, ender, browserify and
+          many other competing solutions. The number one reason Backgrid.js does
+          not support AMD or NPM is because of the barrier it presents to
+          writing extensions that require third-party libraries that don&apos;t
+          support these packaging mechanisms.</p>
+        <p>That said, it <em>is</em> possible to use Backgrid and its various
+          extensions with AMD using RequireJS's <a
+          href="http://requirejs.org/docs/api.html#config-shim" title="RequireJS
+          Shimming">shim</a> option. For CommonJS, there is also first-class
+          support for <a href="https://github.com/component/component"
+                         title="Component">Component</a>.</p>
+        <p>The problem with supporting any package manager is that Backgrid.js
+          is a highly modular project, and that deciding to use any package
+          manager presupposes all its submodules and dependency is compatible
+          with such a package manager and its importing mechanism. The
+          Javascript ecosystem has gotten so diverse now that there is still not
+          yet a clear packaging winner that everybody uses and works well under
+          most situations, it is also not clear that ES Harmony&apos;s module
+          system will be backward compatible with AMD.</p>
+        <p>Having said that, Backgrid.js doesn&apos;t do anything to prevent you
+          from adding support to your favorite package manager. You are
+          encouraged to fork and maintain your own Backgrid.js packages.</p>
       </div>
     </div>
   {{/replace}}
