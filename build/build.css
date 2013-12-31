@@ -7854,11 +7854,11 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 
 .backgrid th {
   font-weight: bold;
-  cursor: pointer;
 }
 
-.backgrid th a {
+.backgrid th.sortable a {
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .backgrid thead th {
