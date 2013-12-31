@@ -15507,6 +15507,8 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
         else if (currentPage < firstPage ||
                  (totalPages > 0 &&
                   (firstPage ? currentPage > totalPages : currentPage >= totalPages))) {
+          var op = firstPage ? ">=" : ">";
+
           throw new RangeError("`currentPage` must be firstPage <= currentPage " +
                                (firstPage ? ">" : ">=") +
                                " totalPages if " + firstPage + "-based. Got " +
