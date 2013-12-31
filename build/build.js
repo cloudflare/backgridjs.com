@@ -14921,7 +14921,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
 }));
 
 });
-require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(exports, require, module){
+require.register("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", function(exports, require, module){
 /*
   backbone-pageable 1.4.3
   http://github.com/wyuenho/backbone-pageable
@@ -15507,8 +15507,6 @@ require.register("wyuenho-backbone-pageable/lib/backbone-pageable.js", function(
         else if (currentPage < firstPage ||
                  (totalPages > 0 &&
                   (firstPage ? currentPage > totalPages : currentPage >= totalPages))) {
-          var op = firstPage ? ">=" : ">";
-
           throw new RangeError("`currentPage` must be firstPage <= currentPage " +
                                (firstPage ? ">" : ">=") +
                                " totalPages if " + firstPage + "-based. Got " +
@@ -29663,19 +29661,19 @@ require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/und
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/underscore/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-underscore/index.js");
 require.alias("jashkenas-backbone/backbone.js", "jashkenas-backbone/index.js");
-require.alias("wyuenho-backbone-pageable/lib/backbone-pageable.js", "backgridjs-com/deps/backbone-pageable/lib/backbone-pageable.js");
-require.alias("wyuenho-backbone-pageable/lib/backbone-pageable.js", "backgridjs-com/deps/backbone-pageable/index.js");
-require.alias("wyuenho-backbone-pageable/lib/backbone-pageable.js", "backbone-pageable/index.js");
-require.alias("jashkenas-underscore/underscore.js", "wyuenho-backbone-pageable/deps/underscore/underscore.js");
-require.alias("jashkenas-underscore/underscore.js", "wyuenho-backbone-pageable/deps/underscore/index.js");
+require.alias("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", "backgridjs-com/deps/backbone-pageable/lib/backbone-pageable.js");
+require.alias("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", "backgridjs-com/deps/backbone-pageable/index.js");
+require.alias("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", "backbone-pageable/index.js");
+require.alias("jashkenas-underscore/underscore.js", "backbone-paginator-backbone-pageable/deps/underscore/underscore.js");
+require.alias("jashkenas-underscore/underscore.js", "backbone-paginator-backbone-pageable/deps/underscore/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-underscore/index.js");
-require.alias("jashkenas-backbone/backbone.js", "wyuenho-backbone-pageable/deps/backbone/backbone.js");
-require.alias("jashkenas-backbone/backbone.js", "wyuenho-backbone-pageable/deps/backbone/index.js");
+require.alias("jashkenas-backbone/backbone.js", "backbone-paginator-backbone-pageable/deps/backbone/backbone.js");
+require.alias("jashkenas-backbone/backbone.js", "backbone-paginator-backbone-pageable/deps/backbone/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/underscore/underscore.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/underscore/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-underscore/index.js");
 require.alias("jashkenas-backbone/backbone.js", "jashkenas-backbone/index.js");
-require.alias("wyuenho-backbone-pageable/lib/backbone-pageable.js", "wyuenho-backbone-pageable/index.js");
+require.alias("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", "backbone-paginator-backbone-pageable/index.js");
 require.alias("wyuenho-backgrid/lib/backgrid.js", "backgridjs-com/deps/backgrid/lib/backgrid.js");
 require.alias("wyuenho-backgrid/lib/backgrid.js", "backgridjs-com/deps/backgrid/index.js");
 require.alias("wyuenho-backgrid/lib/backgrid.js", "backgrid/index.js");
@@ -29701,18 +29699,18 @@ require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/und
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/underscore/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-underscore/index.js");
 require.alias("jashkenas-backbone/backbone.js", "jashkenas-backbone/index.js");
-require.alias("wyuenho-backbone-pageable/lib/backbone-pageable.js", "wyuenho-backgrid-paginator/deps/backbone-pageable/lib/backbone-pageable.js");
-require.alias("wyuenho-backbone-pageable/lib/backbone-pageable.js", "wyuenho-backgrid-paginator/deps/backbone-pageable/index.js");
-require.alias("jashkenas-underscore/underscore.js", "wyuenho-backbone-pageable/deps/underscore/underscore.js");
-require.alias("jashkenas-underscore/underscore.js", "wyuenho-backbone-pageable/deps/underscore/index.js");
+require.alias("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", "wyuenho-backgrid-paginator/deps/backbone-pageable/lib/backbone-pageable.js");
+require.alias("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", "wyuenho-backgrid-paginator/deps/backbone-pageable/index.js");
+require.alias("jashkenas-underscore/underscore.js", "backbone-paginator-backbone-pageable/deps/underscore/underscore.js");
+require.alias("jashkenas-underscore/underscore.js", "backbone-paginator-backbone-pageable/deps/underscore/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-underscore/index.js");
-require.alias("jashkenas-backbone/backbone.js", "wyuenho-backbone-pageable/deps/backbone/backbone.js");
-require.alias("jashkenas-backbone/backbone.js", "wyuenho-backbone-pageable/deps/backbone/index.js");
+require.alias("jashkenas-backbone/backbone.js", "backbone-paginator-backbone-pageable/deps/backbone/backbone.js");
+require.alias("jashkenas-backbone/backbone.js", "backbone-paginator-backbone-pageable/deps/backbone/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/underscore/underscore.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-backbone/deps/underscore/index.js");
 require.alias("jashkenas-underscore/underscore.js", "jashkenas-underscore/index.js");
 require.alias("jashkenas-backbone/backbone.js", "jashkenas-backbone/index.js");
-require.alias("wyuenho-backbone-pageable/lib/backbone-pageable.js", "wyuenho-backbone-pageable/index.js");
+require.alias("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", "backbone-paginator-backbone-pageable/index.js");
 require.alias("wyuenho-backgrid/lib/backgrid.js", "wyuenho-backgrid-paginator/deps/backgrid/lib/backgrid.js");
 require.alias("wyuenho-backgrid/lib/backgrid.js", "wyuenho-backgrid-paginator/deps/backgrid/index.js");
 require.alias("jashkenas-underscore/underscore.js", "wyuenho-backgrid/deps/underscore/underscore.js");

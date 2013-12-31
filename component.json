@@ -19,7 +19,7 @@
     "codemirror": "*",
     "jashkenas/underscore": "*",
     "jashkenas/backbone": "*",
-    "wyuenho/backbone-pageable": "*",
+    "backbone-paginator/backbone-pageable": "*",
     "wyuenho/backgrid": "*",
     "wyuenho/backgrid-paginator": "*",
     "wyuenho/backgrid-filter": "*",
