@@ -128,13 +128,16 @@
       <div class="col-md-3">
         <h2>Paginator</h2>
         <ul class="nav nav-stacked">
-          <li><a href="api/index.html#!/api/Backgrid.Extension.Paginator">Backgrid.Extension.Paginator</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid-paginator/api/index.html#!/api/Backgrid.Extension.PageHandle">Backgrid.Extension.PageHandle</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid-paginator/api/index.html#!/api/Backgrid.Extension.Paginator">Backgrid.Extension.Paginator</a></li>
         </ul>
+        <br/>
         <h4>Best Used On</h4>
         <ul>
           <li>Desktop</li>
           <li>Mobile</li>
         </ul>
+        <a class="btn btn-lg btn-success center-block" href="https://github.com/wyuenho/backgrid-paginator" title="backgrid-paginator">Download</a>
       </div>
       <div class="col-md-9">
         <h3>When to Use</h3>
@@ -151,10 +154,6 @@
           functionality. If you like, you can use
           Backbone.PageableCollection throughout your application and it
           will work exactly the same as Backbone.Collection.</p>
-        <textarea class="code-snippet" data-mode="htmlmixed">
-          &lt;link rel="stylesheet" href="lib/extensions/paginator/backgrid-paginator.css" /&gt;
-          &lt;script src="assets/js/backbone-pageable.js"&gt;&lt;/script&gt;
-          &lt;script src="lib/extensions/paginator/backgrid-paginator.js"&gt;&lt;/script&gt;</textarea>
         <h3>Backbone.PageableCollection</h3>
         <p>Out of the box, Backbone.PageableCollection works with RESTful
           APIs that accept Ruby's will_paginate pagination query
@@ -163,16 +162,10 @@
           <a href="http://developer.github.com/v3/" title="GitHub API
           v3">Github's API</a>:</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
-          var Issue = Backbone.Model.extend({});
-
           // Works exactly like Backbone.Collection.
           var Issues = Backbone.PageableCollection.extend({
-            model: Issue,
 
-            // Enable infinite paging
-            mode: "infinite",
-
-            url: "https://api.github.com/repos/jashkenas/backbone/issues?state=closed",
+            url: "https://api.github.com/search/issues",
 
             // Initial pagination states
             state: {
@@ -184,47 +177,49 @@
             // You can remap the query parameters from `state` keys from
             // the default to those your server supports
             queryParams: {
+              firstPage: 0,
               totalPages: null,
               totalRecords: null,
               sortKey: "sort",
-              order: "direction",
-              directions: {
-                "-1": "asc",
-                "1": "desc"
-              }
+              q: "state:closed repo:jashkenas/backbone"
+            },
+
+            parseState: function (resp, queryParams, state, options) {
+              return {totalRecords: resp.total_count};
+            },
+
+            parseRecords: function (resp, options) {
+              return resp.items;
             }
+
           });
 
           var issues = new Issues();</textarea>
         <h3>Configuring Backgrid.Extension.Paginator</h3>
-        <p>Backgrid.Extension.Paginator supports a few configuration
-          options to adjust to the size of the result set.</p>
+        <p>Backgrid.Extension.Paginator supports a number of configuration
+          options to adjust to the size of the result set. You can control the
+          default window size, how many pages to slide an whether the grid
+          should go back to the first page after sorting.</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
           var issueGrid = new Backgrid.Grid({
 
             columns: [{
-              name: "number",
+              name: "id",
               cell: Backgrid.IntegerCell.extend({ orderSeparator: '' }),
-              editable: false,
-              sortable: false
+              sortable: false,
+              editable: false
             }, {
               name: "title",
               cell: "string",
-              sortable: false
+              sortable: false,
+              editable: false
             }, {
               name: "body",
-              cell: "text", // See the TextCell extension in the next section
+              cell: "text", // See the TextCell extension
               sortable: false
             }, {
-              name: "updated_at",
-              cell: "datetime",
-              editable: false,
-              sortable: false
-            }, {
-              name: "closed_at",
-              cell: "datetime",
-              editable: false,
-              sortable: false
+              name: "comments",
+              cell: "integer"
             }],
 
             collection: issues
@@ -233,7 +228,9 @@
           var $paginatorExample = $("#paginator-example-result");
           $paginatorExample.append(issueGrid.render().el);
 
-          var GithubPaginator = Backgrid.Extension.Paginator.extend({
+
+
+          var paginator = new Backgrid.Extension.Paginator({
 
             // If you anticipate a large number of pages, you can adjust
             // the number of page handles to show. The sliding window
@@ -241,27 +238,34 @@
             // you click next at the end of a window.
             windowSize: 20, // Default is 10
 
-            // If you anticipate a small number of pages, you can choose
-            // to disable the rendering of fast forward handles to save
-            // space.
-            hasFastForward: true, // true is the default
+            // Used to multiple windowSize to yield a number of pages to slide,
+            // in the case the number is 5
+            slideScale: 0.25, // Default is 0.5
 
-            fastForwardHandleLabels: {
-              prev: "<",
-              next: ">"
-            }
-          });
+            // Whether sorting should go back to the first page
+            goBackFirstOnSort: false, // Default is true
 
-          var paginator = new GithubPaginator({
             collection: issues
           });
+
           $paginatorExample.append(paginator.render().el);
 
-          issues.getFirstPage();</textarea>
-      </div>
-      <div class="col-md-12">
+          issues.fetch({reset: true});</textarea>
         <h3>Result</h3>
+        <aside class="note">
+          <h3>Note:</h3>
+          <p>Github's API is <a
+            href="http://developer.github.com/v3/search/#rate-limit" title="Github
+            API Rate Limit">rate limited</a>, if the example doesn't work, you
+            may want to try again in a few minutes.</p>
+        </aside>
         <div id="paginator-example-result" class="backgrid-container" style="height: auto"></div>
+        <p class="label label-warning">Advanced Usage</p>
+        <p>You can control how the control and page handles are rendered, you
+          can even control how the sliding window algorithm works. Please refer
+          to the <a
+          href="http://wyuenho.github.io/backgrid-paginator/api/index.html"
+          title="backgrid-paginator JSDoc"> JSDoc</a> for details.</p>
       </div>
     </div>
   

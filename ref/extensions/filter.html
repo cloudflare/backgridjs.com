@@ -179,12 +179,7 @@
               firstPage: 0,
               totalPages: null,
               totalRecords: null,
-              sortKey: "followers",
-              order: "direction",
-              directions: {
-                "-1": "asc",
-                "1": "desc"
-              }
+              sortKey: "followers"
             },
 
             parseState: function (resp, queryParams, state, options) {
@@ -214,9 +209,9 @@
           <aside class="note">
             <h3>Note:</h3>
             <p>Github's API is <a
-              href="http://developer.github.com/v3/#rate-limiting" title="Github
+              href="http://developer.github.com/v3/search/#rate-limit" title="Github
               API Rate Limit">rate limited</a>, if the example doesn't work, you
-              may want to try again at a later time.</p>
+              may want to try again in a few minutes.</p>
           </aside>
           <p>
             <span class="label label-info">Tip</span>
@@ -415,7 +410,8 @@
       var serverExample = $("#server-side-filter-example-result");
       serverExample.find(".backgrid-container").append(serverGrid.render().el);
 
-      var ServerPaginator = Backgrid.Extension.Paginator.extend({
+      var serverPaginator = new Backgrid.Extension.Paginator({
+        collection: githubUsers,
         renderIndexedPageHandles: false,
         controls: {
           rewind: null,
@@ -423,9 +419,6 @@
         }
       });
 
-      var serverPaginator = new ServerPaginator({
-        collection: githubUsers
-      });
       serverExample.append(serverPaginator.render().el);
 
 

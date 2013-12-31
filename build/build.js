@@ -19367,11 +19367,10 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
 
     /**
        @property {number} slideScale the number used by #slideHowMuch to scale
-       `windowSize` to yield the number of pages to slide when half of the pages
-       from within a window have been reached. For example, the default
-       windowSize(10) * slideScale(0.5) yields 5, which means the window will
-       slide forward 5 pages as soon as you've reached page 6. The smaller the
-       scale factor the less pages to slide, and vice versa.
+       `windowSize` to yield the number of pages to slide. For example, the
+       default windowSize(10) * slideScale(0.5) yields 5, which means the window
+       will slide forward 5 pages as soon as you've reached page 6. The smaller
+       the scale factor the less pages to slide, and vice versa.
 
        Also See:
 
@@ -19430,26 +19429,18 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       var self = this;
       self.controls = _.defaults(options.controls || {}, self.controls,
                                  Paginator.prototype.controls);
-      self.pageHandle = options.pageHandle || self.pageHandle;
-      self.slideScale = options.slideScale != null ?
-          options.slideScale :
-          self.slideScale;
-      self.goBackFirstOnSort = options.goBackFirstOnSort != null ?
-          options.goBackFirstOnSort :
-          self.goBackFirstOnSort;
-      self.renderIndexedPageHandles = options.renderIndexedPageHandles != null ?
-          options.renderIndexedPageHandles :
-          self.renderIndexedPageHandles;
+
+      _.extend(this, _.pick(options || {}, "windowSize", "pageHandle",
+                            "slideScale", "goBackFirstOnSort",
+                            "renderIndexedPageHandles"));
 
       var collection = self.collection;
       self.listenTo(collection, "add", self.render);
       self.listenTo(collection, "remove", self.render);
       self.listenTo(collection, "reset", self.render);
-      if (collection.fullCollection) {
-        self.listenTo(collection.fullCollection, "sort", function () {
-          if (self.goBackFirstOnSort) collection.getFirstPage();
-        });
-      }
+      self.listenTo(collection, "backgrid:sort", function () {
+        if (self.goBackFirstOnSort) collection.getFirstPage();
+      });
     },
 
     /**
