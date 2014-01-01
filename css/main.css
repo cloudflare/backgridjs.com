@@ -82,10 +82,6 @@ body {
   height: 592px;
 }
 
-#example-4-result .backgrid {
-  table-layout: fixed;
-}
-
 .CodeMirror {
   border: 1px solid #ddd;
   -webkit-border-radius: 4px;
