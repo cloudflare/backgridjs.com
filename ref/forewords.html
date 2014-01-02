@@ -142,7 +142,7 @@
           practical terms, this architecture ensures that if you are already
           familiar with Backbone, you can carry that knowledge over and apply to
           Backgrid directly.</p>
-        <h2>Laying out Components</h2>
+        <h3>Laying out Components</h3>
         <p>Backgrid's View components are, borrowing from <a
           href="http://marionettejs.com/" title="Marionette">Marionette</a>'s
           parlance, primarily <em>CollectionView</em> and <em>ItemView</em>
@@ -155,6 +155,21 @@
               not depend on Marionette at all.</p>
           </aside>
         </p>
+        <h3>Event Handling</h3>
+        <p>Another notable architectural choice Backgrid has made involves how
+          it handles events. Backgrid takes advantage of the fact that every
+          Backbone class implements the Backbone.Events interface. Internally,
+          every Backgrid object shares one or more of Columns, Column,
+          Collection and Model, Backgrid simply treats them as "event buses" to
+          enable cross-component communication without requiring every Backgrid
+          component to know of the existence and implementation of each other.
+        </p>
+        <p>Since all Model events will bubble up the collection, interested
+          components can simply treat the Columns and Collection instances as
+          "event queues" and "subscribe" to the Backgrid events. All Backgrid
+          events are effectively notifications of state changes, any objects
+          that mixes in Backbone.Events can react to these state changes. You
+          can find a list of relevent events in this document.</p>
         <h2>Customization</h2>
         <p>If you are coming from a jQuery background, you'd notice that most of
           the jQuery plugins, no matter how "good" that are, for some measure of
