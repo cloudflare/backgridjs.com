@@ -146,12 +146,13 @@
           sorting. See the <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Body">JSDoc</a> for
           details.</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
-          var MyBody = Backgrid.Body.extend({
-            // I really don't know why you would do this, but you can if you want
+          var ScrollableBody = Backgrid.Body.extend({
+            // maybe you'd like to implement table body that is a block element so you can detect scroll events,
+            // and may be implement fixed header (wink wink) https://github.com/wyuenho/backgrid/issues/4
           });
 
           var grid = new Backgrid.Grid({
-            body: MyBody,
+            body: ScrollableBody,
             columns: [{
               // ...
             }],
