@@ -163,9 +163,8 @@
           });
 
           myColumns.on("change:renderable", function (col, colAttr) {
-            if (!colAttr) {
-              // hide the column
-            }
+            // recalculate shown columns count
+            colAttr ? shownColumns++ : shownColumns--;
           });
 
           var myGrid = new Backgrid.Grid({
