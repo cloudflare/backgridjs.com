@@ -10,13 +10,16 @@
   // CommonJS
   if (typeof exports == "object") {
     require("select2");
-    module.exports = factory(require("underscore"),
+    module.exports = factory(root,
+                             require("underscore"),
                              require("backgrid"));
   }
   // Browser
-  else factory(root._, root.Backgrid);
+  else factory(root, root._, root.Backgrid);
 
-}(this, function (_, Backgrid)  {
+}(this, function (root, _, Backgrid)  {
+
+  "use strict";
 
   /**
      Select2CellEditor is a cell editor that renders a `select2` select box
@@ -37,7 +40,9 @@
     },
 
     /** @property */
-    select2Options: null,
+    select2Options: {
+      openOnEnter: false
+    },
 
     initialize: function () {
       Backgrid.SelectCellEditor.prototype.initialize.apply(this, arguments);
@@ -69,27 +74,29 @@
     */
     postRender: function () {
       var self = this;
-      this.$el
-        .on("select2-blur", function (e) {
-          if (!self.multiple) {
-            e.type = "blur";
-            self.close(e);
-          }
-          self.select2Focused = false;
-        })
-        .on("select2-focus", function (e) {
-          self.select2Focused = true;
-        })
-        .select2("container")
-        .on("keydown", this.close)
-        .on("focusout", function (e) {
-          if (!self.select2Focused) {
-            e.type = "blur";
-            self.close(e);
-          }
-        })
-        .attr("tabindex", -1)
-        .focus();
+      if (self.multiple) self.$el.select2("container").keydown(self.close);
+      else self.$el.data("select2").focusser.keydown(self.close);
+
+      self.$el.on("select2-blur", function (e) {
+        if (!self.multiple) {
+          e.type = "blur";
+          self.close(e);
+        }
+        else {
+          // HACK to get around https://github.com/ivaynberg/select2/issues/2011
+          // select2-blur is triggered from blur and is fired repeatibly under
+          // multiple select. Since blue is fired before everything, but focus
+          // is set in focus and click, we need to wait for a while so other
+          // event handlers may have a chance to run.
+          var id = root.setTimeout(function () {
+            root.clearTimeout(id);
+            if (!self.$el.select2("isFocused")) {
+              e.type = "blur";
+              self.close(e);
+            }
+          }, 200);
+        }
+      }).select2("focus");
     },
 
     remove: function () {

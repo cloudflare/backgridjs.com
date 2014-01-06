@@ -33,7 +33,6 @@
           instances by supplying a <code>select2Options</code> object hash
           during extension, in addition to the options SelectCell supports.</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
-
           var data = new Backbone.Collection([{number: 5, another: 1}]);
 
           // Just like SelectCell, Select2Cell supports option lists and groups
@@ -43,16 +42,21 @@
           ]}];
 
           var MySelect2Cell = Backgrid.Extension.Select2Cell.extend({
+            // any options specific to `select2` goes here
             select2Options: {
-              // any options specific to `select2` goes here
+              // default is false because Backgrid will save the cell's value
+              // and exit edit mode on enter
+              openOnEnter: false
             },
             optionValues: numbers,
             // since the value obtained from the underlying `select` element will always be a string,
             // you'll need to provide a `toRaw` formatting method to convert the string back to a
             // type suitable for your model, which is an integer in this case.
             formatter: _.extend({}, Backgrid.SelectFormatter.prototype, {
-              toRaw: function (formattedValue) {
-                return parseInt(formattedValue);
+              toRaw: function (formattedValue, model) {
+                return formattedValue == null ? [] : _.map(formattedValue, function (v) {
+                  return parseInt(v);
+                })
               }
             })
           });
@@ -60,7 +64,7 @@
           var grid = new Backgrid.Grid({
             columns: [{
               name: "number",
-              cell: MySelect2Cell
+              cell: MySelect2Cell.extend({ multiple: true })
             }, {
               name: "another",
               cell: MySelect2Cell

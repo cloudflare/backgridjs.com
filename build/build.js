@@ -4456,7 +4456,7 @@ require.register("wyuenho-backgrid/lib/backgrid.js", function(exports, require, 
   backgrid
   http://github.com/wyuenho/backgrid
 
-  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors <wyuenho@gmail.com>
+  Copyright (c) 2014 Jimmy Yuen Ho Wong and contributors <wyuenho@gmail.com>
   Licensed under the MIT license.
 */
 
@@ -5931,14 +5931,12 @@ var SelectCellEditor = Backgrid.SelectCellEditor = CellEditor.extend({
   },
 
   /**
-     Saves the value of the selected option to the model attribute. Triggers a
-     `backgrid:edited` Backbone event from the model.
+     Saves the value of the selected option to the model attribute.
   */
   save: function (e) {
     var model = this.model;
     var column = this.column;
     model.set(column.get("name"), this.formatter.toRaw(this.$el.val(), model));
-    model.trigger("backgrid:edited", model, column, new Command(e));
   },
 
   /**
@@ -5958,6 +5956,7 @@ var SelectCellEditor = Backgrid.SelectCellEditor = CellEditor.extend({
       e.preventDefault();
       e.stopPropagation();
       this.save(e);
+      model.trigger("backgrid:edited", model, column, new Command(e));
     }
   }
 
@@ -7029,15 +7028,20 @@ var Body = Backgrid.Body = Backbone.View.extend({
      Moves focus to the next renderable and editable cell and return the
      currently editing cell to display mode.
 
+     Triggers a `backgrid:next` event on the model with the indices of the row
+     and column the user *intended* to move to, and whether the intended move
+     was going to go out of bounds. Note that *out of bound* always means an
+     attempt to go past the end of the last row.
+
      @param {Backbone.Model} model The originating model
      @param {Backgrid.Column} column The originating model column
      @param {Backgrid.Command} command The Command object constructed from a DOM
-     Event
+     event
   */
   moveToNextCell: function (model, column, command) {
     var i = this.collection.indexOf(model);
     var j = this.columns.indexOf(column);
-    var cell, renderable, editable;
+    var cell, renderable, editable, m, n;
 
     this.rows[i].cells[j].exitEditMode();
 
@@ -7047,28 +7051,36 @@ var Body = Backgrid.Body = Backbone.View.extend({
       var maxOffset = l * this.collection.length;
 
       if (command.moveUp() || command.moveDown()) {
-        var row = this.rows[i + (command.moveUp() ? -1 : 1)];
+        m = i + (command.moveUp() ? -1 : 1);
+        var row = this.rows[m];
         if (row) {
           cell = row.cells[j];
           if (Backgrid.callByNeed(cell.column.editable(), cell.column, model)) {
             cell.enterEditMode();
+            model.trigger("backgrid:next", m, j, false);
           }
         }
+        else model.trigger("backgrid:next", m, j, true);
       }
       else if (command.moveLeft() || command.moveRight()) {
         var right = command.moveRight();
         for (var offset = i * l + j + (right ? 1 : -1);
              offset >= 0 && offset < maxOffset;
              right ? offset++ : offset--) {
-          var m = ~~(offset / l);
-          var n = offset - m * l;
+          m = ~~(offset / l);
+          n = offset - m * l;
           cell = this.rows[m].cells[n];
           renderable = Backgrid.callByNeed(cell.column.renderable(), cell.column, cell.model);
           editable = Backgrid.callByNeed(cell.column.editable(), cell.column, model);
           if (renderable && editable) {
             cell.enterEditMode();
+            model.trigger("backgrid:next", m, n, false);
             break;
           }
+        }
+
+        if (offset == maxOffset) {
+          model.trigger("backgrid:next", ~~(offset / l), offset - m * l, true);
         }
       }
     }
@@ -9577,11 +9589,13 @@ require.register("wyuenho-backgrid-filter/backgrid-filter.js", function(exports,
        @param {Backbone.Collection} options.collection
        @param {string} [options.name]
        @param {string} [options.placeholder]
+       @param {function(Object): string} [options.template]
     */
     initialize: function (options) {
       ServerSideFilter.__super__.initialize.apply(this, arguments);
       this.name = options.name || this.name;
       this.placeholder = options.placeholder || this.placeholder;
+      this.template = options.template || this.template;
 
       // Persist the query on pagination
       var collection = this.collection, self = this;
@@ -13012,13 +13026,16 @@ require.register("wyuenho-backgrid-select2-cell/backgrid-select2-cell.js", funct
   // CommonJS
   if (typeof exports == "object") {
     require("select2");
-    module.exports = factory(require("underscore"),
+    module.exports = factory(root,
+                             require("underscore"),
                              require("backgrid"));
   }
   // Browser
-  else factory(root._, root.Backgrid);
+  else factory(root, root._, root.Backgrid);
 
-}(this, function (_, Backgrid)  {
+}(this, function (root, _, Backgrid)  {
+
+  "use strict";
 
   /**
      Select2CellEditor is a cell editor that renders a `select2` select box
@@ -13039,7 +13056,9 @@ require.register("wyuenho-backgrid-select2-cell/backgrid-select2-cell.js", funct
     },
 
     /** @property */
-    select2Options: null,
+    select2Options: {
+      openOnEnter: false
+    },
 
     initialize: function () {
       Backgrid.SelectCellEditor.prototype.initialize.apply(this, arguments);
@@ -13071,27 +13090,29 @@ require.register("wyuenho-backgrid-select2-cell/backgrid-select2-cell.js", funct
     */
     postRender: function () {
       var self = this;
-      this.$el
-        .on("select2-blur", function (e) {
-          if (!self.multiple) {
-            e.type = "blur";
-            self.close(e);
-          }
-          self.select2Focused = false;
-        })
-        .on("select2-focus", function (e) {
-          self.select2Focused = true;
-        })
-        .select2("container")
-        .on("keydown", this.close)
-        .on("focusout", function (e) {
-          if (!self.select2Focused) {
-            e.type = "blur";
-            self.close(e);
-          }
-        })
-        .attr("tabindex", -1)
-        .focus();
+      if (self.multiple) self.$el.select2("container").keydown(self.close);
+      else self.$el.data("select2").focusser.keydown(self.close);
+
+      self.$el.on("select2-blur", function (e) {
+        if (!self.multiple) {
+          e.type = "blur";
+          self.close(e);
+        }
+        else {
+          // HACK to get around https://github.com/ivaynberg/select2/issues/2011
+          // select2-blur is triggered from blur and is fired repeatibly under
+          // multiple select. Since blue is fired before everything, but focus
+          // is set in focus and click, we need to wait for a while so other
+          // event handlers may have a chance to run.
+          var id = root.setTimeout(function () {
+            root.clearTimeout(id);
+            if (!self.$el.select2("isFocused")) {
+              e.type = "blur";
+              self.close(e);
+            }
+          }, 200);
+        }
+      }).select2("focus");
     },
 
     remove: function () {
