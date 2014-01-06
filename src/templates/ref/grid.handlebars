@@ -65,7 +65,17 @@
 
           // Remove a column
           var idCol = grid.columns.where({ name: "id" });
-          grid.removeColumn(idCol);</textarea>
+          grid.removeColumn(idCol);
+
+          // Since 0.3.0, you can listen to the `backgrid:next` to see if a cell
+          // movement was out of bound, if yes, you can insert a new row.
+
+          // A movement is only out of bound when the user was trying to go beyond
+          // the last row.
+          grid.collection.listenTo("backgrid:next", function (i, j, outOfBound) {
+            // this will add a row using the collection's model too
+            if (outOfBound) grid.collection.add({});
+          });</textarea>
         <h3>Sorting Programmatically</h3>
         <p>Sometimes, you might want to set the grid to a sorted state before
           display it, you can do that by calling <code>Grid#sort()</code> with a
