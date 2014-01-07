@@ -3,35 +3,49 @@
   {{#replace "content"}}
     <div class="row">
       <div class="col-md-3">
-        <h2>Paginator</h2>
+        <h2>
+          <a id="paginator" href="#paginator" title="Paginator" class="section">Paginator</a>
+        </h2>
         <ul class="nav nav-stacked">
           <li><a href="http://wyuenho.github.io/backgrid-paginator/api/index.html#!/api/Backgrid.Extension.PageHandle">Backgrid.Extension.PageHandle</a></li>
           <li><a href="http://wyuenho.github.io/backgrid-paginator/api/index.html#!/api/Backgrid.Extension.Paginator">Backgrid.Extension.Paginator</a></li>
         </ul>
         <br/>
-        <h4>Best Used On</h4>
+        <h4>
+          <a id="best-used-on" href="#best-used-on" title="Best Used On" class="section">Best Used On</a>
+        </h4>
         <ul>
           <li>Desktop</li>
           <li>Mobile</li>
         </ul>
-        <a class="btn btn-lg btn-success center-block" href="https://github.com/wyuenho/backgrid-paginator" title="backgrid-paginator">Download</a>
+        <a class="btn btn-lg btn-success center-block" href="https://github.com/backbone-paginator/backgrid-paginator" title="backgrid-paginator">Download</a>
       </div>
       <div class="col-md-9">
-        <h3>When to Use</h3>
+        <h3>
+          <a id="when-to-use" href="#when-to-use" title="When to Use" class="section">When to Use</a>
+        </h3>
         <p>When you have more data than your grid can fit, you can use
           Paginator to break the display of your data into pages.</p>
-        <h3>Prerequisites</h3>
+        <h3>
+          <a id="prerequisites" href="#prerequisites" title="Prerequisites" class="section">Prerequisites</a>
+        </h3>
         <p>Backgrid.Extension.Paginator needs a Backbone.Collection
           subclass that supports pagination. Luckily, there is already one
           available specially written for this purpose
-          - <a href="https://github.com/wyuenho/backbone-pageable"
+          - <a href="https://github.com/backbone-paginator/backbone-pageable"
           title="backbone-pageable">Backbone.PageableCollection</a>.</p>
         <p>Backbone.PageableCollection is a strict superset of the vanilla
           Backbone.Collection with additional pagination and sorting
           functionality. If you like, you can use
           Backbone.PageableCollection throughout your application and it
           will work exactly the same as Backbone.Collection.</p>
-        <h3>Backbone.PageableCollection</h3>
+        <h3>
+          <a id="backbone-pageablecollection"
+             href="#backbone-pageablecollection"
+             title="Backbone.PageableCollection"
+             class="section"
+             >Backbone.PageableCollection</a>
+        </h3>
         <p>Out of the box, Backbone.PageableCollection works with RESTful
           APIs that accept Ruby's will_paginate pagination query
           parameters but you are able to configure the query string
@@ -72,7 +86,13 @@
           });
 
           var issues = new Issues();</textarea>
-        <h3>Configuring Backgrid.Extension.Paginator</h3>
+        <h3>
+          <a id="configuring-backgrid-extension-paginator"
+             href="#configuring-backgrid-extension-paginator"
+             title="Configuring Backgrid.Extension.Paginator"
+             class="section"
+             >Configuring Backgrid.Extension.Paginator</a>
+        </h3>
         <p>Backgrid.Extension.Paginator supports a number of configuration
           options to adjust to the size of the result set. You can control the
           default window size, how many pages to slide an whether the grid
@@ -128,7 +148,9 @@
           $paginatorExample.append(paginator.render().el);
 
           issues.fetch({reset: true});</textarea>
-        <h3>Result</h3>
+        <h3>
+          <a id="result" href="#result" title="Result" class="section">Result</a>
+        </h3>
         <aside class="note">
           <h3>Note:</h3>
           <p>Github's API is <a

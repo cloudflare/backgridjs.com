@@ -127,14 +127,18 @@
         
     <div class="row">
       <div class="col-md-3">
-        <h2>Filter</h2>
+        <h2>
+          <a id="filter" href="#filter" title="Filter" class="section">Filter</a>
+        </h2>
         <ul class="nav nav-stacked">
           <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.ServerSideFilter">Backgrid.Extension.ServerSideFilter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.ClientSideFilter">Backgrid.Extension.ClientSideFilter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.LunrFilter">Backgrid.Extension.LunrFilter</a></li>
         </ul>
         <hr/>
-        <h4>Best Used On</h4>
+        <h4>
+          <a id="best-used-on" href="#best-used-on" title="Best Used On" class="section">Best Used On</a>
+        </h4>
         <ul>
           <li>Desktop</li>
           <li>Mobile</li>
@@ -142,16 +146,22 @@
         <a class="btn btn-lg btn-success center-block" href="https://github.com/wyuenho/backgrid-filter" title="backgrid-filter">Download</a>
       </div>
       <div class="col-md-9">
-        <h3>When to Use</h3>
+        <h3>
+          <a id="when-to-use" href="#when-to-use" title="When to Use" class="section">When to Use</a>
+        </h3>
         <p>When you have lots of rows with lots of text, and you just want
           to quickly get to the row that only contain certain keywords.</p>
-        <h3>Prerequisites</h3>
+        <h3>
+          <a id="prerequisites" href="#prerequisites" title="Prerequisites" class="section">Prerequisites</a>
+        </h3>
         <p>There are no extra dependencies for <code>ServerSideFilter</code> and
           <code>ClientSideFilter</code>.</p>
         <p>For <code>LunrFilter</code>, it has a hard dependency on <a
           href="http://lunrjs.com/" title="lunr.js">lunr.js</a> for
           full-text searching.</p>
-        <h3>ServerSideFilter</h3>
+        <h3>
+          <a id="serversidefilter" href="#serversidefilter" title="ServerSideFilter" class="section">ServerSideFilter</a>
+        </h3>
         <p>ServerSideFilter is suitable if you have a server where you send the
           search queries to get back a result. The follow example will create a
           collection that uses Github's excellent API to search for Github
@@ -220,7 +230,9 @@
           </p>
           <div class="backgrid-container"></div>
         </div>
-        <h3>ClientSideFilter</h3>
+        <h3>
+          <a id="clientsidefilter" href="#clientsidefilter" title="ClientSideFilter" class="section">ClientSideFilter</a>
+        </h3>
         <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
           // ClientSideFilter performs a case-insensitive regular
           // expression search on the client side by OR-ing the keywords in
@@ -238,7 +250,9 @@
         <div id="client-side-filter-example-result">
           <div class="backgrid-container"></div>
         </div>
-        <h3>LunrFilter</h3>
+        <h3>
+          <a id="lunrfilter" href="#lunrfilter" title="LunrFilter" class="section">LunrFilter</a>
+        </h3>
         <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
           // LunrFilter is a specialized ClientSideFilter that uses
           // lunr.js to perform full-text searching on the client side.

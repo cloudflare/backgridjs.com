@@ -9111,8 +9111,26 @@ a.section {
   text-decoration: none;
 }
 
-a.section:hover:before {
-  content: "† ";
+a.section:hover:after {
+  content: " §";
+  vertical-align: middle;
+  color: lightgray;
+}
+
+h1 > a.section:hover:after {
+  font-size: 22px;
+}
+
+h2 > a.section:hover:after {
+  font-size: 20px;
+}
+
+h3 > a.section:hover:after {
+  font-size: 18px;
+}
+
+h4 > a.section:hover:after {
+  font-size: 16px;
 }
 
 .note {
@@ -9223,5 +9241,4 @@ body {
   #layout-footer p {
     padding: 40px 0;
   }
-
 }

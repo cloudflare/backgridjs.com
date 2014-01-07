@@ -2,11 +2,23 @@
   {{#replace "title"}}FAQ{{/replace}}
   {{#replace "content"}}
     <div class="page-header">
-      <h1>Frequently Asked Questions</h1>
+      <h1>
+        <a id="frequently-asked-questions"
+           href="#frequently-asked-questions"
+           title="Frequently Asked Questions"
+           class="section"
+           >Frequently Asked Questions</a>
+      </h1>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h2 id="computed-values">How do I add a column of computed values?</h2>
+        <h2>
+          <a id="how-do-i-add-a-column-of-computed-values-"
+             href="#how-do-i-add-a-column-of-computed-values-"
+             title="How do I add a column of computed values?"
+             class="section"
+             >How do I add a column of computed values?</a>
+        </h2>
         <p>The easiest way to do it is to extend your models from a
           <code>Backbone.Model</code> subclass that supports computed
           properties <i>and</i> accessing them via the same <i>get/set</i>
@@ -23,7 +35,13 @@
             href="http://kilon.org/blog/2012/02/backbone-calculated-fields/"
             title="Backbone.js computed properties">roll your own</a> fairly
           easily.</p>
-        <h2>How do I add or remove a row?</h2>
+        <h2>
+          <a id="how-do-i-add-or-remove-a-row-"
+             href="#how-do-i-add-or-remove-a-row-"
+             title="How do I add or remove a row?"
+             class="section"
+             >How do I add or remove a row?</a>
+        </h2>
         <p>You can either use <a
           href="http://backbonejs.org/#Collection-add"
           title="Backbone.Collection#add">Backbone.Collection#add</a> or <a
@@ -33,41 +51,73 @@
           title="Backbone.Collection#remove">Backbone.Collection#remove</a>
           or <a href="#api-grid" title="Grid#removeRow">Grid#removeRow</a>
           to remove rows.</p>
-        <h2>How do I put the grid in a default sorted state?</h2>
-        <p>See this <a href="/ref/grid.html#sorting-programmatically"
-                       title="Sorting Programmatically">example</a>.</p>
-        <h2>How do I validate user input?</h2>
-        <p>See <a href="#api-formatter" title="Formatter">Formatter</a>.</p>
-        <h2>How do I save my row changes to the server immediately?</h2>
+        <h2>
+          <a id="how-do-i-put-the-grid-in-a-default-sorted-state-"
+             href="#how-do-i-put-the-grid-in-a-default-sorted-state-"
+             title="How do I put the grid in a default sorted state?"
+             class="section"
+             >How do I put the grid in a default sorted state?</a>
+        </h2>
+        <p>See the <a href="/ref/grid.html#sorting-programmatically"
+                      title="Sorting Programmatically">sorting
+                      programmatically</a> section.</p>
+        <h2>
+          <a id="how-do-i-validate-user-input-"
+             href="#how-do-i-validate-user-input-"
+             title="How do I validate user input?"
+             class="section"
+             >How do I validate user input?</a>
+        </h2>
+        <p>See the <a href="/ref/formatter.html#validation" title="Formatter Validation">validation section</a> on <a href="/ref/formatter.html" title="Formatter">Formatter</a>.</p>
+        <h2>
+          <a id="how-do-i-save-my-row-changes-to-the-server-immediately-"
+             href="#how-do-i-save-my-row-changes-to-the-server-immediately-"
+             title="How do I save my row changes to the server immediately?"
+             class="section"
+             >How do I save my row changes to the server immediately?</a>
+        </h2>
         <textarea class="code-snippet" data-mode="javascript">
           var MyModel = Backbone.Model.extend({
             initialize: function () {
               Backbone.Model.prototype.initialize.apply(this, arguments);
               this.on("change", function (model, options) {
-              if (options && options.save === false) return;
+              if (options &amp;&amp; options.save === false) return;
                 model.save();
               });
             }
           });</textarea>
-        <h2>Where do I go to ask questions?</h2>
-        <p>Finding an answer to your question about Backgrid is a simple 4-step process:
-          <ol>
-            <li>Ponder about the wisdom of your question and the answer you seek.</li>
-            <li>Search this document for the keywords you are looking for.</li>
-            <li>Pay your tribute to the almighty <a href="https://www.google.com/" title="Google">Google</a>.</li>
-            <li>
-              Go to <a href="http://stackoverflow.com/questions/tagged/backgrid" title="StackOverflow">StackOverflow</a>
-              or as a last resort, <a href="https://github.com/wyuenho/backgrid/issues" title="Github">Github</a>.
-            </li>
-          </ol>
+        <h2>
+          <a id="where-do-i-go-to-ask-questions-"
+             href="#where-do-i-go-to-ask-questions-"
+             title="Where do I go to ask questions?"
+             class="section"
+             >Where do I go to ask questions?</a>
+        </h2>
+        <p>
+          Finding an answer to your question about Backgrid is a simple 4-step process:
         </p>
-        <h2>Does Backgrid.js support adaptive scrolling?</h2>
+        <ol>
+          <li>Ponder about the wisdom of your question and the answer you seek.</li>
+          <li>Search this document for the keywords you are looking for.</li>
+          <li>Pay your tribute to the almighty <a href="https://www.google.com/" title="Google">Google</a>.</li>
+          <li>
+            Go to <a href="http://stackoverflow.com/questions/tagged/backgrid" title="StackOverflow">StackOverflow</a>
+            or as a last resort, <a href="https://github.com/wyuenho/backgrid/issues" title="Github">Github</a>.
+          </li>
+        </ol>
+        <h2>
+          <a id="does-backgrid-js-support-adaptive-scrolling-"
+             href="#does-backgrid-js-support-adaptive-scrolling-"
+             title="Does Backgrid.js support adaptive scrolling?"
+             class="section"
+             >Does Backgrid.js support adaptive scrolling?</a>
+        </h2>
         <p>Some data grid widgets out there support a technique
           called adaptive scrolling, meaning the DOM elements will be
           swapped out of a viewport and new ones appended as the
           models are loaded from the server, thus keeping the memory
           more or less constant while providing an illusion to
-          end-users that there&apos;s no limit to the number of rows the
+          end-users that there's no limit to the number of rows the
           data grid can handle.</p>
         <p>Backgrid.js has something better and achieves the same
           effect with much cleaner code -
@@ -78,7 +128,13 @@
           models and paging purely through the browser. Paginated
           Backgrid.Grid instances only render one page of DOM nodes at a
           time to save memory and keep your web page responsive.</p>
-        <h2>Does Backgrid.js support function aggregates?</h2>
+        <h2>
+          <a id="does-backgrid-js-support-function-aggregates-"
+             href="#does-backgrid-js-support-function-aggregates-"
+             title="Does Backgrid.js support function aggregates?"
+             class="section"
+             >Does Backgrid.js support function aggregates?</a>
+        </h2>
         <p>No, because it is not the goal of this project to produce a
           full-fledged web-based spreadsheet. However, doing aggregation is
           trivial using Underscore.js methods.</p>
@@ -87,10 +143,16 @@
           var sum = collection.reduce(function (accum, num) {
             return accum + num;
           });</textarea>
-        <p>If you use a Backbone plugin that supports <a href="#computed-values"
+        <p>If you use a Backbone plugin that supports <a href="#how-do-i-add-a-column-of-computed-values-"
                                                          title="Computed Values">computed values</a>, you may also treat the
           computed values as a column as well.</p>
-        <h2>Does Backgrid.js support multi-user editing?</h2>
+        <h2>
+          <a id="does-backgrid-js-support-multi-user-editing-"
+             href="#does-backgrid-js-support-multi-user-editing-"
+             title="Does Backgrid.js support multi-user editing?"
+             class="section"
+             >Does Backgrid.js support multi-user editing?</a>
+        </h2>
         <p>Inside a Backgrid grid, every cell listens to the change event
           for its model value. The cells will rerender themselves during
           display mode upon changes in the model values. However, this
@@ -102,22 +164,38 @@
           yourself. Implementing such web-based spreadsheet-like broker
           system is outside of the scope of this project, pull requests
           are welcome however.</p>
-        <h2>Does Backgrid.js support feature (X)?</h2>
-        <p>If the feature you have in mind isn&apos;t found here in this
+        <h2>
+          <a id="does-backgrid-js-support-feature--x--"
+             href="#does-backgrid-js-support-feature--x--"
+             title="Does Backgrid.js support feature (X)?"
+             class="section"
+             >Does Backgrid.js support feature (X)?</a>
+        </h2>
+        <p>If the feature you have in mind isn't found here in this
           Backgrid.js version, it could either be in the works or under
           consideration.</p>
         <p>See the list
-          of <a href="https://github.com/wyuenho/backgrid/issues?labels=enhancement%2Ctask&amp;page=1&amp;state=open"
+          of <a href="https://github.com/wyuenho/backgrid/issues?labels=enhancement&amp;milestone=&amp;page=1&amp;state=open"
                 title="Github Issues">tasks and enhancements</a>.</p>
-        <h2>How to build Backgrid.js?</h2>
+        <h2>
+          <a id="how-to-build-backgrid-js-" href="#how-to-build-backgrid-js-" title="How to build Backgrid.js?" class="section">How to build Backgrid.js?</a>
+        </h2>
         <p><a href="https://github.com/wyuenho/backgrid/blob/gh-pages/CONTRIBUTING.md#building" title="Contributing">See Building.</a></p>
-        <h2 id="contribute">How do I contribute?</h2>
+        <h2>
+          <a id="how-do-i-contribute-" href="#how-do-i-contribute-" title="How do I contribute?" class="section">How do I contribute?</a>
+        </h2>
         <p><a href="https://github.com/wyuenho/backgrid/blob/gh-pages/CONTRIBUTING.md" title="Contributing">See Contributing.</a></p>
-        <h2>Why doesn&apos;t Backgrid.js support AMD (or NPM)?</h2>
+        <h2>
+          <a id="why-doesn-t-backgrid-js-support-amd--or-npm--"
+             href="#why-doesn-t-backgrid-js-support-amd--or-npm--"
+             title="Why doesn't Backgrid.js support AMD (or NPM)?"
+             class="section"
+             >Why doesn't Backgrid.js support AMD (or NPM)?</a>
+        </h2>
         <p>The same question can be asked for volo, bower, ender, browserify and
           many other competing solutions. The number one reason Backgrid.js does
           not support AMD or NPM is because of the barrier it presents to
-          writing extensions that require third-party libraries that don&apos;t
+          writing extensions that require third-party libraries that don't
           support these packaging mechanisms.</p>
         <p>That said, it <em>is</em> possible to use Backgrid and its various
           extensions with AMD using RequireJS's <a
@@ -132,9 +210,9 @@
           with such a package manager and its importing mechanism. The
           Javascript ecosystem has gotten so diverse now that there is still not
           yet a clear packaging winner that everybody uses and works well under
-          most situations, it is also not clear that ES Harmony&apos;s module
+          most situations, it is also not clear that ES Harmony's module
           system will be backward compatible with AMD.</p>
-        <p>Having said that, Backgrid.js doesn&apos;t do anything to prevent you
+        <p>Having said that, Backgrid.js doesn't do anything to prevent you
           from adding support to your favorite package manager. You are
           encouraged to fork and maintain your own Backgrid.js packages.</p>
       </div>
