@@ -3,18 +3,24 @@
   {{#replace "content"}}
     <div class="row">
       <div class="col-md-2">
-        <h2>Columns</h2>
+        <h2>
+          <a id="columns" href="#columns" title="Columns" class="section">Columns</a>
+        </h2>
         <ul class="nav nav-stacked">
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Column" title="Backgrid.Column">Backgrid.Column</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Columns" title="Backgrid.Columns">Backgrid.Columns</a></li>
         </ul>
       </div>
       <div class="col-md-10">
-        <h3>Column Defaults</h3>
+        <h3>
+          <a id="column-defaults" href="#column-defaults" title="Column Defaults" class="section">Column Defaults</a>
+        </h3>
         <p>Column defaults and required parameters are defined in
           the <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Column-method-initialize">Backgrid.Column#initialize</a>
           method.</p>
-        <h3>Column Definition</h3>
+        <h3>
+          <a id="column-definition" href="#column-definition" title="Column Definition" class="section">Column Definition</a>
+        </h3>
         <p>A Column is a placeholder for a column definition.</p>
         <p>You usually don&apos;t need to create an instance of this class
           yourself, as a collection of column instances will be created for
@@ -26,7 +32,10 @@
           a <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Columns">Backgrid.Columns</a>
           collection and pass a reference to any subviews that require
           it.</p>
-        <h3>Listening to Column Attribute Changes</h3>
+        <h3>
+          <a id="listening-to-column-attribute-changes" href="#listening-to-column-attribute-changes" title="Listening to Column Attribute Changes" class="section"
+             >Listening to Column Attribute Changes</a>
+        </h3>
         <p>Occasionally, you may want to listen to column attribute change
           events. In that case, you can choose to initialize a
           Backgrid.Columns collection and listen to events from the
@@ -49,7 +58,13 @@
           });
 
           //...</textarea>
-        <h3>Getting the Column Definitions from the Server</h3>
+        <h3>
+          <a id="getting-the-column-definitions-from-the-server"
+             href="#getting-the-column-definitions-from-the-server"
+             title="Getting the Column Definitions from the Server"
+             class="section"
+             >Getting the Column Definitions from the Server</a>
+        </h3>
         <p>Since Backgrid.Columns is also a Backbone.Collection, you can
           dynamically load and store your column definition via your server.</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">

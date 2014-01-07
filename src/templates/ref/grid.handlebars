@@ -3,17 +3,23 @@
   {{#replace "content"}}
     <div class="row">
       <div class="col-md-2">
-        <h2>Grid</h2>
+        <h2>
+          <a id="grid" href="#grid" title="Grid" class="section">Grid</a>
+        </h2>
         <ul class="nav nav-stacked">
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Grid">Backgrid.Grid</a></li>
         </ul>
-        <h3>Events</h3>
+        <h3>
+          <a id="events" href="#events" title="Events" class="section">Events</a>
+        </h3>
         <ul class="nav nav-stacked">
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Grid-method-render">backgrid:rendered</a></li>
         </ul>
       </div>
       <div class="col-md-10">
-        <h3>How to Use the Grid</h3>
+        <h3>
+          <a id="how-to-use-the-grid" href="#how-to-use-the-grid" title="How to Use the Grid" class="section">How to Use the Grid</a>
+        </h3>
         <p>As described in the <a href="/#basic-example">examples</a>, a basic
           grid needs only a collection and a list of column definitions.</p>
         <p>To display the grid, you will need to render the grid and insert the
@@ -29,7 +35,9 @@
           });
 
           $(".backgrid-container").append(idGrid.render().el);</textarea>
-        <h3>Manipulating Columns and Rows</h3>
+        <h3>
+          <a id="manipulating-columns-and-rows" href="#manipulating-columns-and-rows" title="Manipulating Columns and Rows" class="section">Manipulating Columns and Rows</a>
+        </h3>
         <p>It is very easy to insert or remove a row in a grid, you just
           have to pass a model reference
           to <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Grid-method-insertRow">Grid#insertRow</a>
@@ -76,7 +84,9 @@
             // this will add a row using the collection's model too
             if (outOfBound) grid.collection.add({});
           });</textarea>
-        <h3>Sorting Programmatically</h3>
+        <h3>
+          <a id="sorting-programmatically" href="#sorting-programmatically" title="Sorting Programmatically" class="section">Sorting Programmatically</a>
+        </h3>
         <p>Sometimes, you might want to set the grid to a sorted state before
           displaying it, you can do that by calling <code>Grid#sort()</code>
           with a column name and a direction:</p>
@@ -87,7 +97,9 @@
 
           // now you can display it
           $("#grid-container").append(grid.el);</textarea>
-        <h3>Empty Message</h3>
+        <h3>
+          <a id="empty-message" href="#empty-message" title="Empty Message" class="section">Empty Message</a>
+        </h3>
         <p>If you want to display a message when the grid is empty. You can pass
           an<code>emptyMessage</code> string to the <code>options</code> object
           to the Grid's constructor.</p>

@@ -3,7 +3,9 @@
   {{#replace "content"}}
     <div class="row">
       <div class="col-md-2">
-        <h2>Formatter</h2>
+        <h2>
+          <a id="formatter" href="#formatter" title="Formatter" class="section">Formatter</a>
+        </h2>
         <ul class="nav nav-stacked">
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.CellFormatter">Backgrid.CellFormatter</a></li>
           <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.DatetimeFormatter">Backgrid.DatetimeFormatter</a></li>
@@ -15,7 +17,9 @@
         </ul>
       </div>
       <div class="col-md-10">
-        <h3>Introduction</h3>
+        <h3>
+          <a id="introduction" href="#introduction" title="Introduction" class="section">Introduction</a>
+        </h3>
         <p>In Backgrid, cell formatters serves the purpose of converting values
           between JSON value types and strings, and validation. Writing
           formatters for value conversion and validation is easy as you only
@@ -24,7 +28,9 @@
         <p>Formatters are used for <em>string</em> formatting, not manipulating
           the DOM and styling. Use <a href="http://backbonejs.org/#View-render"
           title="Backbone.View#render">render</a> for that.</p>
-        <h3>Custom Formatters</h3>
+        <h3>
+          <a id="custom-formatters" href="#custom-formatters" title="Custom Formatters" class="section">Custom Formatters</a>
+        </h3>
         <p>Any formatters must have the following two methods defined:</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
           var formatter = {
@@ -43,7 +49,9 @@
           formatters, but sometimes you may want to decide how to format your
           values depending on the other values in the model. You can use it in
           your custom formatters if that's the case.</p>
-        <h3>Validation</h3>
+        <h3>
+          <a id="validation" href="#validation" title="Validation" class="section">Validation</a>
+        </h3>
         <p>In addition to user input conversion, <code>toRaw()</code> also
           validates the user input during conversion. If the user input is
           invalid or cannot be converted to a JSON value,
@@ -55,7 +63,9 @@
           title="Backbone.Model#validate">validate()</a> method defined,
           it will also be used for validation after trying with the
           formatter.</p>
-        <h3>SelectFormatter</h3>
+        <h3>
+          <a id="selectformatter" href="#selectformatter" title="SelectFormatter" class="section">SelectFormatter</a>
+        </h3>
         <p>The most common formatter you'll override is probably
           SelectFormatter. Suppose your column expects an integer, due to a
           limitation of the DOM, the default <code>toRaw()</code> implementation
@@ -83,7 +93,9 @@
               });
             }
           };</textarea>
-        <h3>Using Custom Formatters</h3>
+        <h3>
+          <a id="using-custom-formatters" href="#using-custom-formatters" title="Using Custom Formatters" class="section">Using Custom Formatters</a>
+        </h3>
         <p>A custom formatter supplied to a column definition will be used
           instead of the cell's default:</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
