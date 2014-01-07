@@ -57,16 +57,16 @@
             url: "https://api.github.com/search/users",
 
             state: {
+              firstPage: 1,
               pageSize: 15,
-              sortKey: "updated",
+              sortKey: "joined",
               order: 1
             },
 
             queryParams: {
-              firstPage: 0,
               totalPages: null,
               totalRecords: null,
-              sortKey: "followers"
+              sortKey: "sort"
             },
 
             parseState: function (resp, queryParams, state, options) {
@@ -167,21 +167,16 @@
         url: "https://api.github.com/search/users",
 
         state: {
+          firstPage: 0,
           pageSize: 15,
-          sortKey: "updated",
+          sortKey: "joined",
           order: 1
         },
 
         queryParams: {
-          firstPage: 0,
           totalPages: null,
           totalRecords: null,
-          sortKey: "followers",
-          order: "direction",
-          directions: {
-            "-1": "asc",
-            "1": "desc"
-          }
+          sortKey: "sort"
         },
 
         parseState: function (resp, queryParams, state, options) {
