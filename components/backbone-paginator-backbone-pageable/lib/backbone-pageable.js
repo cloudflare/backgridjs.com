@@ -1,5 +1,5 @@
 /*
-  backbone-pageable 1.4.3
+  backbone-pageable 1.4.4
   http://github.com/wyuenho/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
@@ -1213,7 +1213,8 @@
           var models = col.models;
           if (mode == "client") fullCol.reset(models, opts);
           else {
-            fullCol.add(models, _extend({at: fullCol.length}, opts));
+            fullCol.add(models, _extend({at: fullCol.length},
+                                        _extend(opts, {parse: false})));
             self.trigger("reset", self, opts);
           }
 

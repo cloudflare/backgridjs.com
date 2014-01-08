@@ -16,7 +16,7 @@
   "dependencies": {
     "jashkenas/underscore": "*",
     "jashkenas/backbone": "*",
-    "backbone-paginator/backbone-pageable": "1.4.3",
+    "backbone-paginator/backbone-pageable": "1.4.4",
     "wyuenho/backgrid": "*",
     "wyuenho/backgrid-paginator": "*",
     "wyuenho/backgrid-filter": "*",
