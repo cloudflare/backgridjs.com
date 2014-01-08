@@ -48,7 +48,6 @@
 
 .backgrid th {
   font-weight: bold;
-  text-align: center;
 }
 
 .backgrid th.sortable a {
@@ -561,7 +560,6 @@
 .backgrid .select2-cell.editor .select2-container {
   width: 100%;
 }
-
 /*
 Version: @@ver@@ Timestamp: @@timestamp@@
 */

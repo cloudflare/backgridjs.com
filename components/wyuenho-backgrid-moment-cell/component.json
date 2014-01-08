@@ -2,7 +2,7 @@
   "name": "backgrid-moment-cell",
   "repo": "wyuenho/backgrid-moment-cell",
   "description": "Backgrid.js datetime cell type formatted via moment.js.",
-  "version": "0.3.0-beta",
+  "version": "0.3.0",
   "keywords": [
     "backbone",
     "backgrid",

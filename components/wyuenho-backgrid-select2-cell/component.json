@@ -2,7 +2,7 @@
   "name": "backgrid-select2-cell",
   "repo": "wyuenho/backgrid-select2-cell",
   "description": "Backgrid.js extension to extend the core SelectCell using select2.",
-  "version": "0.3.0-beta",
+  "version": "0.3.0",
   "keywords": [
     "backbone",
     "backgrid",
