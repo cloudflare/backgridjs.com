@@ -221,6 +221,27 @@
 
           // now you can display it
           $("#grid-container").append(grid.el);</textarea>
+        <p>Sometime you may want to render a grid in a sorted state, probably
+          based on a previously saved sorting state. You can supply a
+          <code>direction</code> to a column definition and a sorted collection to
+          a grid's constructor before you render it:</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          territories.comparator = "name";
+          territories.sort();
+
+          var grid = new Backgrid.Grid({
+
+            columns: [{
+              name: "name",
+              cell: "string",
+              direction: "ascending"
+            }],
+
+            collection: territories
+          );
+
+          // The grid will be rendered in a sorted state as soon as you call render
+          $(".backgrid-container").append(grid.render().el);</textarea>
         <h3>
           <a id="empty-message" href="#empty-message" title="Empty Message" class="section">Empty Message</a>
         </h3>
