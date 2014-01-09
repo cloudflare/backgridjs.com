@@ -87,6 +87,87 @@
           <a id="result" href="#result" title="Result" class="section">Result</a>
         </h3>
         <div id="select2-cell-example-result" class="backgrid-container" style="height: auto;"></div>
+        <h3>
+          <a id="getting-data-for-optionvalues"
+             href="#getting-data-for-optionvalues"
+             title="Getting data for `optionValues`"
+             class="section"
+             >Getting data for <code>optionValues</code></a>
+        </h3>
+        <p>The Select2Cell and its superclass <a
+          href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.SelectCell"
+          title="SelectCell">SelectCell</a> assumes that the data for the select
+          box will have been loaded before the grid is rendered. As a
+          consequence of this design decision, select's ability to load its
+          options dynamically is rendered useless.</p>
+        <p>The reason for this design is when the cell is in display mode, it
+          needs to render a label, not its database ID value, so the data will
+          have been already loaded even before the Select2CellEditor goes into
+          effect.</p>
+        <p>To keep your <code>optionValues</code> fresh, you can try one of the following
+          approaches:</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          var SynchronousSelect2Cell = Select2Cell.extend({
+
+            // Cached the last fetched option values
+            _optionValues: null,
+
+            // Records the time since the last fetch
+            lastUpdated: null,
+
+            // Max time ellapsed allowed since the last fetch.
+            // 5 minutes in miniseconds in this case.
+            maxTimeSinceLastUpdate: 300000,
+
+            // Fetches the option values synchronously if they have gone stale,
+            // otherwise return the last fetched results.
+            optionValues: function () {
+              var self = this;
+
+              if (this.lastUpdate == null ||
+                  (new Date()).getTime() - this.lastUpdate >= this.maxTimeSinceLastUpdate) {
+
+                $.ajax({
+                  async: false,
+                  url: "http://www.example.com/data.json",
+                }).done(function (data) {
+                  self._optionValues = data;
+                  self.lastUpdated = (new Date()).getTime();
+                });
+
+              }
+
+              return self._optionValues;
+            }
+          });
+
+          var AsynchronousSelect2Cell = Select2Cell.extend({
+
+            _optionValues: [/* ... pre-populate initial option values here */],
+
+            updateInterval: 300000,
+
+            fetching: false,
+
+            optionValues: function () {
+              var self = this;
+
+              // Updates the option values in the background periodically to maintain freshness
+              setInterval(function () {
+                self.fetching = true;
+
+                $.get("http://www.example.com/data.json").done(function (data) {
+                  self._optionValues = data;
+                  self.fetching = false;
+                });
+              }, self.updateInterval);
+
+              // poor man's semaphore
+              while (self.fetching) {}
+
+              return self._optionValues;
+            }
+          });</textarea>
       </div>
     </div>
   {{/replace}}
