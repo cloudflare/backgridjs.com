@@ -222,11 +222,6 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
   // Save bytes in the minified (but not gzipped) version:
   var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
 
-  //use the faster Date.now if available.
-  var getTime = (Date.now || function() {
-    return new Date().getTime();
-  });
-
   // Create quick reference variables for speed access to core prototypes.
   var
     push             = ArrayProto.push,
@@ -490,7 +485,7 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
     return result.value;
   };
 
-  // Shuffle an array, using the modern version of the
+  // Shuffle an array, using the modern version of the 
   // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
   _.shuffle = function(obj) {
     var rand;
@@ -504,12 +499,11 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
     return shuffled;
   };
 
-  // Sample **n** random values from a collection.
-  // If **n** is not specified, returns a single random element.
+  // Sample **n** random values from an array.
+  // If **n** is not specified, returns a single random element from the array.
   // The internal `guard` argument allows it to work with `map`.
   _.sample = function(obj, n, guard) {
-    if (n == null || guard) {
-      if (obj.length !== +obj.length) obj = _.values(obj);
+    if (arguments.length < 2 || guard) {
       return obj[_.random(obj.length - 1)];
     }
     return _.shuffle(obj).slice(0, Math.max(0, n));
@@ -522,7 +516,7 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
 
   // Sort the object's values by a criterion produced by an iterator.
   _.sortBy = function(obj, value, context) {
-    var iterator = value == null ? _.identity : lookupIterator(value);
+    var iterator = lookupIterator(value);
     return _.pluck(_.map(obj, function(value, index, list) {
       return {
         value: value,
@@ -872,13 +866,12 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
     var previous = 0;
     options || (options = {});
     var later = function() {
-      previous = options.leading === false ? 0 : getTime();
+      previous = options.leading === false ? 0 : new Date;
       timeout = null;
       result = func.apply(context, args);
-      context = args = null;
     };
     return function() {
-      var now = getTime();
+      var now = new Date;
       if (!previous && options.leading === false) previous = now;
       var remaining = wait - (now - previous);
       context = this;
@@ -888,7 +881,6 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
         timeout = null;
         previous = now;
         result = func.apply(context, args);
-        context = args = null;
       } else if (!timeout && options.trailing !== false) {
         timeout = setTimeout(later, remaining);
       }
@@ -905,28 +897,21 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
     return function() {
       context = this;
       args = arguments;
-      timestamp = getTime();
+      timestamp = new Date();
       var later = function() {
-        var last = getTime() - timestamp;
+        var last = (new Date()) - timestamp;
         if (last < wait) {
           timeout = setTimeout(later, wait - last);
         } else {
           timeout = null;
-          if (!immediate) {
-            result = func.apply(context, args);
-            context = args = null;
-          }
+          if (!immediate) result = func.apply(context, args);
         }
       };
       var callNow = immediate && !timeout;
       if (!timeout) {
         timeout = setTimeout(later, wait);
       }
-      if (callNow) {
-        result = func.apply(context, args);
-        context = args = null;
-      }
-
+      if (callNow) result = func.apply(context, args);
       return result;
     };
   };
@@ -948,7 +933,11 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
   // allowing you to adjust arguments, run code before and after, and
   // conditionally execute the original function.
   _.wrap = function(func, wrapper) {
-    return _.partial(wrapper, func);
+    return function() {
+      var args = [func];
+      push.apply(args, arguments);
+      return wrapper.apply(this, args);
+    };
   };
 
   // Returns a function that is the composition of a list of functions, each
@@ -1134,8 +1123,7 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
     // from different frames are.
     var aCtor = a.constructor, bCtor = b.constructor;
     if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                             _.isFunction(bCtor) && (bCtor instanceof bCtor))
-                        && ('constructor' in a && 'constructor' in b)) {
+                             _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
       return false;
     }
     // Add the first object to the stack of traversed objects.
@@ -1487,18 +1475,6 @@ require.register("jashkenas-underscore/underscore.js", function(exports, require
 
   });
 
-  // AMD registration happens at the end for compatibility with AMD loaders
-  // that may not enforce next-turn semantics on modules. Even though general
-  // practice for AMD registration is to be anonymous, underscore registers
-  // as a named module because, like jQuery, it is a base library that is
-  // popular enough to be bundled in a third party lib, but not be part of
-  // an AMD load request. Those cases could generate an error when an
-  // anonymous define() is called outside of a loader request.
-  if (typeof define === 'function' && define.amd) {
-    define('underscore', [], function() {
-      return _;
-    });
-  }
 }).call(this);
 
 });
@@ -1511,31 +1487,14 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
 //     For all details and documentation:
 //     http://backbonejs.org
 
-(function(root, factory) {
-
-  // Set up Backbone appropriately for the environment. Start with AMD.
-  if (typeof define === 'function' && define.amd) {
-    define(['underscore', 'jquery', 'exports'], function(_, $, exports) {
-      // Export global even in AMD case in case this script is loaded with
-      // others that may still expect a global Backbone.
-      root.Backbone = factory(root, exports, _, $);
-    });
-
-  // Next for Node.js or CommonJS. jQuery may not be needed as a module.
-  } else if (typeof exports !== 'undefined') {
-    var _ = require('underscore'), $;
-    try { $ = require('jquery'); } catch(e) {};
-    factory(root, exports, _, $);
-
-  // Finally, as a browser global.
-  } else {
-    root.Backbone = factory(root, {}, root._, (root.jQuery || root.Zepto || root.ender || root.$));
-  }
-
-}(this, function(root, Backbone, _, $) {
+(function(){
 
   // Initial Setup
   // -------------
+
+  // Save a reference to the global object (`window` in the browser, `exports`
+  // on the server).
+  var root = this;
 
   // Save the previous value of the `Backbone` variable, so that it can be
   // restored later on, if `noConflict` is used.
@@ -1547,6 +1506,15 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
   var slice = array.slice;
   var splice = array.splice;
 
+  // The top-level namespace. All public Backbone classes and modules will
+  // be attached to this. Exported for both the browser and the server.
+  var Backbone;
+  if (typeof exports !== 'undefined') {
+    Backbone = exports;
+  } else {
+    Backbone = root.Backbone = {};
+  }
+
   // Current version of the library. Keep in sync with `package.json`.
   Backbone.VERSION = '1.1.0';
 
@@ -1556,7 +1524,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
 
   // For Backbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
   // the `$` variable.
-  Backbone.$ = $;
+  Backbone.$ = root.jQuery || root.Zepto || root.ender || root.$;
 
   // Runs Backbone.js in *noConflict* mode, returning the `Backbone` variable
   // to its previous owner. Returns a reference to this Backbone object.
@@ -1622,7 +1590,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
       var retain, ev, events, names, i, l, j, k;
       if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
       if (!name && !callback && !context) {
-        this._events = void 0;
+        this._events = {};
         return this;
       }
       names = name ? [name] : _.keys(this._events);
@@ -1863,7 +1831,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
 
       // Trigger all relevant attribute changes.
       if (!silent) {
-        if (changes.length) this._pending = options;
+        if (changes.length) this._pending = true;
         for (var i = 0, l = changes.length; i < l; i++) {
           this.trigger('change:' + changes[i], this, current[changes[i]], options);
         }
@@ -1874,7 +1842,6 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
       if (changing) return this;
       if (!silent) {
         while (this._pending) {
-          options = this._pending;
           this._pending = false;
           this.trigger('change', this, options);
         }
@@ -2155,6 +2122,8 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
       for (i = 0, l = models.length; i < l; i++) {
         model = models[i] = this.get(models[i]);
         if (!model) continue;
+        delete this._byId[model.id];
+        delete this._byId[model.cid];
         index = this.indexOf(model);
         this.models.splice(index, 1);
         this.length--;
@@ -2162,7 +2131,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
           options.index = index;
           model.trigger('remove', model, this, options);
         }
-        this._removeReference(model, options);
+        this._removeReference(model);
       }
       return singular ? models[0] : models;
     },
@@ -2188,11 +2157,11 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
       // Turn bare objects into model references, and prevent invalid models
       // from being added.
       for (i = 0, l = models.length; i < l; i++) {
-        attrs = models[i] || {};
+        attrs = models[i];
         if (attrs instanceof Model) {
           id = model = attrs;
         } else {
-          id = attrs[targetModel.prototype.idAttribute || 'id'];
+          id = attrs[targetModel.prototype.idAttribute];
         }
 
         // If a duplicate is found, prevent it from being added and
@@ -2212,7 +2181,12 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
           model = models[i] = this._prepareModel(attrs, options);
           if (!model) continue;
           toAdd.push(model);
-          this._addReference(model, options);
+
+          // Listen to added models' events, and index models for lookup by
+          // `id` and by `cid`.
+          model.on('all', this._onModelEvent, this);
+          this._byId[model.cid] = model;
+          if (model.id != null) this._byId[model.id] = model;
         }
         if (order) order.push(existing || model);
       }
@@ -2252,7 +2226,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
         }
         if (sort || (order && order.length)) this.trigger('sort', this, options);
       }
-
+      
       // Return the added (or merged) model (or models).
       return singular ? models[0] : models;
     },
@@ -2264,7 +2238,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
     reset: function(models, options) {
       options || (options = {});
       for (var i = 0, l = this.models.length; i < l; i++) {
-        this._removeReference(this.models[i], options);
+        this._removeReference(this.models[i]);
       }
       options.previousModels = this.models;
       this._reset();
@@ -2305,7 +2279,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
     // Get a model from the set by id.
     get: function(obj) {
       if (obj == null) return void 0;
-      return this._byId[obj] || this._byId[obj.id] || this._byId[obj.cid];
+      return this._byId[obj.id] || this._byId[obj.cid] || this._byId[obj];
     },
 
     // Get the model at the given index.
@@ -2381,7 +2355,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
       if (!options.wait) this.add(model, options);
       var collection = this;
       var success = options.success;
-      options.success = function(model, resp) {
+      options.success = function(model, resp, options) {
         if (options.wait) collection.add(model, options);
         if (success) success(model, resp, options);
       };
@@ -2411,7 +2385,10 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
     // Prepare a hash of attributes (or other model) to be added to this
     // collection.
     _prepareModel: function(attrs, options) {
-      if (attrs instanceof Model) return attrs;
+      if (attrs instanceof Model) {
+        if (!attrs.collection) attrs.collection = this;
+        return attrs;
+      }
       options = options ? _.clone(options) : {};
       options.collection = this;
       var model = new this.model(attrs, options);
@@ -2420,18 +2397,8 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
       return false;
     },
 
-    // Internal method to create a model's ties to a collection.
-    _addReference: function(model, options) {
-      this._byId[model.cid] = model;
-      if (model.id != null) this._byId[model.id] = model;
-      if (!model.collection) model.collection = this;
-      model.on('all', this._onModelEvent, this);
-    },
-
     // Internal method to sever a model's ties to a collection.
-    _removeReference: function(model, options) {
-      delete this._byId[model.id];
-      delete this._byId[model.cid];
+    _removeReference: function(model) {
       if (this === model.collection) delete model.collection;
       model.off('all', this._onModelEvent, this);
     },
@@ -2460,7 +2427,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
     'reject', 'every', 'all', 'some', 'any', 'include', 'contains', 'invoke',
     'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
     'tail', 'drop', 'last', 'without', 'difference', 'indexOf', 'shuffle',
-    'lastIndexOf', 'isEmpty', 'chain', 'sample'];
+    'lastIndexOf', 'isEmpty', 'chain'];
 
   // Mix in each Underscore method as a proxy to `Collection#models`.
   _.each(methods, function(method) {
@@ -2472,7 +2439,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
   });
 
   // Underscore methods that take a property name as an argument.
-  var attributeMethods = ['groupBy', 'countBy', 'sortBy', 'indexBy'];
+  var attributeMethods = ['groupBy', 'countBy', 'sortBy'];
 
   // Use attributes instead of properties.
   _.each(attributeMethods, function(method) {
@@ -3092,9 +3059,7 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
     };
   };
 
-  return Backbone;
-
-}));
+}).call(this);
 
 });
 require.register("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", function(exports, require, module){

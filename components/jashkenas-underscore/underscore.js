@@ -20,11 +20,6 @@
   // Save bytes in the minified (but not gzipped) version:
   var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
 
-  //use the faster Date.now if available.
-  var getTime = (Date.now || function() {
-    return new Date().getTime();
-  });
-
   // Create quick reference variables for speed access to core prototypes.
   var
     push             = ArrayProto.push,
@@ -288,7 +283,7 @@
     return result.value;
   };
 
-  // Shuffle an array, using the modern version of the
+  // Shuffle an array, using the modern version of the 
   // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
   _.shuffle = function(obj) {
     var rand;
@@ -302,12 +297,11 @@
     return shuffled;
   };
 
-  // Sample **n** random values from a collection.
-  // If **n** is not specified, returns a single random element.
+  // Sample **n** random values from an array.
+  // If **n** is not specified, returns a single random element from the array.
   // The internal `guard` argument allows it to work with `map`.
   _.sample = function(obj, n, guard) {
-    if (n == null || guard) {
-      if (obj.length !== +obj.length) obj = _.values(obj);
+    if (arguments.length < 2 || guard) {
       return obj[_.random(obj.length - 1)];
     }
     return _.shuffle(obj).slice(0, Math.max(0, n));
@@ -320,7 +314,7 @@
 
   // Sort the object's values by a criterion produced by an iterator.
   _.sortBy = function(obj, value, context) {
-    var iterator = value == null ? _.identity : lookupIterator(value);
+    var iterator = lookupIterator(value);
     return _.pluck(_.map(obj, function(value, index, list) {
       return {
         value: value,
@@ -670,13 +664,12 @@
     var previous = 0;
     options || (options = {});
     var later = function() {
-      previous = options.leading === false ? 0 : getTime();
+      previous = options.leading === false ? 0 : new Date;
       timeout = null;
       result = func.apply(context, args);
-      context = args = null;
     };
     return function() {
-      var now = getTime();
+      var now = new Date;
       if (!previous && options.leading === false) previous = now;
       var remaining = wait - (now - previous);
       context = this;
@@ -686,7 +679,6 @@
         timeout = null;
         previous = now;
         result = func.apply(context, args);
-        context = args = null;
       } else if (!timeout && options.trailing !== false) {
         timeout = setTimeout(later, remaining);
       }
@@ -703,28 +695,21 @@
     return function() {
       context = this;
       args = arguments;
-      timestamp = getTime();
+      timestamp = new Date();
       var later = function() {
-        var last = getTime() - timestamp;
+        var last = (new Date()) - timestamp;
         if (last < wait) {
           timeout = setTimeout(later, wait - last);
         } else {
           timeout = null;
-          if (!immediate) {
-            result = func.apply(context, args);
-            context = args = null;
-          }
+          if (!immediate) result = func.apply(context, args);
         }
       };
       var callNow = immediate && !timeout;
       if (!timeout) {
         timeout = setTimeout(later, wait);
       }
-      if (callNow) {
-        result = func.apply(context, args);
-        context = args = null;
-      }
-
+      if (callNow) result = func.apply(context, args);
       return result;
     };
   };
@@ -746,7 +731,11 @@
   // allowing you to adjust arguments, run code before and after, and
   // conditionally execute the original function.
   _.wrap = function(func, wrapper) {
-    return _.partial(wrapper, func);
+    return function() {
+      var args = [func];
+      push.apply(args, arguments);
+      return wrapper.apply(this, args);
+    };
   };
 
   // Returns a function that is the composition of a list of functions, each
@@ -932,8 +921,7 @@
     // from different frames are.
     var aCtor = a.constructor, bCtor = b.constructor;
     if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                             _.isFunction(bCtor) && (bCtor instanceof bCtor))
-                        && ('constructor' in a && 'constructor' in b)) {
+                             _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
       return false;
     }
     // Add the first object to the stack of traversed objects.
@@ -1285,16 +1273,4 @@
 
   });
 
-  // AMD registration happens at the end for compatibility with AMD loaders
-  // that may not enforce next-turn semantics on modules. Even though general
-  // practice for AMD registration is to be anonymous, underscore registers
-  // as a named module because, like jQuery, it is a base library that is
-  // popular enough to be bundled in a third party lib, but not be part of
-  // an AMD load request. Those cases could generate an error when an
-  // anonymous define() is called outside of a loader request.
-  if (typeof define === 'function' && define.amd) {
-    define('underscore', [], function() {
-      return _;
-    });
-  }
 }).call(this);
