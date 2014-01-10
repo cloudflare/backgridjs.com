@@ -28,6 +28,7 @@ module.exports = {
       var cm = window.CodeMirror.fromTextArea(elm, {
         mode: $elm.data("mode"),
         lineNumbers: true,
+        readOnly: true,
         theme: "eclipse",
         tabindex: -1
       });
@@ -38,10 +39,6 @@ module.exports = {
         if ($elm.data("eval") === "yes") {
           if (window.execScript) window.execScript(value);
           else window.eval.call(window, value);
-          cm.on("change", function () {
-            if (window.execScript) window.execScript(cm.doc.getValue());
-            else window.eval.call(window, cm.doc.getValue());
-          });
         }
       }
       else {
