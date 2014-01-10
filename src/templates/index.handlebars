@@ -34,7 +34,7 @@
         <p style="font-size: 18px">
           The goal of Backgrid.js is to produce a set of core Backbone UI
           elements that offer you all the basic displaying, sorting and
-          editing functionalities you&apos;d expect, and to create an elegant
+          editing functionalities you'd expect, and to create an elegant
           API that makes extending Backgrid.js with extra functionalities
           easy.</p>
       </div>
@@ -70,7 +70,8 @@
             >Supported browsers: <b style="font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">[1]</b></a>
         </h2>
         <ul>
-          <li>Internet Explorer 8+</li>
+          <li>Internet Explorer 8 [2]</li>
+          <li>Internet Explorer 9+</li>
           <li>Chrome 4+</li>
           <li>Safari 4+</li>
           <li>Firefox 4+</li>
@@ -79,11 +80,12 @@
         <aside class="note">
           <h3>Notes:</h3>
           <div>1. Both the desktop and mobile versions of the above browsers are supported.</div>
+          <div>2. With the exception of the Filter extension's search icon CSS.</div>
         </aside>
       </div>
     </div>
     <div class="page-header">
-      <h1 id="getting-started">
+      <h1>
         <a id="getting-started" href="#getting-started" title="Getting Started" class="section">Getting Started</a>
       </h1>
     </div>
@@ -192,10 +194,10 @@
               var columns = [{
                 name: "id", // The key of the model attribute
                 label: "ID", // The name to display in the header
-                editable: false, // By default every cell in a column is editable, but *ID* shouldn&apos;t be
-                // Defines a cell type, and ID is displayed as an integer without the &apos;,&apos; separating 1000s.
+                editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
+                // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
                 cell: Backgrid.IntegerCell.extend({
-                  orderSeparator: &apos;&apos;
+                  orderSeparator: ''
                 })
               }, {
                 name: "name",
@@ -213,7 +215,7 @@
               }, {
                 name: "date",
                 label: "Date",
-                cell: "date",
+                cell: "date"
               }, {
                 name: "url",
                 label: "URL",
@@ -241,7 +243,7 @@
             <p>The list of column definitions <b>Backgrid.Grid</b> expects is
               simply a list of JSON objects, which you can hardcode into your
               HTML templates or retrieve from a server when the DOM is
-              ready. Backgrid doesn&apos;t care where the column definitions
+              ready. Backgrid doesn't care where the column definitions
               come from, as long as you supply the list to the Grid constructor.</p>
             <p>As expected, you now have a basic editable data grid
               displayed. All the columns headers are labeled and sortable by
@@ -258,7 +260,7 @@
               href="https://github.com/wyuenho/backgrid-moment-cell"
               title="MomentCell">MomentCell</a> give you a much richer editing
               interface for option lists and datetime values on desktop
-              browsers. In addition, there&apos;s a wide range of possibilities
+              browsers. In addition, there's a wide range of possibilities
               with how the data is converted for display and persistence by
               using <a href="/ref/formatter.html"
               title="Formatter">formatters</a> or customizing <a
@@ -270,7 +272,7 @@
             <h2>
               <a id="complete-example" href="#complete-example" title="Complete Example" class="section">Complete Example</a>
             </h2>
-            <p>If you have a large result set like the above, you&apos;d
+            <p>If you have a large result set like the above, you'd
               probably want to be able to paginate and filter your results. This
               is easily achieved in Backgrid.js.</p>
             <p>Backgrid.js comes with a number of <a

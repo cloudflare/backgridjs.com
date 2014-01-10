@@ -1,4 +1,5 @@
 var $ = require("jquery");
+var _ = require("underscore");
 require("codemirror");
 
 function unpad (str) {
@@ -10,7 +11,7 @@ function unpad (str) {
     if (result == null) spaceCounts.push(0);
     else spaceCounts.push(result[0].length);
   }
-  var longestCommonSpaceCount = Math.min.apply(this, spaceCounts.filter(function (c) { return c > 0; }));
+  var longestCommonSpaceCount = Math.min.apply(this, _.filter(spaceCounts, function (c) { return c > 0; }));
   for (var i = 0, l = lines.length; i < l; i++) {
     lines[i] = lines[i].slice(longestCommonSpaceCount);
   }
@@ -27,7 +28,6 @@ module.exports = {
       var cm = window.CodeMirror.fromTextArea(elm, {
         mode: $elm.data("mode"),
         lineNumbers: true,
-        readOnly: true,
         theme: "eclipse",
         tabindex: -1
       });
@@ -36,9 +36,11 @@ module.exports = {
         var value = $elm.val();
         cm.setValue(unpad(value));
         if ($elm.data("eval") === "yes") {
-          eval.call(window, value);
+          if (window.execScript) window.execScript(value);
+          else window.eval.call(window, value);
           cm.on("change", function () {
-            eval.call(window, cm.doc.getValue());
+            if (window.execScript) window.execScript(cm.doc.getValue());
+            else window.eval.call(window, cm.doc.getValue());
           });
         }
       }
@@ -52,4 +54,5 @@ module.exports = {
       $elm.data("codemirror", cm);
     });
   }
+
 };

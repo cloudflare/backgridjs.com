@@ -48,7 +48,6 @@
 
 .backgrid th {
   font-weight: bold;
-  text-align: center;
 }
 
 .backgrid th.sortable a {
@@ -331,10 +330,13 @@
 */
 
 .backgrid-filter .search {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  z-index: 1000;
   width: 10px;
   height: 20px;
-  margin-right: -10px;
+  margin-top: -10px;
   -webkit-box-sizing: content-box;
      -moz-box-sizing: content-box;
           box-sizing: content-box;
@@ -384,7 +386,8 @@
 .backgrid-filter .clear {
   position: absolute;
   top: 50%;
-  right: 14px;
+  right: 8px;
+  z-index: 1000;
   width: 10px;
   height: 20px;
   margin-top: -10px;
@@ -397,6 +400,7 @@
 }
 
 .backgrid-filter input[type="search"] {
+  position: absolute;
   display: inline-block;
   width: 206px;
   height: 20px;
@@ -9083,6 +9087,12 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 
 #social-media {
   padding: 14px 0;
+  height: 50px;
+  overflow: hidden;
+}
+
+#social-media .fb-like {
+  width: 90px;
 }
 
 #social-media .g-plusone {

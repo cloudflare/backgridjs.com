@@ -5839,7 +5839,7 @@ var SelectCellEditor = Backgrid.SelectCellEditor = CellEditor.extend({
       options = options + this.template({
         text: nvps[i][0],
         value: nvps[i][1],
-        selected: selectedValues.indexOf(nvps[i][1]) > -1
+        selected: _.indexOf(selectedValues, nvps[i][1]) > -1
       });
     }
     return options;
@@ -5883,7 +5883,7 @@ var SelectCellEditor = Backgrid.SelectCellEditor = CellEditor.extend({
       else if (_.isObject(optionValue)) {
         optgroupName = optionValue.name;
         optgroup = $("<optgroup></optgroup>", { label: optgroupName });
-        optgroup.append(this._renderOptions(optionValue.values, selectedValues));
+        optgroup.append(this._renderOptions.call(this, optionValue.values, selectedValues));
         this.$el.append(optgroup);
       }
       else {
@@ -6493,19 +6493,35 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
                       }
                     }
                   });
-    this.listenTo(column, "change:direction", this.resetCellDirection);
+    this.listenTo(column, "change:direction", this.setCellDirectionMaybe);
     this.listenTo(column, "change:name change:label", this.render);
 
     if (Backgrid.callByNeed(column.editable(), column, collection)) $el.addClass("editable");
     if (Backgrid.callByNeed(column.sortable(), column, collection)) $el.addClass("sortable");
     if (Backgrid.callByNeed(column.renderable(), column, collection)) $el.addClass("renderable");
+
+    this.listenTo(collection, "backgrid:sort", this.removeCellDirectionMaybe);
   },
 
   /**
-     Event handler for the column's `change:direction` event. Resets this cell's
-     direction to default if sorting is being done on another column.
+     Event handler for the collection's `backgrid:sort` event. Removes all the
+     CSS direction classes if the column being sorted on is not the same as this
+     header cell's.
    */
-  resetCellDirection: function (columnToSort, direction) {
+  removeCellDirectionMaybe: function (columnToSort) {
+    if (columnToSort.cid != this.column.cid) {
+      this.$el.removeClass("ascending").removeClass("descending");
+      this.column.set("direction", null);
+    }
+  },
+
+  /**
+     Event handler for the column's `change:direction` event. If this
+     HeaderCell's column is being sorted on, it applies the direction given as a
+     CSS class to the header cell. Removes all the CSS direction classes
+     otherwise.
+   */
+  setCellDirectionMaybe: function (columnToSort, direction) {
     this.$el.removeClass("ascending").removeClass("descending");
     if (columnToSort.cid == this.column.cid) this.$el.addClass(direction);
   },
@@ -6910,6 +6926,10 @@ var Body = Backgrid.Body = Backbone.View.extend({
   */
   sort: function (column, direction) {
 
+    if (!_.contains(["ascending", "descending", null], direction)) {
+      throw new RangeError('direction must be one of "ascending", "descending" or `null`');
+    }
+
     if (_.isString(column)) column = this.columns.findWhere({name: column});
 
     var collection = this.collection;
@@ -6923,7 +6943,7 @@ var Body = Backgrid.Body = Backbone.View.extend({
                                          order ?
                                          column.sortValue() :
                                          function (model) {
-                                           return model.cid;
+                                           return model.cid.replace('c', '') * 1;
                                          });
 
     if (Backbone.PageableCollection &&
@@ -29200,6 +29220,7 @@ break}Hb(b,function(){b.curOp.selectionChanged=b.curOp.forceUpdate=b.curOp.updat
 });
 require.register("backgridjs-com/js/main.js", function(exports, require, module){
 var $ = require("jquery");
+var _ = require("underscore");
 require("codemirror");
 
 function unpad (str) {
@@ -29211,7 +29232,7 @@ function unpad (str) {
     if (result == null) spaceCounts.push(0);
     else spaceCounts.push(result[0].length);
   }
-  var longestCommonSpaceCount = Math.min.apply(this, spaceCounts.filter(function (c) { return c > 0; }));
+  var longestCommonSpaceCount = Math.min.apply(this, _.filter(spaceCounts, function (c) { return c > 0; }));
   for (var i = 0, l = lines.length; i < l; i++) {
     lines[i] = lines[i].slice(longestCommonSpaceCount);
   }
@@ -29228,7 +29249,6 @@ module.exports = {
       var cm = window.CodeMirror.fromTextArea(elm, {
         mode: $elm.data("mode"),
         lineNumbers: true,
-        readOnly: true,
         theme: "eclipse",
         tabindex: -1
       });
@@ -29237,9 +29257,11 @@ module.exports = {
         var value = $elm.val();
         cm.setValue(unpad(value));
         if ($elm.data("eval") === "yes") {
-          eval.call(window, value);
+          if (window.execScript) window.execScript(value);
+          else window.eval.call(window, value);
           cm.on("change", function () {
-            eval.call(window, cm.doc.getValue());
+            if (window.execScript) window.execScript(cm.doc.getValue());
+            else window.eval.call(window, cm.doc.getValue());
           });
         }
       }
@@ -29253,6 +29275,7 @@ module.exports = {
       $elm.data("codemirror", cm);
     });
   }
+
 };
 
 });

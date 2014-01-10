@@ -1,5 +1,11 @@
 #social-media {
   padding: 14px 0;
+  height: 50px;
+  overflow: hidden;
+}
+
+#social-media .fb-like {
+  width: 90px;
 }
 
 #social-media .g-plusone {

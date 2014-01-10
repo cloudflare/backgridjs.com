@@ -14,16 +14,22 @@
     <meta name="keywords" content="backgrid,backgrid.js,backbone,backbone.js,datagrid,grid,paginator,javascript" />
     <meta name="description" content="A powerful widget set for building data grids with Backbone.js" />
 
+    <meta property="og:title" content="Backgridjs" />
+    <meta property="og:description" content="A powerful widget set for building data grids with Backbone.js" />
+    <meta property="og:url" content="http://backgridjs.com" />
+
     <title>Backgrid.js - Body</title>
 
     <link rel="canonical" href="http://backgridjs.com" />
 
     <link rel="stylesheet" href="/build/build.min.css" />
     <!--[if lt IE 9]>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-        <![endif]-->
+      <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
   </head>
   <body>
+    <div id="fb-root"></div>
     <div id="main">
       <header>
         <div class="navbar navbar-default navbar-fixed-top">
@@ -58,9 +64,7 @@
                     <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
-                    <li>
-                      <a href="/ref/forewords.html">Forewords</a>
-                    </li>
+                    <li><a href="/ref/forewords.html">Forewords</a></li>
                     <li class="divider"></li>
                     <li><a href="/ref/grid.html">Grid</a></li>
                     <li><a href="/ref/column.html">Column</a></li>
@@ -76,19 +80,17 @@
                   <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
                     Extensions
                     <b class="caret"></b>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a href="/ref/extensions/development.html">Development Guide</a>
-                      </li>
-                      <li class="divider"></li>
-                      <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
-                      <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
-                      <li><a href="/ref/extensions/filter.html">Filter</a></li>
-                      <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
-                      <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
-                      <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
-                    </ul>
                   </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/extensions/development.html">Development Guide</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
+                    <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
+                    <li><a href="/ref/extensions/filter.html">Filter</a></li>
+                    <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
+                    <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
+                    <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
+                  </ul>
                 </li>
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
@@ -106,14 +108,15 @@
               </ul>
               <ul class="nav navbar-nav navbar-right visible-md visible-lg">
                 <li id="social-media">
-                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://backgridjs.com" data-via="wong_jim" data-hashtags="backgridjs,backbone_js">Tweet</a>
-                  <div class="g-plusone" data-size="medium"></div>
-                  <iframe src="http://ghbtns.com/github-btn.html?user=wyuenho&amp;repo=backgrid&amp;type=watch&amp;count=true"
-                          allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-                  <a href="https://coderwall.com/wyuenho"><img alt="Endorse wyuenho on Coderwall" width="110" height="20" src="http://api.coderwall.com/wyuenho/endorsecount.png" /></a>
                   <iframe allowtransparency="true" frameborder="0" scrolling="no"
                           style="border: 0; margin: 0 0 0 15px; padding: 0;"
-                          src="https://www.gittip.com/wyuenho/widget.html" width="48pt" height="22pt"></iframe>
+                          src="https://www.gittip.com/wyuenho/widget.html" width="50" height="20"></iframe>
+                  <iframe src="http://ghbtns.com/github-btn.html?user=wyuenho&amp;repo=backgrid&amp;type=watch&amp;count=true"
+                          allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://backgridjs.com" data-via="wong_jim" data-hashtags="backgridjs,backbone_js">Tweet</a>
+                  <div class="fb-like" data-href="http://backgridjs.com" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+                  <div class="g-plusone" data-size="medium" data-recommendations="false"></div>
+                  <a href="https://coderwall.com/wyuenho"><img alt="Endorse wyuenho on Coderwall" width="110" height="20" src="http://api.coderwall.com/wyuenho/endorsecount.png" /></a>
                 </li>
               </ul>
             </div>
@@ -225,6 +228,15 @@
       });
     </script>
     <script>
+      // Facebook Like
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=273448342806008";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
       // Google +1
       (function() {
         var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;

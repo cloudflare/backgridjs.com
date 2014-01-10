@@ -14,16 +14,22 @@
     <meta name="keywords" content="backgrid,backgrid.js,backbone,backbone.js,datagrid,grid,paginator,javascript" />
     <meta name="description" content="A powerful widget set for building data grids with Backbone.js" />
 
+    <meta property="og:title" content="Backgridjs" />
+    <meta property="og:description" content="A powerful widget set for building data grids with Backbone.js" />
+    <meta property="og:url" content="http://backgridjs.com" />
+
     <title>Backgrid.js - A powerful widget set for building data grids with Backbone.js</title>
 
     <link rel="canonical" href="http://backgridjs.com" />
 
     <link rel="stylesheet" href="/build/build.min.css" />
     <!--[if lt IE 9]>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-        <![endif]-->
+      <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
   </head>
   <body>
+    <div id="fb-root"></div>
     <div id="main">
       <header>
         <div class="navbar navbar-default navbar-fixed-top">
@@ -58,9 +64,7 @@
                     <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
-                    <li>
-                      <a href="/ref/forewords.html">Forewords</a>
-                    </li>
+                    <li><a href="/ref/forewords.html">Forewords</a></li>
                     <li class="divider"></li>
                     <li><a href="/ref/grid.html">Grid</a></li>
                     <li><a href="/ref/column.html">Column</a></li>
@@ -76,19 +80,17 @@
                   <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
                     Extensions
                     <b class="caret"></b>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a href="/ref/extensions/development.html">Development Guide</a>
-                      </li>
-                      <li class="divider"></li>
-                      <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
-                      <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
-                      <li><a href="/ref/extensions/filter.html">Filter</a></li>
-                      <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
-                      <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
-                      <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
-                    </ul>
                   </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/extensions/development.html">Development Guide</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
+                    <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
+                    <li><a href="/ref/extensions/filter.html">Filter</a></li>
+                    <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
+                    <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
+                    <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
+                  </ul>
                 </li>
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
@@ -106,14 +108,15 @@
               </ul>
               <ul class="nav navbar-nav navbar-right visible-md visible-lg">
                 <li id="social-media">
-                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://backgridjs.com" data-via="wong_jim" data-hashtags="backgridjs,backbone_js">Tweet</a>
-                  <div class="g-plusone" data-size="medium"></div>
-                  <iframe src="http://ghbtns.com/github-btn.html?user=wyuenho&amp;repo=backgrid&amp;type=watch&amp;count=true"
-                          allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-                  <a href="https://coderwall.com/wyuenho"><img alt="Endorse wyuenho on Coderwall" width="110" height="20" src="http://api.coderwall.com/wyuenho/endorsecount.png" /></a>
                   <iframe allowtransparency="true" frameborder="0" scrolling="no"
                           style="border: 0; margin: 0 0 0 15px; padding: 0;"
-                          src="https://www.gittip.com/wyuenho/widget.html" width="48pt" height="22pt"></iframe>
+                          src="https://www.gittip.com/wyuenho/widget.html" width="50" height="20"></iframe>
+                  <iframe src="http://ghbtns.com/github-btn.html?user=wyuenho&amp;repo=backgrid&amp;type=watch&amp;count=true"
+                          allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://backgridjs.com" data-via="wong_jim" data-hashtags="backgridjs,backbone_js">Tweet</a>
+                  <div class="fb-like" data-href="http://backgridjs.com" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+                  <div class="g-plusone" data-size="medium" data-recommendations="false"></div>
+                  <a href="https://coderwall.com/wyuenho"><img alt="Endorse wyuenho on Coderwall" width="110" height="20" src="http://api.coderwall.com/wyuenho/endorsecount.png" /></a>
                 </li>
               </ul>
             </div>
@@ -158,7 +161,7 @@
         <p style="font-size: 18px">
           The goal of Backgrid.js is to produce a set of core Backbone UI
           elements that offer you all the basic displaying, sorting and
-          editing functionalities you&apos;d expect, and to create an elegant
+          editing functionalities you'd expect, and to create an elegant
           API that makes extending Backgrid.js with extra functionalities
           easy.</p>
       </div>
@@ -194,7 +197,8 @@
             >Supported browsers: <b style="font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: normal;">[1]</b></a>
         </h2>
         <ul>
-          <li>Internet Explorer 8+</li>
+          <li>Internet Explorer 8 [2]</li>
+          <li>Internet Explorer 9+</li>
           <li>Chrome 4+</li>
           <li>Safari 4+</li>
           <li>Firefox 4+</li>
@@ -203,11 +207,12 @@
         <aside class="note">
           <h3>Notes:</h3>
           <div>1. Both the desktop and mobile versions of the above browsers are supported.</div>
+          <div>2. With the exception of the Filter extension's search icon CSS.</div>
         </aside>
       </div>
     </div>
     <div class="page-header">
-      <h1 id="getting-started">
+      <h1>
         <a id="getting-started" href="#getting-started" title="Getting Started" class="section">Getting Started</a>
       </h1>
     </div>
@@ -316,10 +321,10 @@
               var columns = [{
                 name: "id", // The key of the model attribute
                 label: "ID", // The name to display in the header
-                editable: false, // By default every cell in a column is editable, but *ID* shouldn&apos;t be
-                // Defines a cell type, and ID is displayed as an integer without the &apos;,&apos; separating 1000s.
+                editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
+                // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
                 cell: Backgrid.IntegerCell.extend({
-                  orderSeparator: &apos;&apos;
+                  orderSeparator: ''
                 })
               }, {
                 name: "name",
@@ -337,7 +342,7 @@
               }, {
                 name: "date",
                 label: "Date",
-                cell: "date",
+                cell: "date"
               }, {
                 name: "url",
                 label: "URL",
@@ -365,7 +370,7 @@
             <p>The list of column definitions <b>Backgrid.Grid</b> expects is
               simply a list of JSON objects, which you can hardcode into your
               HTML templates or retrieve from a server when the DOM is
-              ready. Backgrid doesn&apos;t care where the column definitions
+              ready. Backgrid doesn't care where the column definitions
               come from, as long as you supply the list to the Grid constructor.</p>
             <p>As expected, you now have a basic editable data grid
               displayed. All the columns headers are labeled and sortable by
@@ -382,7 +387,7 @@
               href="https://github.com/wyuenho/backgrid-moment-cell"
               title="MomentCell">MomentCell</a> give you a much richer editing
               interface for option lists and datetime values on desktop
-              browsers. In addition, there&apos;s a wide range of possibilities
+              browsers. In addition, there's a wide range of possibilities
               with how the data is converted for display and persistence by
               using <a href="/ref/formatter.html"
               title="Formatter">formatters</a> or customizing <a
@@ -394,7 +399,7 @@
             <h2>
               <a id="complete-example" href="#complete-example" title="Complete Example" class="section">Complete Example</a>
             </h2>
-            <p>If you have a large result set like the above, you&apos;d
+            <p>If you have a large result set like the above, you'd
               probably want to be able to paginate and filter your results. This
               is easily achieved in Backgrid.js.</p>
             <p>Backgrid.js comes with a number of <a
@@ -526,6 +531,15 @@
       });
     </script>
     <script>
+      // Facebook Like
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=273448342806008";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
       // Google +1
       (function() {
         var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
