@@ -2,7 +2,7 @@
   backgrid
   http://github.com/wyuenho/backgrid
 
-  Copyright (c) 2014 Jimmy Yuen Ho Wong and contributors <wyuenho@gmail.com>
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors <wyuenho@gmail.com>
   Licensed under the MIT license.
 */
 
@@ -1021,7 +1021,7 @@ var UriCell = Backgrid.UriCell = Cell.extend({
       tabIndex: -1,
       href: rawValue,
       title: this.title || formattedValue,
-      target: this.target
+      target: this.target,
     }).text(formattedValue));
     this.delegateEvents();
     return this;
@@ -1477,12 +1477,14 @@ var SelectCellEditor = Backgrid.SelectCellEditor = CellEditor.extend({
   },
 
   /**
-     Saves the value of the selected option to the model attribute.
+     Saves the value of the selected option to the model attribute. Triggers a
+     `backgrid:edited` Backbone event from the model.
   */
   save: function (e) {
     var model = this.model;
     var column = this.column;
     model.set(column.get("name"), this.formatter.toRaw(this.$el.val(), model));
+    model.trigger("backgrid:edited", model, column, new Command(e));
   },
 
   /**
@@ -1502,7 +1504,6 @@ var SelectCellEditor = Backgrid.SelectCellEditor = CellEditor.extend({
       e.preventDefault();
       e.stopPropagation();
       this.save(e);
-      model.trigger("backgrid:edited", model, column, new Command(e));
     }
   }
 
@@ -2073,21 +2074,44 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
                       }
                     }
                   });
-    this.listenTo(column, "change:direction", this.resetCellDirection);
+
     this.listenTo(column, "change:name change:label", this.render);
 
     if (Backgrid.callByNeed(column.editable(), column, collection)) $el.addClass("editable");
     if (Backgrid.callByNeed(column.sortable(), column, collection)) $el.addClass("sortable");
     if (Backgrid.callByNeed(column.renderable(), column, collection)) $el.addClass("renderable");
+
+    this.listenTo(collection, "backgrid:sort", this._resetCellDirection);
   },
 
   /**
-     Event handler for the column's `change:direction` event. Resets this cell's
-     direction to default if sorting is being done on another column.
+     Gets or sets the direction of this cell. If called directly without
+     parameters, returns the current direction of this cell, otherwise sets
+     it. If a `null` is given, sets this cell back to the default order.
+
+     @param {null|"ascending"|"descending"} dir
+     @return {null|string} The current direction or the changed direction.
    */
-  resetCellDirection: function (columnToSort, direction) {
-    this.$el.removeClass("ascending").removeClass("descending");
-    if (columnToSort.cid == this.column.cid) this.$el.addClass(direction);
+  direction: function (dir) {
+    if (arguments.length) {
+      var direction = this.column.get('direction');
+      if (direction) this.$el.removeClass(direction);
+      if (dir) this.$el.addClass(dir);
+      this.column.set('direction', dir);
+    }
+
+    return this.column.get('direction');
+  },
+
+  /**
+     Event handler for the Backbone `backgrid:sort` event. Resets this cell's
+     direction to default if sorting is being done on another column.
+
+     @private
+   */
+  _resetCellDirection: function (columnToSort, direction) {
+    if (columnToSort !== this.column) this.direction(null);
+    else this.direction(direction);
   },
 
   /**
@@ -2098,21 +2122,20 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
   onClick: function (e) {
     e.preventDefault();
 
-    var column = this.column;
-    var collection = this.collection;
-    var event = "backgrid:sort";
+    var collection = this.collection, event = "backgrid:sort";
 
     function cycleSort(header, col) {
-      if (column.get("direction") === "ascending") collection.trigger(event, col, "descending");
-      else if (column.get("direction") === "descending") collection.trigger(event, col, null);
+      if (header.direction() === "ascending") collection.trigger(event, col, "descending");
+      else if (header.direction() === "descending") collection.trigger(event, col, null);
       else collection.trigger(event, col, "ascending");
     }
 
     function toggleSort(header, col) {
-      if (column.get("direction") === "ascending") collection.trigger(event, col, "descending");
+      if (header.direction() === "ascending") collection.trigger(event, col, "descending");
       else collection.trigger(event, col, "ascending");
     }
 
+    var column = this.column;
     var sortable = Backgrid.callByNeed(column.sortable(), column, this.collection);
     if (sortable) {
       var sortType = column.get("sortType");
@@ -2138,8 +2161,8 @@ var HeaderCell = Backgrid.HeaderCell = Backbone.View.extend({
 
     this.$el.append(label);
     this.$el.addClass(column.get("name"));
-    this.$el.addClass(column.get("direction"));
     this.delegateEvents();
+    this.direction(column.get("direction"));
     return this;
   }
 
@@ -2342,6 +2365,8 @@ var Body = Backgrid.Body = Backbone.View.extend({
       return;
     }
 
+    options = _.extend({render: true}, options || {});
+
     var row = new this.row({
       columns: this.columns,
       model: model
@@ -2354,11 +2379,13 @@ var Body = Backgrid.Body = Backbone.View.extend({
     var $children = $el.children();
     var $rowEl = row.render().$el;
 
-    if (index >= $children.length) {
-      $el.append($rowEl);
-    }
-    else {
-      $children.eq(index).before($rowEl);
+    if (options.render) {
+      if (index >= $children.length) {
+        $el.append($rowEl);
+      }
+      else {
+        $children.eq(index).before($rowEl);
+      }
     }
 
     return this;
@@ -2512,7 +2539,7 @@ var Body = Backgrid.Body = Backbone.View.extend({
       collection.setSorting(order && column.get("name"), order,
                             {sortValue: column.sortValue()});
 
-      if (collection.fullCollection) {
+      if (collection.mode == "client") {
         if (collection.fullCollection.comparator == null) {
           collection.fullCollection.comparator = comparator;
         }
@@ -2524,8 +2551,6 @@ var Body = Backgrid.Body = Backbone.View.extend({
       collection.comparator = comparator;
       collection.sort();
     }
-
-    column.set("direction", direction);
 
     return this;
   },
@@ -2550,20 +2575,15 @@ var Body = Backgrid.Body = Backbone.View.extend({
      Moves focus to the next renderable and editable cell and return the
      currently editing cell to display mode.
 
-     Triggers a `backgrid:next` event on the model with the indices of the row
-     and column the user *intended* to move to, and whether the intended move
-     was going to go out of bounds. Note that *out of bound* always means an
-     attempt to go past the end of the last row.
-
      @param {Backbone.Model} model The originating model
      @param {Backgrid.Column} column The originating model column
      @param {Backgrid.Command} command The Command object constructed from a DOM
-     event
+     Event
   */
   moveToNextCell: function (model, column, command) {
     var i = this.collection.indexOf(model);
     var j = this.columns.indexOf(column);
-    var cell, renderable, editable, m, n;
+    var cell, renderable, editable;
 
     this.rows[i].cells[j].exitEditMode();
 
@@ -2573,36 +2593,28 @@ var Body = Backgrid.Body = Backbone.View.extend({
       var maxOffset = l * this.collection.length;
 
       if (command.moveUp() || command.moveDown()) {
-        m = i + (command.moveUp() ? -1 : 1);
-        var row = this.rows[m];
+        var row = this.rows[i + (command.moveUp() ? -1 : 1)];
         if (row) {
           cell = row.cells[j];
           if (Backgrid.callByNeed(cell.column.editable(), cell.column, model)) {
             cell.enterEditMode();
-            model.trigger("backgrid:next", m, j, false);
           }
         }
-        else model.trigger("backgrid:next", m, j, true);
       }
       else if (command.moveLeft() || command.moveRight()) {
         var right = command.moveRight();
         for (var offset = i * l + j + (right ? 1 : -1);
              offset >= 0 && offset < maxOffset;
              right ? offset++ : offset--) {
-          m = ~~(offset / l);
-          n = offset - m * l;
+          var m = ~~(offset / l);
+          var n = offset - m * l;
           cell = this.rows[m].cells[n];
           renderable = Backgrid.callByNeed(cell.column.renderable(), cell.column, cell.model);
           editable = Backgrid.callByNeed(cell.column.editable(), cell.column, model);
           if (renderable && editable) {
             cell.enterEditMode();
-            model.trigger("backgrid:next", m, n, false);
             break;
           }
-        }
-
-        if (offset == maxOffset) {
-          model.trigger("backgrid:next", ~~(offset / l), offset - m * l, true);
         }
       }
     }
@@ -2774,16 +2786,16 @@ var Grid = Backgrid.Grid = Backbone.View.extend({
   /**
      Delegates to Backgrid.Body#insertRow.
    */
-  insertRow: function () {
-    this.body.insertRow.apply(this.body, arguments);
+  insertRow: function (model, collection, options) {
+    this.body.insertRow(model, collection, options);
     return this;
   },
 
   /**
      Delegates to Backgrid.Body#removeRow.
    */
-  removeRow: function () {
-    this.body.removeRow.apply(this.body, arguments);
+  removeRow: function (model, collection, options) {
+    this.body.removeRow(model, collection, options);
     return this;
   },
 
@@ -2793,9 +2805,12 @@ var Grid = Backgrid.Grid = Backbone.View.extend({
      happen.
 
      @param {Object} [options] Options for `Backgrid.Columns#add`.
+     @param {boolean} [options.render=true] Whether to render the column
+     immediately after insertion.
    */
-  insertColumn: function () {
-    this.columns.add.apply(this.columns, arguments);
+  insertColumn: function (column, options) {
+    options = options || {render: true};
+    this.columns.add(column, options);
     return this;
   },
 
@@ -2806,8 +2821,8 @@ var Grid = Backgrid.Grid = Backbone.View.extend({
 
      @param {Object} [options] Options for `Backgrid.Columns#remove`.
    */
-  removeColumn: function () {
-    this.columns.remove.apply(this.columns, arguments);
+  removeColumn: function (column, options) {
+    this.columns.remove(column, options);
     return this;
   },
 
@@ -2815,7 +2830,7 @@ var Grid = Backgrid.Grid = Backbone.View.extend({
      Delegates to Backgrid.Body#sort.
    */
   sort: function () {
-    this.body.sort.apply(this.body, arguments);
+    this.body.sort(arguments);
     return this;
   },
 
