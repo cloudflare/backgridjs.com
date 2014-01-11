@@ -111,10 +111,6 @@ body {
   margin-bottom: 20px;
 }
 
-#example-2-result {
-  height: 592px;
-}
-
 .CodeMirror {
   border: 1px solid #ddd;
   -webkit-border-radius: 4px;
