@@ -4438,8 +4438,7 @@ require.register("wyuenho-backgrid/lib/backgrid.js", function(exports, require, 
   else factory(this, this._, this.Backbone);
 }(function (root, _, Backbone) {
 
-  "use strict";
-/*
+  /*
   backgrid
   http://github.com/wyuenho/backgrid
 
@@ -4483,8 +4482,6 @@ function lpad(str, length, padstr) {
 var $ = Backbone.$;
 
 var Backgrid = root.Backgrid = {
-
-  VERSION: "0.3.0",
 
   Extension: {},
 
@@ -4589,7 +4586,6 @@ _.extend(Command.prototype, {
              this.moveRight() || this.save() || this.cancel());
   }
 });
-
 
 /*
   backgrid
@@ -7323,8 +7319,6 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
   }
 
 }(this, function (_, Backbone, Backgrid) {
-
-  "use strict";
 
   /**
      PageHandle is a class that renders the actual page handles and reacts to
