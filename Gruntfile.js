@@ -43,6 +43,9 @@ module.exports = function (grunt) {
 
     componentbuild: {
       default: {
+        options: {
+          copy: true
+        },
         src: ".",
         dest: "build"
       }

@@ -274,13 +274,13 @@
       });
 
       var clientExample = $("#client-side-filter-example-result");
-      clientExample.find(".backgrid-container").append(clientGrid.render().$el)
+      clientExample.find(".backgrid-container").append(clientGrid.render().el)
 
       var clientPaginator = new Backgrid.Extension.Paginator({
         collection: clientTerritories
       });
 
-      clientExample.append(clientPaginator.render().$el);
+      clientExample.append(clientPaginator.render().el);
 
       clientTerritories.fetch({reset: true});
 
@@ -321,13 +321,13 @@
       });
 
       var lunrExample = $("#lunr-filter-example-result");
-      lunrExample.find(".backgrid-container").append(lunrGrid.render().$el)
+      lunrExample.find(".backgrid-container").append(lunrGrid.render().el)
 
       var lunrPaginator = new Backgrid.Extension.Paginator({
         collection: lunrTerritories
       });
 
-      lunrExample.append(lunrPaginator.render().$el);
+      lunrExample.append(lunrPaginator.render().el);
 
       lunrTerritories.fetch({reset: true});
     </script>

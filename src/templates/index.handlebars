@@ -21,7 +21,7 @@
       <div class="btn-group clearfix hidden-xs hidden-sm">
         <a class="btn btn-lg btn-success" href="#basic-example">See Examples</a>
         <a class="btn btn-lg btn-primary hidden-sm hidden-xs"
-           href="https://github.com/wyuenho/backgrid/tags">Download v0.3.2</a>
+           href="https://github.com/wyuenho/backgrid/tags">Download v0.3.3</a>
         <a class="btn btn-lg btn-info"
            href="https://github.com/wyuenho/backgrid/releases">What's new?</a>
       </div>
@@ -229,7 +229,7 @@
               });
 
               // Render the grid and attach the root to your HTML document
-              $("#example-1-result").append(grid.render().$el);
+              $("#example-1-result").append(grid.render().el);
 
               // Fetch some countries from the url
               territories.fetch({reset: true});</textarea>
@@ -312,7 +312,7 @@
 
               // Render the grid
               var $example2 = $("#example-2-result");
-              $example2.append(pageableGrid.render().$el)
+              $example2.append(pageableGrid.render().el)
 
               // Initialize the paginator
               var paginator = new Backgrid.Extension.Paginator({
@@ -320,7 +320,7 @@
               });
 
               // Render the paginator
-              $example2.after(paginator.render().$el);
+              $example2.after(paginator.render().el);
 
               // Initialize a client-side filter to filter on the client
               // mode pageable collection's cache.
@@ -330,10 +330,10 @@
               });
 
               // Render the filter
-              $example2.before(filter.render().$el);
+              $example2.before(filter.render().el);
 
               // Add some space to the filter and move it to the right
-              filter.$el.css({float: "right", margin: "20px"});
+              $(filter.el).css({float: "right", margin: "20px"});
 
               // Fetch some data
               pageableTerritories.fetch({reset: true});</textarea>

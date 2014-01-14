@@ -152,16 +152,16 @@
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
           // Suppose you want to highlight the entire row when an editable field is focused
           var FocusableRow = Backgrid.Row.extend({
-            highlightColor: 'lightYellow',
+            highlightColor: "lightYellow",
             events: {
-              focusin: 'rowFocused',
-              focusout: 'rowLostFocus'
+              focusin: "rowFocused",
+              focusout: "rowLostFocus"
             },
             rowFocused: function() {
-              this.$el.css('background-color', this.highlightColor);
+              this.el.style.backgroundColor = this.highlightColor;
             },
             rowLostFocus: function() {
-              this.$el.removeAttr('style');
+              delete this.el.style.backgroundColor;
             }
           });
 

@@ -25,7 +25,7 @@
           var CaptionFooter = Backgrid.Footer.extend({
 
             render: function () {
-              this.$el.html("&lt;tr&gt;&lt;td colspan=&apos;6&apos;&gt;Hello World!&lt;/td&gt;&lt;/tr&gt;");
+              this.el.innerHTML = '&lt;tr&gt;&lt;td colspan="6"&gt;Hello World!&lt;/td&gt;&lt;/tr&gt;"'
               return this;
             }
 
