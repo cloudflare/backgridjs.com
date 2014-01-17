@@ -52,7 +52,6 @@
 }
 
 .backgrid th.sortable a {
-  text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -295,6 +294,7 @@
   color: #999999;
   cursor: default;
 }
+
 /*
   backgrid-filter
   http://github.com/wyuenho/backgrid

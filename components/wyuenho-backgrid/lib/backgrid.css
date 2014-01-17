@@ -52,7 +52,6 @@
 }
 
 .backgrid th.sortable a {
-  text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
 }
