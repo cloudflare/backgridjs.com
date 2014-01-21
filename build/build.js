@@ -3064,8 +3064,8 @@ require.register("jashkenas-backbone/backbone.js", function(exports, require, mo
 });
 require.register("backbone-paginator-backbone-pageable/lib/backbone-pageable.js", function(exports, require, module){
 /*
-  backbone-pageable 1.4.4
-  http://github.com/wyuenho/backbone-pageable
+  backbone-pageable 1.4.5
+  http://github.com/backbone-paginator/backbone-pageable
 
   Copyright (c) 2013 Jimmy Yuen Ho Wong
   Licensed under the MIT @license.
@@ -4009,16 +4009,10 @@ require.register("backbone-paginator-backbone-pageable/lib/backbone-pageable.js"
        links from them for infinite paging.
 
        This default implementation parses the RFC 5988 `Link` header and extract
-       3 links from it - `first`, `prev`, `next`. If a `previous` link is found,
-       it will be found in the `prev` key in the returned object hash. Any
-       subclasses overriding this method __must__ return an object hash having
-       only the keys above. If `first` is missing, the collection's default URL
-       is assumed to be the `first` URL. If `prev` or `next` is missing, it is
-       assumed to be `null`. An empty object hash must be returned if there are
-       no links found. If either the response or the header contains information
-       pertaining to the total number of records on the server, #state.totalRecords
-       must be set to that number. The default implementation uses the `last`
-       link from the header to calculate it.
+       3 links from it - `first`, `prev`, `next`. Any subclasses overriding this
+       method __must__ return an object hash having only the keys
+       above. However, simply returning a `next` link or an empty hash if there
+       are no more links should be enough for most implementations.
 
        @param {*} resp The deserialized response body.
        @param {Object} [options]
@@ -4030,7 +4024,7 @@ require.register("backbone-paginator-backbone-pageable/lib/backbone-pageable.js"
       var links = {};
       var linkHeader = options.xhr.getResponseHeader("Link");
       if (linkHeader) {
-        var relations = ["first", "prev", "previous", "next", "last"];
+        var relations = ["first", "prev", "next"];
         _each(linkHeader.split(","), function (linkValue) {
           var linkParts = linkValue.split(";");
           var url = linkParts[0].replace(URL_TRIM_RE, '');
@@ -4039,39 +4033,10 @@ require.register("backbone-paginator-backbone-pageable/lib/backbone-pageable.js"
             var paramParts = param.split("=");
             var key = paramParts[0].replace(PARAM_TRIM_RE, '');
             var value = paramParts[1].replace(PARAM_TRIM_RE, '');
-            if (key == "rel" && _contains(relations, value)) {
-              if (value == "previous") links.prev = url;
-              else links[value] = url;
-            }
+            if (key == "rel" && _contains(relations, value)) links[value] = url;
           });
         });
-
-        var last = links.last || '', qsi, qs;
-        if (qs = (qsi = last.indexOf('?')) ? last.slice(qsi + 1) : '') {
-          var params = queryStringToParams(qs);
-
-          var state = _clone(this.state);
-          var queryParams = this.queryParams;
-          var pageSize = state.pageSize;
-
-          var totalRecords = params[queryParams.totalRecords] * 1;
-          var pageNum = params[queryParams.currentPage] * 1;
-          var totalPages = params[queryParams.totalPages];
-
-          if (!totalRecords) {
-            if (pageNum) totalRecords = (state.firstPage === 0 ?
-                                         pageNum + 1 :
-                                         pageNum) * pageSize;
-            else if (totalPages) totalRecords = totalPages * pageSize;
-          }
-
-          if (totalRecords) state.totalRecords = totalRecords;
-
-          this.state = this._checkState(state);
-        }
       }
-
-      delete links.last;
 
       return links;
     },
@@ -4116,7 +4081,8 @@ require.register("backbone-paginator-backbone-pageable/lib/backbone-pageable.js"
     },
 
     /**
-       Parse server response for server pagination state updates.
+       Parse server response for server pagination state updates. Not applicable
+       under infinite mode.
 
        This default implementation first checks whether the response has any
        state object as documented in #parse. If it exists, a state object is
@@ -6911,8 +6877,8 @@ var Body = Backgrid.Body = Backbone.View.extend({
      Backbone.PageableCollection, sorting will be done globally on all the pages
      and the current page will then be returned.
 
-     Triggers a Backbone `backgrid:sort` event from the collection when done
-     with the column, direction, comparator and a reference to the collection.
+     Triggers a Backbone `backgrid:sorted` event from the collection when done
+     with the column, direction and a reference to the collection.
 
      @param {Backgrid.Column} column
      @param {null|"ascending"|"descending"} direction
@@ -6948,16 +6914,23 @@ var Body = Backgrid.Body = Backbone.View.extend({
                             {sortValue: column.sortValue()});
 
       if (collection.fullCollection) {
+        // If order is null, pageable will remove the comparator on both sides,
+        // in this case the default insertion order comparator needs to be
+        // attached to get back to the order before sorting.
         if (collection.fullCollection.comparator == null) {
           collection.fullCollection.comparator = comparator;
         }
         collection.fullCollection.sort();
+        collection.trigger("backgrid:sorted", column, direction, collection);
       }
-      else collection.fetch({reset: true});
+      else collection.fetch({reset: true, success: function () {
+        collection.trigger("backgrid:sorted", column, direction, collection);
+      }});
     }
     else {
       collection.comparator = comparator;
       collection.sort();
+      collection.trigger("backgrid:sorted", column, direction, collection);
     }
 
     column.set("direction", direction);
@@ -7422,8 +7395,6 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
        @param {boolean} [options.isFastForward=false]
     */
     initialize: function (options) {
-      Backbone.View.prototype.initialize.apply(this, arguments);
-
       var collection = this.collection;
       var state = collection.state;
       var currentPage = state.currentPage;
@@ -7444,19 +7415,6 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       }
       this.pageIndex = pageIndex;
 
-      if (((this.isRewind || this.isBack) && currentPage == firstPage) ||
-          ((this.isForward || this.isFastForward) &&
-           (currentPage == lastPage || collection.state.totalPages < 1))) {
-        this.$el.addClass("disabled");
-      }
-      else if (!(this.isRewind ||
-                 this.isBack ||
-                 this.isForward ||
-                 this.isFastForward) &&
-               currentPage == pageIndex) {
-        this.$el.addClass("active");
-      }
-
       this.label = (options.label || (firstPage ? pageIndex : pageIndex + 1)) + '';
       var title = options.title || this.title;
       this.title = _.isFunction(title) ? title({label: this.label}) : title;
@@ -7472,6 +7430,26 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       if (this.title) anchor.title = this.title;
       anchor.innerHTML = this.label;
       this.el.appendChild(anchor);
+
+      var collection = this.collection;
+      var state = collection.state;
+      var currentPage = state.currentPage;
+      var pageIndex = this.pageIndex;
+
+      if (this.isRewind && currentPage == state.firstPage ||
+         this.isBack && !collection.hasPrevious() ||
+         this.isForward && !collection.hasNext() ||
+         this.isFastForward && (currentPage == state.lastPage || state.totalPages < 1)) {
+        this.$el.addClass("disabled");
+      }
+      else if (!(this.isRewind ||
+                 this.isBack ||
+                 this.isForward ||
+                 this.isFastForward) &&
+               state.currentPage == pageIndex) {
+        this.$el.addClass("active");
+      }
+
       this.delegateEvents();
       return this;
     },
@@ -7482,9 +7460,13 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
     */
     changePage: function (e) {
       e.preventDefault();
-      var $el = this.$el;
+      var $el = this.$el, col = this.collection;
       if (!$el.hasClass("active") && !$el.hasClass("disabled")) {
-        this.collection.getPage(this.pageIndex);
+        if (this.isRewind) col.getFirstPage();
+        else if (this.isBack) col.getPreviousPage();
+        else if (this.isForward) col.getNextPage();
+        else if (this.isFastForward) col.getLastPage();
+        else col.getPage(this.pageIndex, {reset: true});
       }
       return this;
     }
@@ -7574,16 +7556,16 @@ require.register("wyuenho-backgrid-paginator/backgrid-paginator.js", function(ex
       self.controls = _.defaults(options.controls || {}, self.controls,
                                  Paginator.prototype.controls);
 
-      _.extend(this, _.pick(options || {}, "windowSize", "pageHandle",
+      _.extend(self, _.pick(options || {}, "windowSize", "pageHandle",
                             "slideScale", "goBackFirstOnSort",
                             "renderIndexedPageHandles"));
 
-      var collection = self.collection;
-      self.listenTo(collection, "add", self.render);
-      self.listenTo(collection, "remove", self.render);
-      self.listenTo(collection, "reset", self.render);
-      self.listenTo(collection, "backgrid:sort", function () {
-        if (self.goBackFirstOnSort) collection.getFirstPage();
+      var col = self.collection;
+      self.listenTo(col, "add", self.render);
+      self.listenTo(col, "remove", self.render);
+      self.listenTo(col, "reset", self.render);
+      self.listenTo(col, "backgrid:sorted", function () {
+        if (self.goBackFirstOnSort) col.getFirstPage({reset: true});
       });
     },
 

@@ -16,19 +16,19 @@
   "dependencies": {
     "jashkenas/underscore": "*",
     "jashkenas/backbone": "*",
-    "backbone-paginator/backbone-pageable": "1.4.4",
-    "wyuenho/backgrid": "0.3.4",
-    "wyuenho/backgrid-paginator": "0.3.4",
-    "wyuenho/backgrid-filter": "0.3.4",
-    "wyuenho/backgrid-select-all": "0.3.4",
-    "wyuenho/backgrid-text-cell": "0.3.4",
-    "wyuenho/backgrid-moment-cell": "0.3.4",
-    "wyuenho/backgrid-select2-cell": "0.3.4",
+    "backbone-paginator/backbone-pageable": "1.4.5",
+    "wyuenho/backgrid": "0.3.5",
+    "wyuenho/backgrid-paginator": "0.3.5",
+    "wyuenho/backgrid-filter": "0.3.5",
+    "wyuenho/backgrid-select-all": "0.3.5",
+    "wyuenho/backgrid-text-cell": "0.3.5",
+    "wyuenho/backgrid-moment-cell": "0.3.5",
+    "wyuenho/backgrid-select2-cell": "0.3.5",
     "ivaynberg/select2": "*"
   },
   "paths": [
     "components"
   ],
   "remotes": [],
-  "version": "0.3.4"
+  "version": "0.3.5"
 }
