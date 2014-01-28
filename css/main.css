@@ -1,22 +1,19 @@
 #social-media {
-  padding: 14px 0;
+  line-height: 50px;
   height: 50px;
   overflow: hidden;
 }
 
-#social-media .fb-like {
-  width: 90px;
+#social-media > li {
+  padding-top: 10px;
+  margin-right: 1em;
 }
 
-#social-media .g-plusone {
-  display: inline-block;
+#social-media > li:last-child {
+  margin-right: 15px;
 }
 
-#social-media * {
-  vertical-align: middle !important;
-}
-
-#social-media > a {
+#social-media > li > a {
   padding: 0;
   margin: 0;
   display: inline-block;

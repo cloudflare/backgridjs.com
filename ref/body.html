@@ -29,7 +29,6 @@
     <![endif]-->
   </head>
   <body>
-    <div id="fb-root"></div>
     <div id="main">
       <header>
         <div class="navbar navbar-default navbar-fixed-top">
@@ -108,24 +107,40 @@
                   </ul>
                 </li>
               </ul>
-              <ul class="nav navbar-nav navbar-right visible-md visible-lg">
-                <li id="social-media">
-                  <iframe allowtransparency="true" frameborder="0" scrolling="no"
-                          style="border: 0; margin: 0 0 0 15px; padding: 0;"
-                          src="https://www.gittip.com/wyuenho/widget.html" width="50" height="20"></iframe>
-                  <iframe src="http://ghbtns.com/github-btn.html?user=wyuenho&amp;repo=backgrid&amp;type=watch&amp;count=true"
-                          allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
-                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://backgridjs.com" data-via="wong_jim" data-hashtags="backgrid,backbonejs">Tweet</a>
-                  <div class="fb-like" data-href="http://backgridjs.com" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
-                  <div class="g-plusone" data-size="medium" data-recommendations="false"></div>
-                  <a href="https://coderwall.com/wyuenho"><img alt="Endorse wyuenho on Coderwall" width="110" height="20" src="http://api.coderwall.com/wyuenho/endorsecount.png" /></a>
+              <ul id="social-media" class="nav navbar-nav navbar-right visible-md visible-lg">
+                <li>
+                  <a class="sprite-icons-gittip" href="https://www.gittip.com/wyuenho/" title="Gittip Me"></a>
+                </li>
+                <li>
+                  <a class="sprite-icons-github" href="https://github.com/wyuenho/backgrid" title="Fork me on Github"></a>
+                </li>
+
+                <li>
+                  <a href="https://twitter.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;via=wong_jim&amp;hashtags=backgrid,backbonejs&amp;size=medium"
+                     title="Share on Twitter"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=648,width=845');return false;"
+                     class="sprite-icons-twitter"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbackgridjs.com"
+                     title="Share on Facebook"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=368,width=605');return false;"
+                     class="sprite-icons-facebook"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://plus.google.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;annotation=inline"
+                     title="Share on Google+"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                     class="sprite-icons-google"
+                     ></a>
                 </li>
               </ul>
             </div>
           </div>
-          <a class="visible-md visible-lg" href="https://github.com/wyuenho/backgrid">
-            <img style="position: absolute; top: 0; right: 0; border: 0;" width="149" height="149" src="/img/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
-          </a>
         </div>
       </header>
       <div class="container content">
@@ -229,34 +244,6 @@
           }
         });
       });
-    </script>
-    <script>
-      // Facebook Like
-      (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=273448342806008";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-
-      // Google +1
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-
-      // Tweet Button
-      !function(d,s,id) {
-        var js,fjs=d.getElementsByTagName(s)[0];
-        if(!d.getElementById(id)){
-          js=d.createElement(s);
-          js.id=id;
-          js.src="//platform.twitter.com/widgets.js";
-          fjs.parentNode.insertBefore(js,fjs);
-        }
-      }(document,"script","twitter-wjs");
     </script>
     
 

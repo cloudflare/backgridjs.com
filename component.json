@@ -2,8 +2,13 @@
   "name": "backgridjs-com",
   "repo": "wyuenho/backgridjs-com",
   "main": "js/main.js",
+  "images": [
+    "img/icons.png",
+    "img/icons@2x.png"
+  ],
   "styles": [
-    "css/main.css"
+    "css/main.css",
+    "css/icons.css"
   ],
   "scripts": [
     "js/main.js"

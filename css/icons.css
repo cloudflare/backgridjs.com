@@ -1,0 +1,16 @@
+/* glue: 0.4 hash: 4bcd47ad34 */
+.sprite-icons-twitter,
+.sprite-icons-google,
+.sprite-icons-gittip,
+.sprite-icons-github,
+.sprite-icons-facebook{background-image:url('../img/icons.png');background-repeat:no-repeat}
+.sprite-icons-twitter{background-position:0px 0px;width:32px;height:32px;}
+.sprite-icons-google{background-position:-32px 0px;width:32px;height:32px;}
+.sprite-icons-gittip{background-position:0px -32px;width:32px;height:32px;}
+.sprite-icons-github{background-position:-32px -32px;width:32px;height:32px;}
+.sprite-icons-facebook{background-position:-64px 0px;width:32px;height:32px;}
+@media only screen and (-webkit-min-device-pixel-ratio: 2.0), only screen and (min--moz-device-pixel-ratio: 2.0), only screen and (-o-min-device-pixel-ratio: 200/100), only screen and (min-device-pixel-ratio: 2.0) {.sprite-icons-twitter,
+.sprite-icons-google,
+.sprite-icons-gittip,
+.sprite-icons-github,
+.sprite-icons-facebook{background-image:url('../img/icons@2x.png');-webkit-background-size: 96px 64px;-moz-background-size: 96px 64px;background-size: 96px 64px;}}

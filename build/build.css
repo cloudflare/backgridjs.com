@@ -9089,24 +9089,21 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .cm-s-eclipse .CodeMirror-matchingbracket {outline:1px solid grey; color:black !important;}
 
 #social-media {
-  padding: 14px 0;
+  line-height: 50px;
   height: 50px;
   overflow: hidden;
 }
 
-#social-media .fb-like {
-  width: 90px;
+#social-media > li {
+  padding-top: 10px;
+  margin-right: 1em;
 }
 
-#social-media .g-plusone {
-  display: inline-block;
+#social-media > li:last-child {
+  margin-right: 15px;
 }
 
-#social-media * {
-  vertical-align: middle !important;
-}
-
-#social-media > a {
+#social-media > li > a {
   padding: 0;
   margin: 0;
   display: inline-block;
@@ -9253,3 +9250,21 @@ body {
     padding: 40px 0;
   }
 }
+
+
+/* glue: 0.4 hash: 4bcd47ad34 */
+.sprite-icons-twitter,
+.sprite-icons-google,
+.sprite-icons-gittip,
+.sprite-icons-github,
+.sprite-icons-facebook{background-image:url("backgridjs-com/css/../img/icons.png");background-repeat:no-repeat}
+.sprite-icons-twitter{background-position:0px 0px;width:32px;height:32px;}
+.sprite-icons-google{background-position:-32px 0px;width:32px;height:32px;}
+.sprite-icons-gittip{background-position:0px -32px;width:32px;height:32px;}
+.sprite-icons-github{background-position:-32px -32px;width:32px;height:32px;}
+.sprite-icons-facebook{background-position:-64px 0px;width:32px;height:32px;}
+@media only screen and (-webkit-min-device-pixel-ratio: 2.0), only screen and (min--moz-device-pixel-ratio: 2.0), only screen and (-o-min-device-pixel-ratio: 200/100), only screen and (min-device-pixel-ratio: 2.0) {.sprite-icons-twitter,
+.sprite-icons-google,
+.sprite-icons-gittip,
+.sprite-icons-github,
+.sprite-icons-facebook{background-image:url("backgridjs-com/css/../img/icons@2x.png");-webkit-background-size: 96px 64px;-moz-background-size: 96px 64px;background-size: 96px 64px;}}
