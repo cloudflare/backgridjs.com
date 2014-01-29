@@ -9088,8 +9088,14 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .cm-s-eclipse .CodeMirror-activeline-background {background: #e8f2ff !important;}
 .cm-s-eclipse .CodeMirror-matchingbracket {outline:1px solid grey; color:black !important;}
 
-.jumbotron .logo {
+.desktop-logo {
   width: 90%;
+}
+
+.mobile-logo {
+  width: 100px;
+  margin-right: 20px;
+  display: inline-block!important;
 }
 
 .jumbotron h1 {
@@ -9188,6 +9194,7 @@ body {
   height: 60px;
   line-height: 60px;
   background-color: #f5f5f5;
+  text-align: center;
 }
 
 #layout-footer p {
@@ -9217,15 +9224,14 @@ body {
 }
 
 @media (max-width: 991px) {
-  .jumbotron .logo {
-    display: block;
-    width: 50%;
-    margin: 0 auto 20px;
+  .jumbotron .logo.hidden-md.hidden-lg {
+    display: inline-block!important;
+    height: 63px;
+    margin-right: 20px;
   }
 }
 
 @media (max-width: 767px) {
-
   .navbar.navbar-fixed-top {
     margin-left: 0;
     margin-right: 0;
@@ -9233,17 +9239,14 @@ body {
 
   .jumbotron h1 {
     font-size: 48px;
-    /* margin-top: 0; */
-    /* margin-bottom: 20px; */
   }
 
   #layout-footer {
-    height: 120px;
+    height: 154px;
   }
 
   #layout-footer p {
     padding: 50px 0;
-    text-align: center;
     line-height: 1.3em;
   }
 
@@ -9254,15 +9257,13 @@ body {
 }
 
 @media (max-width: 479px) {
-  .jumbotron {
-    /* padding: 10px; */
+  .jumbotron h1 {
+    text-align: center;
   }
-
-  #layout-footer p {
-    padding: 40px 0;
+  .jumbotron .mobile-logo {
+    margin: 0 auto 20px;
   }
 }
-
 
 /* glue: 0.4 hash: 4bcd47ad34 */
 .sprite-icons-twitter,
