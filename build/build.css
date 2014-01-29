@@ -9088,6 +9088,15 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .cm-s-eclipse .CodeMirror-activeline-background {background: #e8f2ff !important;}
 .cm-s-eclipse .CodeMirror-matchingbracket {outline:1px solid grey; color:black !important;}
 
+.jumbotron .logo {
+  width: 90%;
+}
+
+.jumbotron h1 {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
 #social-media {
   line-height: 50px;
   height: 50px;
@@ -9185,11 +9194,6 @@ body {
   margin-bottom: 0;
 }
 
-.jumbotron h1 {
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
 .nav.nav-stacked > li > a {
   padding: 0;
 }
@@ -9212,6 +9216,14 @@ body {
   overflow-x: auto;
 }
 
+@media (max-width: 991px) {
+  .jumbotron .logo {
+    display: block;
+    width: 50%;
+    margin: 0 auto 20px;
+  }
+}
+
 @media (max-width: 767px) {
 
   .navbar.navbar-fixed-top {
@@ -9221,8 +9233,8 @@ body {
 
   .jumbotron h1 {
     font-size: 48px;
-    margin-top: 0;
-    margin-bottom: 20px;
+    /* margin-top: 0; */
+    /* margin-bottom: 20px; */
   }
 
   #layout-footer {
@@ -9243,7 +9255,7 @@ body {
 
 @media (max-width: 479px) {
   .jumbotron {
-    padding: 10px;
+    /* padding: 10px; */
   }
 
   #layout-footer p {
