@@ -9088,6 +9088,22 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .cm-s-eclipse .CodeMirror-activeline-background {background: #e8f2ff !important;}
 .cm-s-eclipse .CodeMirror-matchingbracket {outline:1px solid grey; color:black !important;}
 
+.tdwfb {
+  display: none;
+  background: #333;
+  text-align: center;
+}
+
+.tdwfb h3 {
+  margin: 0;
+  padding: 10px 20px;
+}
+
+.tdwfb a {
+  color: #f2c45a;
+  font-family: 'brandon_grotesque', Helvetica, Arial, sans-serif;
+}
+
 .desktop-logo {
   width: 90%;
 }

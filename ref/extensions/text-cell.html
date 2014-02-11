@@ -31,6 +31,7 @@
   </head>
   <body>
     <div id="main">
+      <div class="tdwfb"><h3><a href="https://thedaywefightback.org/" title="The Day We Fight Back">Dear Internet, we’re sick of complaining about the NSA. We want new laws that curtail online surveillance. Today we fight back.</a></h3></div>
       <header>
         <div class="navbar navbar-default navbar-fixed-top">
           <div class="container">
@@ -266,6 +267,12 @@
           }
         });
       });
+
+     $(document).ready(function () {
+       if (new Date().getTime() <= new Date(2014, 1, 12, 2, 0, 0).getTime()) {
+         $('.tdwfb').show();
+       }
+     });
     </script>
     
 
