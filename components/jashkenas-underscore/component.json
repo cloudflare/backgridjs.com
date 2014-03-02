@@ -11,8 +11,9 @@
   "repo": "jashkenas/underscore",
   "main": "underscore.js",
   "scripts": [
-    "underscore.js"
+    "underscore.js",
+    "underscore-min.js"
   ],
-  "version": "1.5.2",
+  "version": "1.6.0",
   "license": "MIT"
 }
