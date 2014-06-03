@@ -42,11 +42,11 @@
           Backgrid.Columns collection and listen to events from the
           individual models.</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
-          var myColumns = new Backgrid.Columns({
+          var myColumns = new Backgrid.Columns([{
             name: "id", label: "ID", cell: "string"
           }, {
             // ...
-          });
+          }]);
 
           myColumns.on("change:renderable", function (col, colAttr) {
             // recalculate shown columns count
