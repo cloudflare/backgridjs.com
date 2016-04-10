@@ -1,6 +1,19 @@
 var $ = require("jquery");
+require("bootstrap");
+var CodeMirror = require("codemirror");
+require("codemirror/mode/javascript/javascript");
+require("codemirror/mode/css/css");
 var _ = require("underscore");
-require("codemirror");
+var Backbone = require("backbone");
+Backbone.$ = $;
+var PageableCollection = Backbone.PageableCollection = require("backbone.paginator");
+var Backgrid = require("backgrid");
+require("backgrid-paginator");
+require("backgrid-filter");
+require("backgrid-select-all");
+require("backgrid-select2-cell");
+require("backgrid-moment-cell");
+require("backgrid-text-cell");
 
 function unpad (str) {
   var lines = str.split("\n");
@@ -18,38 +31,51 @@ function unpad (str) {
   return lines.join("\n");
 }
 
-module.exports = {
+function setUpCodeMirror() {
 
-  setUpCodeMirror: function () {
+  $("textarea.code-snippet").each(function (index, elm) {
+    var $elm = $(elm);
 
-    $("textarea.code-snippet").each(function (index, elm) {
-      var $elm = $(elm);
-
-      var cm = window.CodeMirror.fromTextArea(elm, {
-        mode: $elm.data("mode"),
-        lineNumbers: true,
-        readOnly: true,
-        theme: "eclipse",
-        tabindex: -1
-      });
-
-      if ($elm.data("mode") === "javascript") {
-        var value = $elm.val();
-        cm.setValue(unpad(value));
-        if ($elm.data("eval") === "yes") {
-          if (window.execScript) window.execScript(value);
-          else window.eval.call(window, value);
-        }
-      }
-      else {
-        var lineCount = cm.doc.lineCount();
-        for (var i = 0; i < lineCount; i++) {
-          cm.indentLine(i);
-        }
-      }
-
-      $elm.data("codemirror", cm);
+    var cm = CodeMirror.fromTextArea(elm, {
+      mode: $elm.data("mode"),
+      lineNumbers: true,
+      readOnly: true,
+      theme: "eclipse",
+      tabindex: -1
     });
-  }
 
-};
+    if ($elm.data("mode") === "javascript") {
+      var value = $elm.val();
+      cm.setValue(unpad(value));
+      if ($elm.data("eval") === "yes") {
+        if (window.execScript) window.execScript(value);
+        else window.eval.call(window, value);
+      }
+    }
+    else {
+      var lineCount = cm.doc.lineCount();
+      for (var i = 0; i < lineCount; i++) {
+        cm.indentLine(i);
+      }
+    }
+
+    $elm.data("codemirror", cm);
+  });
+}
+
+$(document).ready(function () {
+  setUpCodeMirror();
+
+  $("a[href^='/#'], a[href^='#']").click(function (e) {
+    e.preventDefault();
+    var target = this.hash;
+    if (target) {
+      var $target = $(target);
+      $("html, body").stop().animate({
+        "scrollTop": $target.offset().top - 55
+      }, 500, "swing", function() {
+        window.location.hash = target;
+      });
+    }
+  });
+});

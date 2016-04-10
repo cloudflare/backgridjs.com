@@ -1,6 +1,6 @@
 {{#extend "layout"}}
-  {{#replace "title"}}A powerful widget set for building data grids with Backbone.js{{/replace}}
-  {{#replace "content"}}
+  {{#content "title"}}A powerful widget set for building data grids with Backbone.js{{/content}}
+  {{#content "content"}}
     <section class="jumbotron">
       <div class="row">
         <div class="col-md-6">
@@ -25,7 +25,7 @@
           <div class="btn-group clearfix hidden-xs hidden-sm">
             <a class="btn btn-lg btn-success" href="#basic-example">See Examples</a>
             <a class="btn btn-lg btn-primary hidden-sm hidden-xs"
-               href="https://github.com/wyuenho/backgrid/tags">Download v0.3.5</a>
+               href="https://github.com/wyuenho/backgrid/tags">Download v0.3.7</a>
             <a class="btn btn-lg btn-info"
                href="https://github.com/wyuenho/backgrid/releases">What's new?</a>
           </div>
@@ -146,7 +146,7 @@
           title="Component">Component</a> is a good Web component manager that
           builds both your JS and CSS resources:
         </p>
-        <pre>$ component install wyuenho/backgrid</pre>
+        <pre>$ npm install backgrid</pre>
         <h3>
           <a id="the-old-fashioned-way" href="#the-old-fashion-way" title="The Old-Fashioned Way" class="section">The Old-Fashioned Way</a>
         </h3>
@@ -356,5 +356,5 @@
         </div>
       </div>
     </div>
-  {{/replace}}
+  {{/content}}
 {{/extend}}

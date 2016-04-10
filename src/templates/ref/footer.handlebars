@@ -1,6 +1,6 @@
 {{#extend "layout"}}
-  {{#replace "title"}}Footer{{/replace}}
-  {{#replace "content"}}
+  {{#content "title"}}Footer{{/content}}
+  {{#content "content"}}
     <div class="row">
       <div class="col-md-2">
         <h2><a id="footer" href="#footer" title="Footer" class="section">Footer</a></h2>
@@ -40,5 +40,5 @@
           });</textarea>
       </div>
     </div>
-  {{/replace}}
+  {{/content}}
 {{/extend}}

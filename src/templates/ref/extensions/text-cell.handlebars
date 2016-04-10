@@ -1,6 +1,6 @@
 {{#extend "layout"}}
-  {{#replace "title"}}Text Cell{{/replace}}
-  {{#replace "content"}}
+  {{#content "title"}}Text Cell{{/content}}
+  {{#content "content"}}
     <div class="row">
       <div class="col-md-3">
         <h2>
@@ -62,5 +62,5 @@
         <div id="text-cell-example-result" class="backgrid-container" style="height: auto;"></div>
       </div>
     </div>
-  {{/replace}}
+  {{/content}}
 {{/extend}}
