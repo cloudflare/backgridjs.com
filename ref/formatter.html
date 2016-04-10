@@ -1,0 +1,308 @@
+<!doctype html>
+<!--
+  backgrid
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="backgrid,backgrid.js,backbone,backbone.js,datagrid,grid,paginator,javascript" />
+    <meta name="description" content="A powerful widget set for building data grids with Backbone.js" />
+
+    <meta property="og:title" content="Backgridjs" />
+    <meta property="og:description" content="A powerful widget set for building data grids with Backbone.js" />
+    <meta property="og:url" content="http://backgridjs.com" />
+    <meta property="og:image" content="http://backgridjs.com/img/backgrid-logo.png" />
+
+    <title>Backgrid.js - Formatter</title>
+
+    <link rel="canonical" href="http://backgridjs.com" />
+
+    <link rel="stylesheet" href="/build/bundle.css" />
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="main">
+      <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="/"
+                 class="navbar-brand" title="A powerful widget set for building data grids with Backbone.js">Backgrid.js</a>
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Introduction
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/index.html#features">Features</a></li>
+                    <li><a href="/index.html#getting-started">Getting Started</a></li>
+                    <li><a href="/index.html#basic-example">Basic Example</a></li>
+                    <li><a href="/index.html#complete-example">Complete Example</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Core API
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/forewords.html">Forewords</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/grid.html">Grid</a></li>
+                    <li><a href="/ref/column.html">Column</a></li>
+                    <li><a href="/ref/cell.html">Cell</a></li>
+                    <li><a href="/ref/formatter.html">Formatter</a></li>
+                    <li><a href="/ref/header.html">Header</a></li>
+                    <li><a href="/ref/row.html">Row</a></li>
+                    <li><a href="/ref/body.html">Body</a></li>
+                    <li><a href="/ref/footer.html">Footer</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Extensions
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/extensions/development.html">Development Guide</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
+                    <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
+                    <li><a href="/ref/extensions/filter.html">Filter</a></li>
+                    <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
+                    <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
+                    <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
+                    <li class="divider"></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/wiki#extensions">More</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    More Info
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/misc/styling.html">Styling</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/misc/faq.html">FAQ</a></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/releases">Change Log</a></li>
+                    <li><a href="/misc/license.html">License</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul id="social-media" class="nav navbar-nav navbar-right visible-md visible-lg">
+                <li>
+                  <a class="sprite-icons-github" href="https://github.com/wyuenho/backgrid" title="Fork me on Github"></a>
+                </li>
+
+                <li>
+                  <a href="https://twitter.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;via=wong_jim&amp;hashtags=backgrid,backbonejs&amp;size=medium"
+                     title="Share on Twitter"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=648,width=845');return false;"
+                     class="sprite-icons-twitter"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbackgridjs.com"
+                     title="Share on Facebook"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=368,width=605');return false;"
+                     class="sprite-icons-facebook"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://plus.google.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;annotation=inline"
+                     title="Share on Google+"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                     class="sprite-icons-google"
+                     ></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="container content">
+            <div class="row">
+      <div class="col-md-2">
+        <h2>
+          <a id="formatter" href="#formatter" title="Formatter" class="section">Formatter</a>
+        </h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.CellFormatter">Backgrid.CellFormatter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.DatetimeFormatter">Backgrid.DatetimeFormatter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.NumberFormatter">Backgrid.NumberFormatter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.PercentFormatter">Backgrid.PercentFormatter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.StringFormatter">Backgrid.StringFormatter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.EmailFormatter">Backgrid.EmailFormatter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.SelectFormatter">Backgrid.SelectFormatter</a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <h3>
+          <a id="introduction" href="#introduction" title="Introduction" class="section">Introduction</a>
+        </h3>
+        <p>In Backgrid, cell formatters serves the purpose of converting values
+          between JSON value types and strings, and validation. Writing
+          formatters for value conversion and validation is easy as you only
+          have to conform to a very simple protocol.</p>
+        <p class="label label-warning">Pro Tip</p>
+        <p>Formatters are used for <em>string</em> formatting, not manipulating
+          the DOM and styling. Use <a href="http://backbonejs.org/#View-render"
+          title="Backbone.View#render">render</a> for that.</p>
+        <h3>
+          <a id="custom-formatters" href="#custom-formatters" title="Custom Formatters" class="section">Custom Formatters</a>
+        </h3>
+        <p>Any formatters must have the following two methods defined:</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var formatter = {
+            // function (*, Backbone.Model): string
+            fromRaw: function (rawData, model) { },
+            // function (string, Backbone.Model): *|undefined
+            toRaw: function (formattedData, model) { }
+          };</textarea>
+        <p><code>fromRaw()</code> is called by Backgrid.Cell and its
+          subclasses whenever a raw model value needs to be formatted into
+          a humanized form for display.</p>
+        <p><code>toRaw()</code> is called by Backgrid.CellEditor and its
+          subclasses whenever a user input string needs to be converted back
+          to a raw JSON value for model persistence.</p>
+        <p>The <code>model</code> parameter is not used by any built-in
+          formatters, but sometimes you may want to decide how to format your
+          values depending on the other values in the model. You can use it in
+          your custom formatters if that's the case.</p>
+        <h3>
+          <a id="validation" href="#validation" title="Validation" class="section">Validation</a>
+        </h3>
+        <p>In addition to user input conversion, <code>toRaw()</code> also
+          validates the user input during conversion. If the user input is
+          invalid or cannot be converted to a JSON value,
+          <code>toRaw()</code><strong>MUST</strong> return
+          <code>undefined</code> instead of throwing an Error.</p>
+        <p>In addition to using formatters to do simple yes or no
+          validations, if your model class has
+          a <a href="http://backbonejs.org/#Model-validate"
+          title="Backbone.Model#validate">validate()</a> method defined,
+          it will also be used for validation after trying with the
+          formatter.</p>
+        <h3>
+          <a id="selectformatter" href="#selectformatter" title="SelectFormatter" class="section">SelectFormatter</a>
+        </h3>
+        <p>The most common formatter you'll override is probably
+          SelectFormatter. Suppose your column expects an integer, due to a
+          limitation of the DOM, the default <code>toRaw()</code> implementation
+          will simply return the selected value from the DOM, which is always a
+          string.</p>
+        <p>If you need to store a different type, you should override the
+          formatter to provide a <code>toRaw()</code> implementation that returns a
+          correct type:</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var IntSelectFormatter = {
+            fromRaw: Backgrid.SelectFormatter.fromRaw,
+            toRaw: function (formattedValue, model) {
+              return parseInt(formattedValue);
+            }
+          };</textarea>
+        <p>If you want to use a SelectCell with multiple select, and if the type
+          of your model value is not string, you have to override
+          <code>toRaw</code> to return an array of values:</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          var MultipleIntSelectFormatter = {
+            fromRaw: Backgrid.SelectFormatter.fromRaw,
+            toRaw: function (formattedValue, model) {
+              return formattedValue == null ? [] : _.map(formattedValue, function (v) {
+                return parseInt(v);
+              });
+            }
+          };</textarea>
+        <h3>
+          <a id="using-custom-formatters" href="#using-custom-formatters" title="Using Custom Formatters" class="section">Using Custom Formatters</a>
+        </h3>
+        <p>A custom formatter supplied to a column definition will be used
+          instead of the cell's default:</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var grid = new Backgrid.Grid({
+            columns: [{
+              name: "url",
+              cell: "uri",
+              formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
+                fromRaw: function (rawValue, model) {
+                  return rawValue.replace("http://", '');
+                }
+              })
+            }],
+            collection: col
+          });</textarea>
+        <p>To make your custom cell and custom formatter reuseable, you can
+          package them up together and give your custom cell to a column
+          definition:</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          var MyUriFormatter = _.extend({}, Backgrid.CellFormatter.prototype, {
+            fromRaw: function (rawValue, model) {
+              return rawValue.replace("http://", '');
+            }
+          });
+
+          var MyUriCell = Backgrid.UriCell.extend({
+            // every cell class has a default formatter, which you can override
+            formatter: MyUriFormatter
+          });
+
+          var grid = new Backgrid.Grid({
+            columns: [{
+              name: "url",
+              cell: MyUriCell,
+            }],
+            collection: col
+          });</textarea>
+      </div>
+    </div>
+
+      </div>
+    </div>
+    <div id="layout-footer">
+      <div class="container">
+        <p class="text-muted">
+          Copyright &copy; 2013 <a href="mailto:wyuenho@gmail.com" title="Jimmy
+          Yuen Ho Wong">Jimmy Yuen Ho Wong</a> and contributors. Logo designed
+          by <a href="http://kylerosenberg.com/" title="Kyle Rosenberg">Kyle
+          Rosenberg</a>. <a href="/misc/license" title="License">MIT
+          Licensed.</a>
+        </p>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36403214-1']);
+      _gaq.push(['_setDomainName', 'backgridjs.com']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <script src="/build/bundle.js"></script>
+  </body>
+</html>

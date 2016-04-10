@@ -1,0 +1,502 @@
+<!doctype html>
+<!--
+  backgrid
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="backgrid,backgrid.js,backbone,backbone.js,datagrid,grid,paginator,javascript" />
+    <meta name="description" content="A powerful widget set for building data grids with Backbone.js" />
+
+    <meta property="og:title" content="Backgridjs" />
+    <meta property="og:description" content="A powerful widget set for building data grids with Backbone.js" />
+    <meta property="og:url" content="http://backgridjs.com" />
+    <meta property="og:image" content="http://backgridjs.com/img/backgrid-logo.png" />
+
+    <title>Backgrid.js - Filters</title>
+
+    <link rel="canonical" href="http://backgridjs.com" />
+
+    <link rel="stylesheet" href="/build/bundle.css" />
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="main">
+      <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="/"
+                 class="navbar-brand" title="A powerful widget set for building data grids with Backbone.js">Backgrid.js</a>
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Introduction
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/index.html#features">Features</a></li>
+                    <li><a href="/index.html#getting-started">Getting Started</a></li>
+                    <li><a href="/index.html#basic-example">Basic Example</a></li>
+                    <li><a href="/index.html#complete-example">Complete Example</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Core API
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/forewords.html">Forewords</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/grid.html">Grid</a></li>
+                    <li><a href="/ref/column.html">Column</a></li>
+                    <li><a href="/ref/cell.html">Cell</a></li>
+                    <li><a href="/ref/formatter.html">Formatter</a></li>
+                    <li><a href="/ref/header.html">Header</a></li>
+                    <li><a href="/ref/row.html">Row</a></li>
+                    <li><a href="/ref/body.html">Body</a></li>
+                    <li><a href="/ref/footer.html">Footer</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Extensions
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/extensions/development.html">Development Guide</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
+                    <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
+                    <li><a href="/ref/extensions/filter.html">Filter</a></li>
+                    <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
+                    <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
+                    <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
+                    <li class="divider"></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/wiki#extensions">More</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    More Info
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/misc/styling.html">Styling</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/misc/faq.html">FAQ</a></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/releases">Change Log</a></li>
+                    <li><a href="/misc/license.html">License</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul id="social-media" class="nav navbar-nav navbar-right visible-md visible-lg">
+                <li>
+                  <a class="sprite-icons-github" href="https://github.com/wyuenho/backgrid" title="Fork me on Github"></a>
+                </li>
+
+                <li>
+                  <a href="https://twitter.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;via=wong_jim&amp;hashtags=backgrid,backbonejs&amp;size=medium"
+                     title="Share on Twitter"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=648,width=845');return false;"
+                     class="sprite-icons-twitter"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbackgridjs.com"
+                     title="Share on Facebook"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=368,width=605');return false;"
+                     class="sprite-icons-facebook"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://plus.google.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;annotation=inline"
+                     title="Share on Google+"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                     class="sprite-icons-google"
+                     ></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="container content">
+            <div class="row">
+      <div class="col-md-3">
+        <h2>
+          <a id="filter" href="#filter" title="Filter" class="section">Filter</a>
+        </h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.ServerSideFilter">Backgrid.Extension.ServerSideFilter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.ClientSideFilter">Backgrid.Extension.ClientSideFilter</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid-filter/api/index.html#!/api/Backgrid.Extension.LunrFilter">Backgrid.Extension.LunrFilter</a></li>
+        </ul>
+        <hr/>
+        <h4>
+          <a id="best-used-on" href="#best-used-on" title="Best Used On" class="section">Best Used On</a>
+        </h4>
+        <ul>
+          <li>Desktop</li>
+          <li>Mobile</li>
+        </ul>
+        <a class="btn btn-lg btn-success center-block" href="https://github.com/wyuenho/backgrid-filter" title="backgrid-filter">Download</a>
+      </div>
+      <div class="col-md-9">
+        <h3>
+          <a id="when-to-use" href="#when-to-use" title="When to Use" class="section">When to Use</a>
+        </h3>
+        <p>When you have lots of rows with lots of text, and you just want
+          to quickly get to the row that only contain certain keywords.</p>
+        <h3>
+          <a id="prerequisites" href="#prerequisites" title="Prerequisites" class="section">Prerequisites</a>
+        </h3>
+        <p>There are no extra dependencies for <code>ServerSideFilter</code> and
+          <code>ClientSideFilter</code>.</p>
+        <p>For <code>LunrFilter</code>, it has a hard dependency on <a
+          href="http://lunrjs.com/" title="lunr.js">lunr.js</a> for
+          full-text searching.</p>
+        <h3>
+          <a id="serversidefilter" href="#serversidefilter" title="ServerSideFilter" class="section">ServerSideFilter</a>
+        </h3>
+        <p>ServerSideFilter is suitable if you have a server where you send the
+          search queries to get back a result. The follow example will create a
+          collection that uses Github's excellent API to search for Github
+          users. See <a
+          href="http://developer.github.com/v3/search/#search-users"
+          title="Github API - Search Users">here</a> for the valid search terms
+          to use.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          // Creates a Backbone.PageableCollection to talk to Github's API.
+
+          // While you don't have to use Backbone.PageableCollection, it is
+          // recommended that you do because of its good support for querying
+          // RESTful APIs that support pagination and sorting.
+
+          // See https://github.com/backbone-paginator/backbone-pageable
+          var GithubUsers = Backbone.PageableCollection.extend({
+            url: "https://api.github.com/search/users",
+
+            state: {
+              pageSize: 15,
+              sortKey: "joined",
+              order: 1
+            },
+
+            queryParams: {
+              totalPages: null,
+              totalRecords: null,
+              sortKey: "sort"
+            },
+
+            parseState: function (resp, queryParams, state, options) {
+              return {totalRecords: resp.total_count};
+            },
+
+            parseRecords: function (resp, options) {
+              return resp.items;
+            }
+
+          });
+
+          var githubUsers = new GithubUsers();
+
+          // ... and then give the collection instance to a grid as usual ...</textarea>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          // ServerSideFilter delegates the searching to the server by submitting a query.
+          var serverSideFilter = new Backgrid.Extension.ServerSideFilter({
+            collection: githubUsers,
+            // the name of the URL query parameter
+            name: "q",
+            placeholder: "ex: location:your country" // HTML5 placeholder for the search box
+          });
+
+          $("#server-side-filter-example-result .backgrid-container").before(serverSideFilter.render().el);</textarea>
+        <div id="server-side-filter-example-result">
+          <aside class="note">
+            <h3>Note:</h3>
+            <p>Github's API is <a
+              href="http://developer.github.com/v3/search/#rate-limit" title="Github
+              API Rate Limit">rate limited</a>, if the example doesn't work, you
+              may want to try again in a few minutes.</p>
+          </aside>
+          <p>
+            <span class="label label-info">Tip</span>
+            <a href="http://developer.github.com/v3/search/#search-users" title="Github Search User API">Github Search User API</a>
+          </p>
+          <div class="backgrid-container"></div>
+        </div>
+        <h3>
+          <a id="clientsidefilter" href="#clientsidefilter" title="ClientSideFilter" class="section">ClientSideFilter</a>
+        </h3>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          // ClientSideFilter performs a case-insensitive regular
+          // expression search on the client side by OR-ing the keywords in
+          // the search box together.
+          var clientSideFilter = new Backgrid.Extension.ClientSideFilter({
+            collection: clientTerritories,
+            placeholder: "Search in the browser",
+            // The model fields to search for matches
+            fields: ['name'],
+            // How long to wait after typing has stopped before searching can start
+            wait: 150
+          });
+
+          $("#client-side-filter-example-result").prepend(clientSideFilter.render().el);</textarea>
+        <div id="client-side-filter-example-result">
+          <div class="backgrid-container"></div>
+        </div>
+        <h3>
+          <a id="lunrfilter" href="#lunrfilter" title="LunrFilter" class="section">LunrFilter</a>
+        </h3>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
+          // LunrFilter is a specialized ClientSideFilter that uses
+          // lunr.js to perform full-text searching on the client side.
+          var lunrFilter = new Backgrid.Extension.LunrFilter({
+            collection: lunrTerritories,
+            placeholder: "Full-text searching",
+            // lunr.js field name and boost value
+            fields: {
+              name: 10
+            },
+            // lunr.js document key for indexing
+            ref: 'id',
+            wait: 150
+          });
+
+          $("#lunr-filter-example-result").prepend(lunrFilter.render().el);</textarea>
+        <div id="lunr-filter-example-result">
+          <div class="backgrid-container"></div>
+        </div>
+        <p class="label label-info">Pro Tip</p>
+        <p>ClientSideFilter and LunrFilter won't work unless the collection
+          contains all the data for filtering at the time the filters are
+          initialized. If you are fetching data after the filters were
+          initialized and using Backbone 1.0.0+, you should pass <code>{remove:
+          true}</code> or <code>{reset: true}</code> to
+          <code>Collection#fetch()</code> due to the change to
+          <code>Collection#set()</code> after <a
+          href="http://backbonejs.org/#Collection-fetch"
+          title="Backbone.Collection#fetch">fetching</a>.
+      </div>
+    </div>
+
+      </div>
+    </div>
+    <div id="layout-footer">
+      <div class="container">
+        <p class="text-muted">
+          Copyright &copy; 2013 <a href="mailto:wyuenho@gmail.com" title="Jimmy
+          Yuen Ho Wong">Jimmy Yuen Ho Wong</a> and contributors. Logo designed
+          by <a href="http://kylerosenberg.com/" title="Kyle Rosenberg">Kyle
+          Rosenberg</a>. <a href="/misc/license" title="License">MIT
+          Licensed.</a>
+        </p>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36403214-1']);
+      _gaq.push(['_setDomainName', 'backgridjs.com']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <script src="/build/bundle.js"></script>
+    <script>
+      var GithubUsers = Backbone.PageableCollection.extend({
+        url: "https://api.github.com/search/users",
+
+        state: {
+          pageSize: 15,
+          sortKey: "joined",
+          order: 1
+        },
+
+        queryParams: {
+          totalPages: null,
+          totalRecords: null,
+          sortKey: "sort"
+        },
+
+        parseState: function (resp, queryParams, state, options) {
+          return {totalRecords: resp.total_count};
+        },
+
+        parseRecords: function (resp, options) {
+          return resp.items;
+        }
+
+      });
+
+      var githubUsers = new GithubUsers();
+
+      var serverGrid = new Backgrid.Grid({
+        columns: [{
+          name: "id",
+          cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+          }),
+          editable: false,
+          sortable: false
+        }, {
+          name: "login",
+          cell: "string",
+          editable: false,
+          sortable: false
+        }, {
+          name: "html_url",
+          cell: "uri",
+          editable: false,
+          sortable: false
+        }, {
+          name: "score",
+          cell: "number",
+          editable: false,
+          sortable: false
+        }],
+        collection: githubUsers
+      });
+
+      var serverExample = $("#server-side-filter-example-result");
+      serverExample.find(".backgrid-container").append(serverGrid.render().el);
+
+      var serverPaginator = new Backgrid.Extension.Paginator({
+        collection: githubUsers,
+        renderIndexedPageHandles: false,
+        controls: {
+          rewind: null,
+          fastForward: null
+        }
+      });
+
+      serverExample.append(serverPaginator.render().el);
+
+
+      var PageableTerritories = Backbone.PageableCollection.extend({
+        url: "/examples/pageable-territories.json",
+        state: {
+          pageSize: 15
+        },
+        mode: "client"
+      });
+
+      var clientTerritories = new PageableTerritories();
+
+      var clientGrid = new Backgrid.Grid({
+        columns: [{
+          name: "id",
+          label: "ID",
+          editable: false,
+          cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+          })
+        }, {
+          name: "name",
+          label: "Name",
+          cell: "string"
+        }, {
+          name: "pop",
+          label: "Population",
+          cell: "integer"
+        }, {
+          name: "percentage",
+          label: "% of World Population",
+          cell: "number"
+        }, {
+          name: "date",
+          label: "Date",
+          cell: "date",
+        }, {
+          name: "url",
+          label: "URL",
+          cell: "uri"
+        }],
+        collection: clientTerritories
+      });
+
+      var clientExample = $("#client-side-filter-example-result");
+      clientExample.find(".backgrid-container").append(clientGrid.render().el)
+
+      var clientPaginator = new Backgrid.Extension.Paginator({
+        collection: clientTerritories
+      });
+
+      clientExample.append(clientPaginator.render().el);
+
+      clientTerritories.fetch({reset: true});
+
+
+
+      var lunrTerritories = new PageableTerritories();
+
+      var lunrGrid = new Backgrid.Grid({
+        columns: [{
+          name: "id",
+          label: "ID",
+          editable: false,
+          cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+          })
+        }, {
+          name: "name",
+          label: "Name",
+          cell: "string"
+        }, {
+          name: "pop",
+          label: "Population",
+          cell: "integer"
+        }, {
+          name: "percentage",
+          label: "% of World Population",
+          cell: "number"
+        }, {
+          name: "date",
+          label: "Date",
+          cell: "date",
+        }, {
+          name: "url",
+          label: "URL",
+          cell: "uri"
+        }],
+        collection: lunrTerritories
+      });
+
+      var lunrExample = $("#lunr-filter-example-result");
+      lunrExample.find(".backgrid-container").append(lunrGrid.render().el)
+
+      var lunrPaginator = new Backgrid.Extension.Paginator({
+        collection: lunrTerritories
+      });
+
+      lunrExample.append(lunrPaginator.render().el);
+
+      lunrTerritories.fetch({reset: true});
+    </script>
+  </body>
+</html>

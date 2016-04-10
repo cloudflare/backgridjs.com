@@ -1,0 +1,436 @@
+<!doctype html>
+<!--
+  backgrid
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="backgrid,backgrid.js,backbone,backbone.js,datagrid,grid,paginator,javascript" />
+    <meta name="description" content="A powerful widget set for building data grids with Backbone.js" />
+
+    <meta property="og:title" content="Backgridjs" />
+    <meta property="og:description" content="A powerful widget set for building data grids with Backbone.js" />
+    <meta property="og:url" content="http://backgridjs.com" />
+    <meta property="og:image" content="http://backgridjs.com/img/backgrid-logo.png" />
+
+    <title>Backgrid.js - Cell</title>
+
+    <link rel="canonical" href="http://backgridjs.com" />
+
+    <link rel="stylesheet" href="/build/bundle.css" />
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="main">
+      <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="/"
+                 class="navbar-brand" title="A powerful widget set for building data grids with Backbone.js">Backgrid.js</a>
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Introduction
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/index.html#features">Features</a></li>
+                    <li><a href="/index.html#getting-started">Getting Started</a></li>
+                    <li><a href="/index.html#basic-example">Basic Example</a></li>
+                    <li><a href="/index.html#complete-example">Complete Example</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Core API
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/forewords.html">Forewords</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/grid.html">Grid</a></li>
+                    <li><a href="/ref/column.html">Column</a></li>
+                    <li><a href="/ref/cell.html">Cell</a></li>
+                    <li><a href="/ref/formatter.html">Formatter</a></li>
+                    <li><a href="/ref/header.html">Header</a></li>
+                    <li><a href="/ref/row.html">Row</a></li>
+                    <li><a href="/ref/body.html">Body</a></li>
+                    <li><a href="/ref/footer.html">Footer</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Extensions
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/extensions/development.html">Development Guide</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
+                    <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
+                    <li><a href="/ref/extensions/filter.html">Filter</a></li>
+                    <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
+                    <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
+                    <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
+                    <li class="divider"></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/wiki#extensions">More</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    More Info
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/misc/styling.html">Styling</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/misc/faq.html">FAQ</a></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/releases">Change Log</a></li>
+                    <li><a href="/misc/license.html">License</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul id="social-media" class="nav navbar-nav navbar-right visible-md visible-lg">
+                <li>
+                  <a class="sprite-icons-github" href="https://github.com/wyuenho/backgrid" title="Fork me on Github"></a>
+                </li>
+
+                <li>
+                  <a href="https://twitter.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;via=wong_jim&amp;hashtags=backgrid,backbonejs&amp;size=medium"
+                     title="Share on Twitter"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=648,width=845');return false;"
+                     class="sprite-icons-twitter"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbackgridjs.com"
+                     title="Share on Facebook"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=368,width=605');return false;"
+                     class="sprite-icons-facebook"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://plus.google.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;annotation=inline"
+                     title="Share on Google+"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                     class="sprite-icons-google"
+                     ></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="container content">
+            <div class="row">
+      <div class="col-md-2">
+        <h2>
+          <a id="cell" href="#cell" title="Cell" class="section">Cell</a>
+        </h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Cell">Backgrid.Cell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.DatetimeCell">Backgrid.DatetimeCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.DateCell">Backgrid.DateCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.TimeCell">Backgrid.TimeCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.NumberCell">Backgrid.NumberCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.IntegerCell">Backgrid.IntegerCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.PercentCell">Backgrid.PercentCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.StringCell">Backgrid.StringCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.UriCell">Backgrid.UriCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.EmailCell">Backgrid.EmailCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.BooleanCell">Backgrid.BooleanCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.SelectCell">Backgrid.SelectCell</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.CellEditor">Backgrid.CellEditor</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.InputCellEditor">Backgrid.InputCellEditor</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.SelectCellEditor">Backgrid.SelectCellEditor</a></li>
+        </ul>
+        <h3>
+          <a id="events" href="#events" title="Events" class="section">Events</a>
+        </h3>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Cell-method-enterEditMode">backgrid:edit</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Cell-method-enterEditMode">backgrid:editing</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.InputCellEditor-method-saveOrCancel">backgrid:edited</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.InputCellEditor-method-saveOrCancel">backgrid:error</a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <h3>
+          <a id="demo" href="#demo" title="Demo" class="section">Demo</a>
+        </h3>
+        <p class="label label-success">Try them</p>
+        <div id="cell-demo-grid-1" class="backgrid-container" style="height: auto"></div>
+        <div id="cell-demo-grid-2" class="backgrid-container" style="height: auto"></div>
+        <aside class="note">
+          <h5>Note:</h5>
+          <p>Backgrid.js and its author are not associated with Santa and
+            santaclaus.com in any way.</p>
+        </aside>
+        <h3>
+          <a id="configuring-cells" href="#configuring-cells" title="Configuring Cells" class="section">Configuring Cells</a>
+        </h3>
+        <p>While many built-in cells provide reasonable defaults, you may
+          choose to configure them to suit your own needs.</p>
+        <p>Cell types that you are most likely to configure are the
+          NumberCell, DatetimeCell and SelectCell classes. Once
+          configured, you may use them as the cell attribute values in
+          column definitions.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var grid = new Backgrid.Grid({
+
+            columns: [{
+              name: "id",
+              label: "ID",
+              editable: false,
+              // Dynamically defines a new cell type with new defaults.
+              // ID is displayed as an integer without ','s.
+              cell: Backgrid.IntegerCell.extend({
+                orderSeparator: ''
+              })
+            }, {
+              name: "lastaccessed",
+              label: "Last Login Time",
+              editable: false,
+              cell: Backgrid.DatetimeCell.extend({
+                includeMilli: true
+              })
+            }, {
+              name: "gender",
+              label: "Gender",
+              cell: Backgrid.SelectCell.extend({
+                // It's possible to render an option group or use a
+                // function to provide option values too.
+                optionValues: [["Male", "m"], ["Female", "f"]]
+              })
+            }],
+
+            collection: col
+          });</textarea>
+        <p class="label label-info">Pro Tip</p>
+        <p>SelectCell treats all option values as strings by default, if
+          you need to persist a different type of values into your model,
+          you should extend SelectCell to provide your
+          own <a href="/ref/formatter.html"
+                 title="Formatter">formatter</a>.</p>
+        <p>See the <a href="http://wyuenho.github.io/backgrid/api/index.html" title="API Doc">JSDoc</a> for
+          the various Cell classes for details on what you can configure
+          using this method.</p>
+        <h3>
+          <a id="custom-cell" href="#custom-cell" title="Custom Cell" class="section">Custom Cell</a>
+        </h3>
+        <p>If the built-in and extension cell classes are not enough for
+          you, you may choose to create your own cell class and supply it
+          to a column definition.</p>
+        <p>If your custom cell will still use a
+          <code>&lt;input type="text" /&gt;</code> like the predefined
+          ones for editing, you may choose to
+          subclass <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Cell">Cell</a>
+          or one of the predefined classes and simply define a className
+          and a <a href="/ref/formatter.html"
+                   title="Formatter">formatter</a>. In fact, most of the core cell
+          classes are done this way.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          // This is how StringCell is defined.
+
+          Backgrid.StringCell = Backgrid.Cell.extend({
+
+            // Cell default class names are the lower-cased and dasherized
+            // form of the the cell class names by convention.
+            className: "string-cell"
+
+            formatter: Backgrid.StringFormatter
+
+          });</textarea>
+        <p>If your cell class will render differently in display mode, you
+          may simply
+          override <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Cell-method-render">Cell#render()</a>
+          in your subclass.</p>
+        <h3>
+          <a id="custom-celleditor" href="#custom-celleditor" title="Custom CellEditor" class="section">Custom CellEditor</a>
+        </h3>
+        <p class="label label-warning">Advanced Usage</p>
+        <p>Some cell types, like the
+          <a href="/ref/extensions/text-cell.html" title="TextCell">TextCell</a>
+          extension, may only make sense if the editor is rendered in a
+          modal dialog or a form element in a different part of the
+          page. In that case the
+          default <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.InputCellEditor"
+                     title="InputCellEditor">InputCellEditor</a>, which renders a
+          <code>&lt;input type="text" /&gt;</code>, will not be suitable
+          and a new <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.CellEditor"
+                       title="CellEditor">CellEditor</a> must be defined.</p>
+        <p>A custom cell editor should subclass <a
+          href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.CellEditor">CellEditor</a>
+          as it defines a number of required parameters in its initializer
+          and clean up operations that are necessary for most cell
+          editors. When a cell class enters edit mode, a new editor
+          instance is constructed by given it the required parameters, and
+          then a Backbone event <code>backgrid:edit</code> is fired from
+          the cell instance itself. A custom cell class can act on this
+          event to do anything before the cell editor is rendered.</p>
+        <p>Once the cell has entered edit mode, a Backbone event
+          <code>backgrid:editing</code> is fired. A custom cell class can
+          then act on it to do anything after the cell editor has been
+          rendered, e.g. placing the focus inside the editor.</p>
+        <p>During editing, if an error is encountered (see the <a
+          href="/ref/formatter.html">formatter protocol</a> below), a cell
+          editor should fire a Backbone event <code>backgrid:error</code>
+          so that listeners&mdash;usually a cell instance&mdash;can
+          respond appropriately. When editing is done, a cell editor
+          should fire a Backbone <code>backgrid:edited</code> event. A cell
+          should be listening to this event so it can remove its editor
+          and re-render itsef in display mode.</p>
+        <p class="label label-danger">Truely Advanced Hacking</p>
+        <p>At the most basic level, Cells and CellEditors are simply
+          <a href="http://backbonejs.org/#View"
+             title="Backbone.View">Backbone.View</a> classes that are
+          guaranteed to be given a number of parameters when constructed
+          by <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Row"
+                title="Row">Row</a>. You can use any Backbone.View as your Cell
+          and CellEditor.</p>
+      </div>
+    </div>
+
+      </div>
+    </div>
+    <div id="layout-footer">
+      <div class="container">
+        <p class="text-muted">
+          Copyright &copy; 2013 <a href="mailto:wyuenho@gmail.com" title="Jimmy
+          Yuen Ho Wong">Jimmy Yuen Ho Wong</a> and contributors. Logo designed
+          by <a href="http://kylerosenberg.com/" title="Kyle Rosenberg">Kyle
+          Rosenberg</a>. <a href="/misc/license" title="License">MIT
+          Licensed.</a>
+        </p>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36403214-1']);
+      _gaq.push(['_setDomainName', 'backgridjs.com']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <script src="/build/bundle.js"></script>
+    <script>
+     $(document).ready(function () {
+
+       function nextChristmas() {
+         var now = new Date();
+         if (now.getMonth() < 11 || (now.getMonth() == 11 && now.getDate() < 24)) {
+           return now.getFullYear() + "-12-24T00:00Z";
+         }
+
+         if (now.getMonth() == 11 && now.getDate() >= 26) {
+           return (now.getFullYear() + 1) + "-12-24T00:00Z";
+         }
+       }
+
+       var santa1 = new Backbone.Model({
+         name: "Santa Clause",
+         age: new Date().getFullYear() - 270,
+         birthday: "0270-03-01",
+         gender: "m",
+         alive: true,
+         deliveryRate: 50
+       });
+
+       var santa2 = new Backbone.Model({
+         url: "http://santaclaus.com",
+         email: "santa@santaclaus.com",
+         nextDeliveryTime: nextChristmas(),
+         hisLocalTime: moment().format("YYYY-MM-DDTHH:mm:ss.SSS\\Z"),
+         moneyInWallet: 10.7
+       });
+
+       var columns = [{
+         name: "name",
+         cell: "string",
+         label: "Name (StringCell)"
+       }, {
+         name: "age",
+         cell: "integer",
+         label: "Age (IntegerCell)"
+       }, {
+         name: "birthday",
+         cell: "date",
+         label: "Birthday (DateCell)"
+       }, {
+         name: "gender",
+         cell: Backgrid.SelectCell.extend({
+           optionValues: [["Male", "m"], ["Female", "f"]]
+         }),
+         label: "Gender (SelectCell)"
+       }, {
+         name: "alive",
+         cell: "boolean",
+         label: "Alive (BooleanCell)"
+       }, {
+         name: "deliveryRate",
+         cell: "percent",
+         label: "Percent Delivered"
+       }, {
+         name: "url",
+         cell: "uri",
+         label: "URL (UriCell)"
+       }, {
+         name: "email",
+         cell: "email",
+         label: "Email (EmailCell)"
+       }, {
+         name: "nextDeliveryTime",
+         cell: "datetime",
+         label: "Next Delivery Time (DateTimeCell)"
+       }, {
+         name: "hisLocalTime", // His local time is your local time, Santa lives at the North Pole.
+         cell: "time",
+         label: "His Local Time (TimeCell)"
+       }, {
+         name: "moneyInWallet",
+         cell: "number",
+         label: "Change in Wallet (NumberCell)"
+       }];
+
+       var cellDemoGrid1 = new Backgrid.Grid({
+         columns: columns.slice(0, 6),
+         collection: new Backbone.Collection([santa1])
+       });
+
+       $("#cell-demo-grid-1").append(cellDemoGrid1.render().el);
+
+       var cellDemoGrid2 = new Backgrid.Grid({
+         columns: columns.slice(6),
+         collection: new Backbone.Collection([santa2])
+       });
+
+       $("#cell-demo-grid-2").append(cellDemoGrid2.render().el);
+     });
+    </script>
+  </body>
+</html>

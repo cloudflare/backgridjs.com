@@ -1,0 +1,217 @@
+<!doctype html>
+<!--
+  backgrid
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+ -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="keywords" content="backgrid,backgrid.js,backbone,backbone.js,datagrid,grid,paginator,javascript" />
+    <meta name="description" content="A powerful widget set for building data grids with Backbone.js" />
+
+    <meta property="og:title" content="Backgridjs" />
+    <meta property="og:description" content="A powerful widget set for building data grids with Backbone.js" />
+    <meta property="og:url" content="http://backgridjs.com" />
+    <meta property="og:image" content="http://backgridjs.com/img/backgrid-logo.png" />
+
+    <title>Backgrid.js - Body</title>
+
+    <link rel="canonical" href="http://backgridjs.com" />
+
+    <link rel="stylesheet" href="/build/bundle.css" />
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="main">
+      <header>
+        <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a href="/"
+                 class="navbar-brand" title="A powerful widget set for building data grids with Backbone.js">Backgrid.js</a>
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Introduction
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/index.html#features">Features</a></li>
+                    <li><a href="/index.html#getting-started">Getting Started</a></li>
+                    <li><a href="/index.html#basic-example">Basic Example</a></li>
+                    <li><a href="/index.html#complete-example">Complete Example</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Core API
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/forewords.html">Forewords</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/grid.html">Grid</a></li>
+                    <li><a href="/ref/column.html">Column</a></li>
+                    <li><a href="/ref/cell.html">Cell</a></li>
+                    <li><a href="/ref/formatter.html">Formatter</a></li>
+                    <li><a href="/ref/header.html">Header</a></li>
+                    <li><a href="/ref/row.html">Row</a></li>
+                    <li><a href="/ref/body.html">Body</a></li>
+                    <li><a href="/ref/footer.html">Footer</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    Extensions
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/ref/extensions/development.html">Development Guide</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/ref/extensions/select-all.html">SelectAll</a></li>
+                    <li><a href="/ref/extensions/paginator.html">Paginator</a></li>
+                    <li><a href="/ref/extensions/filter.html">Filter</a></li>
+                    <li><a href="/ref/extensions/text-cell.html">TextCell</a></li>
+                    <li><a href="/ref/extensions/moment-cell.html">MomentCell</a></li>
+                    <li><a href="/ref/extensions/select2-cell.html">Select2Cell</a></li>
+                    <li class="divider"></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/wiki#extensions">More</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+                    More Info
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/misc/styling.html">Styling</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/misc/faq.html">FAQ</a></li>
+                    <li><a href="https://github.com/wyuenho/backgrid/releases">Change Log</a></li>
+                    <li><a href="/misc/license.html">License</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul id="social-media" class="nav navbar-nav navbar-right visible-md visible-lg">
+                <li>
+                  <a class="sprite-icons-github" href="https://github.com/wyuenho/backgrid" title="Fork me on Github"></a>
+                </li>
+
+                <li>
+                  <a href="https://twitter.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;via=wong_jim&amp;hashtags=backgrid,backbonejs&amp;size=medium"
+                     title="Share on Twitter"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=648,width=845');return false;"
+                     class="sprite-icons-twitter"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fbackgridjs.com"
+                     title="Share on Facebook"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=368,width=605');return false;"
+                     class="sprite-icons-facebook"
+                     ></a>
+                </li>
+
+                <li>
+                  <a href="https://plus.google.com/share?url=http%3A%2F%2Fbackgridjs.com&amp;annotation=inline"
+                     title="Share on Google+"
+                     onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                     class="sprite-icons-google"
+                     ></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="container content">
+            <div class="row">
+      <div class="col-md-2">
+        <h2>
+          <a id="body" href="#body" title="Body" class="section">Body</a>
+        </h2>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Body">Backgrid.Body</a></li>
+        </ul>
+        <h3>
+          <a id="events" href="#events" title="Events" class="section">Events</a>
+        </h3>
+        <ul class="nav nav-stacked">
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Body-method-moveToNextCell">backgrid:next</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Body-method-refresh">backgrid:refresh</a></li>
+          <li><a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Body-method-sort">backgrid:sorted</a></li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <h3>
+          <a id="customizing-body" href="#customizing-body" title="Customizing Body" class="section">Customizing Body</a>
+        </h3>
+        <p class="label label-danger">Truely Advanced Hacking</p>
+        <p>Body is the intermediary view that coordinates between the various
+          parts of the grid. Specifically, the default implementation is
+          responsible for re-rendering the rows when any model is inserted into,
+          removed from, or reordered in the underlying collection, including
+          sorting. See the <a href="http://wyuenho.github.io/backgrid/api/index.html#!/api/Backgrid.Body">JSDoc</a> for
+          details.</p>
+        <textarea class="code-snippet" data-mode="javascript" data-eval="no">
+          var ScrollableBody = Backgrid.Body.extend({
+            // maybe you'd like to implement table body that is a block element so you can detect scroll events,
+            // and may be implement fixed header (wink wink) https://github.com/wyuenho/backgrid/issues/4
+          });
+
+          var grid = new Backgrid.Grid({
+            body: ScrollableBody,
+            columns: [{
+              // ...
+            }],
+            collection: col
+          });</textarea>
+      </div>
+    </div>
+
+      </div>
+    </div>
+    <div id="layout-footer">
+      <div class="container">
+        <p class="text-muted">
+          Copyright &copy; 2013 <a href="mailto:wyuenho@gmail.com" title="Jimmy
+          Yuen Ho Wong">Jimmy Yuen Ho Wong</a> and contributors. Logo designed
+          by <a href="http://kylerosenberg.com/" title="Kyle Rosenberg">Kyle
+          Rosenberg</a>. <a href="/misc/license" title="License">MIT
+          Licensed.</a>
+        </p>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36403214-1']);
+      _gaq.push(['_setDomainName', 'backgridjs.com']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <script src="/build/bundle.js"></script>
+  </body>
+</html>
