@@ -1,6 +1,6 @@
 {{#extend "layout"}}
-  {{#replace "title"}}Filters{{/replace}}
-  {{#replace "content"}}
+  {{#content "title"}}Filters{{/content}}
+  {{#content "content"}}
     <div class="row">
       <div class="col-md-3">
         <h2>
@@ -159,8 +159,8 @@
           title="Backbone.Collection#fetch">fetching</a>.
       </div>
     </div>
-  {{/replace}}
-  {{#append "endscripts"}}
+  {{/content}}
+  {{#content "endscripts" mode="append"}}
     <script>
       var GithubUsers = Backbone.PageableCollection.extend({
         url: "https://api.github.com/search/users",
@@ -331,5 +331,5 @@
 
       lunrTerritories.fetch({reset: true});
     </script>
-  {{/append}}
+  {{/content}}
 {{/extend}}

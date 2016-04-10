@@ -1,6 +1,6 @@
 {{#extend "layout"}}
-  {{#replace "title"}}Cell{{/replace}}
-  {{#replace "content"}}
+  {{#content "title"}}Cell{{/content}}
+  {{#content "content"}}
     <div class="row">
       <div class="col-md-2">
         <h2>
@@ -169,8 +169,8 @@
           and CellEditor.</p>
       </div>
     </div>
-  {{/replace}}
-  {{#append "endscripts"}}
+  {{/content}}
+  {{#content "endscripts" mode="append"}}
     <script>
      $(document).ready(function () {
 
@@ -265,5 +265,5 @@
        $("#cell-demo-grid-2").append(cellDemoGrid2.render().el);
      });
     </script>
-  {{/append}}
+  {{/content}}
 {{/extend}}

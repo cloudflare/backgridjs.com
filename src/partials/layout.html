@@ -23,7 +23,7 @@
 
     <link rel="canonical" href="http://backgridjs.com" />
 
-    <link rel="stylesheet" href="/build/build.min.css" />
+    <link rel="stylesheet" href="/build/bundle.css" />
     <!--[if lt IE 9]>
       <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
       <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
@@ -110,9 +110,6 @@
               </ul>
               <ul id="social-media" class="nav navbar-nav navbar-right visible-md visible-lg">
                 <li>
-                  <a class="sprite-icons-gittip" href="https://www.gittip.com/wyuenho/" title="Gittip Me"></a>
-                </li>
-                <li>
                   <a class="sprite-icons-github" href="https://github.com/wyuenho/backgrid" title="Fork me on Github"></a>
                 </li>
 
@@ -173,42 +170,7 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
-    <script src="/build/build.min.js"></script>
-    <script>
-      $ = jQuery = require("jquery");
-      require("bootstrap");
-      require("select2");
-      _ = require("underscore");
-      Backbone = require("backbone");
-      Backbone.$ = $;
-      require("backbone-pageable");
-      Backgrid = require("backgrid");
-      require("backgrid-paginator");
-      require("backgrid-filter");
-      require("backgrid-select-all");
-      require("backgrid-select2-cell");
-      require("backgrid-moment-cell");
-      require("backgrid-text-cell");
-      require("codemirror");
-      $(document).ready(function () {
-        $("a[href^='/#'], a[href^='#']").click(function (e) {
-          e.preventDefault();
-          var target = this.hash;
-          if (target) {
-            var $target = $(target);
-            $("html, body").stop().animate({
-              "scrollTop": $target.offset().top - 55
-            }, 500, "swing", function() {
-              window.location.hash = target;
-            });
-          }
-        });
-      });
-    </script>
+    <script src="/build/bundle.js"></script>
     {{/block}}
-
-    <script>
-      require("backgridjs-com").setUpCodeMirror();
-    </script>
   </body>
 </html>
