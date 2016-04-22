@@ -6,7 +6,6 @@ require("codemirror/mode/css/css");
 var _ = require("underscore");
 var Backbone = require("backbone");
 Backbone.$ = $;
-var PageableCollection = Backbone.PageableCollection = require("backbone.paginator");
 var Backgrid = require("backgrid");
 require("backgrid-paginator");
 require("backgrid-filter");

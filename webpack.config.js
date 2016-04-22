@@ -33,7 +33,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, "build"),
     filename: "bundle.js",
-    publicPath: __dirname,
+    publicPath: "/build/",
     pathinfo: NODE_ENV != "production"
   },
 
