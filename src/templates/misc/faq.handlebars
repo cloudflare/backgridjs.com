@@ -185,36 +185,6 @@
           <a id="how-do-i-contribute-" href="#how-do-i-contribute-" title="How do I contribute?" class="section">How do I contribute?</a>
         </h2>
         <p><a href="https://github.com/wyuenho/backgrid/blob/gh-pages/CONTRIBUTING.md" title="Contributing">See Contributing.</a></p>
-        <h2>
-          <a id="why-doesn-t-backgrid-js-support-amd--or-npm--"
-             href="#why-doesn-t-backgrid-js-support-amd--or-npm--"
-             title="Why doesn't Backgrid.js support AMD (or NPM)?"
-             class="section"
-             >Why doesn't Backgrid.js support AMD (or NPM)?</a>
-        </h2>
-        <p>The same question can be asked for volo, bower, ender, browserify and
-          many other competing solutions. The number one reason Backgrid.js does
-          not support AMD or NPM is because of the barrier it presents to
-          writing extensions that require third-party libraries that don't
-          support these packaging mechanisms.</p>
-        <p>That said, it <em>is</em> possible to use Backgrid and its various
-          extensions with AMD using RequireJS's <a
-          href="http://requirejs.org/docs/api.html#config-shim"
-          title="RequireJS Shimming">shim</a> option.
-          For CommonJS, there is also first-class support for <a
-          href="https://github.com/component/component"
-          title="Component">Component</a>.</p>
-        <p>The problem with supporting any package manager is that Backgrid.js
-          is a highly modular project, and that deciding to use any package
-          manager presupposes all its submodules and dependency is compatible
-          with such a package manager and its importing mechanism. The
-          Javascript ecosystem has gotten so diverse now that there is still not
-          yet a clear packaging winner that everybody uses and works well under
-          most situations, it is also not clear that ES Harmony's module
-          system will be backward compatible with AMD.</p>
-        <p>Having said that, Backgrid.js doesn't do anything to prevent you
-          from adding support to your favorite package manager. You are
-          encouraged to fork and maintain your own Backgrid.js packages.</p>
       </div>
     </div>
   {{/content}}
