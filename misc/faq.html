@@ -153,6 +153,40 @@
     </div>
     <div class="row">
       <div class="col-md-12">
+        <h2><a id="how-do-i-write-a-cell-that-renders-a-button-"
+               href="#how-do-i-write-a-cell-that-renders-a-button-"
+               class="section"
+            >How do I write a cell that renders a button?</a></h2>
+        <p>It is quite common to want to use a cell that acts on an entire
+          row. You may want to pop up a modal, delete the row, or toggle
+          editibility for all the columns. The possibilities are endless. For
+          those cases, you can write a custom <code>ActionCell</code>, and then
+          pass it to the column definition.</p>
+        <textarea class="code-snippet" data-mode="javascript">
+          var ActionCell = Backgrid.Cell.extend({
+            events: {
+              'click button': 'deleteRow'
+            },
+            deleteRow: function(e) {
+              e.preventDefault();
+              this.model.destory();
+            },
+            render: function () {
+              this.$el.html('<button>-</button>');
+              return this;
+            }
+          });
+
+          var grid = new Backgrid.Grid({
+            columns: [{
+              ...
+            }, {
+              name: '',
+              label: 'Action',
+              cell: ActionCell
+            }]
+          });
+        </textarea>
         <h2>
           <a id="how-do-i-add-a-column-of-computed-values-"
              href="#how-do-i-add-a-column-of-computed-values-"
@@ -263,8 +297,8 @@
         <p>Backgrid.js has something better and achieves the same
           effect with much cleaner code -
           <a href="#api-paginator">paginator extension</a>, which
-          uses <a href="https://github.com/wyuenho/backbone-pageable/"
-                  title="backbone-pageable">backbone-pageable</a>. The paginator
+          uses <a href="https://github.com/backbone-paginator/backbone.paginator"
+                  title="backbone.paginator">backbone.paginator</a>. The paginator
           supports both paging on the server-side, or preloading all the
           models and paging purely through the browser. Paginated
           Backgrid.Grid instances only render one page of DOM nodes at a
@@ -326,36 +360,6 @@
           <a id="how-do-i-contribute-" href="#how-do-i-contribute-" title="How do I contribute?" class="section">How do I contribute?</a>
         </h2>
         <p><a href="https://github.com/wyuenho/backgrid/blob/gh-pages/CONTRIBUTING.md" title="Contributing">See Contributing.</a></p>
-        <h2>
-          <a id="why-doesn-t-backgrid-js-support-amd--or-npm--"
-             href="#why-doesn-t-backgrid-js-support-amd--or-npm--"
-             title="Why doesn't Backgrid.js support AMD (or NPM)?"
-             class="section"
-             >Why doesn't Backgrid.js support AMD (or NPM)?</a>
-        </h2>
-        <p>The same question can be asked for volo, bower, ender, browserify and
-          many other competing solutions. The number one reason Backgrid.js does
-          not support AMD or NPM is because of the barrier it presents to
-          writing extensions that require third-party libraries that don't
-          support these packaging mechanisms.</p>
-        <p>That said, it <em>is</em> possible to use Backgrid and its various
-          extensions with AMD using RequireJS's <a
-          href="http://requirejs.org/docs/api.html#config-shim"
-          title="RequireJS Shimming">shim</a> option.
-          For CommonJS, there is also first-class support for <a
-          href="https://github.com/component/component"
-          title="Component">Component</a>.</p>
-        <p>The problem with supporting any package manager is that Backgrid.js
-          is a highly modular project, and that deciding to use any package
-          manager presupposes all its submodules and dependency is compatible
-          with such a package manager and its importing mechanism. The
-          Javascript ecosystem has gotten so diverse now that there is still not
-          yet a clear packaging winner that everybody uses and works well under
-          most situations, it is also not clear that ES Harmony's module
-          system will be backward compatible with AMD.</p>
-        <p>Having said that, Backgrid.js doesn't do anything to prevent you
-          from adding support to your favorite package manager. You are
-          encouraged to fork and maintain your own Backgrid.js packages.</p>
       </div>
     </div>
 
