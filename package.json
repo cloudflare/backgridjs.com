@@ -13,9 +13,6 @@
     "url": "http://github.com/wyuenho/backgridjs.com"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=0.10"
-  },
   "private": true,
   "scripts": {
     "clean": "gulp clean",
