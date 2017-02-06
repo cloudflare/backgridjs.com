@@ -1,9 +1,3 @@
-
-@import 'backgrid';
-@import 'backgrid-filter';
-@import 'backgrid-moment-cell';
-@import 'backgrid-select-all';
-@import 'backgrid-text-cell';
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -7082,6 +7076,408 @@ span.CodeMirror-selectedtext { background: none; }
 .cm-s-eclipse .CodeMirror-activeline-background { background: #e8f2ff; }
 .cm-s-eclipse .CodeMirror-matchingbracket { outline:1px solid grey; color:black !important; }
 /*
+  backgrid
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT license.
+*/
+.backgrid-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 465px;
+  padding: 0;
+  overflow: auto;
+  border: 0;
+}
+.backgrid {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  border-collapse: collapse;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+.backgrid th,
+.backgrid td {
+  display: none;
+  height: 20px;
+  max-width: 250px;
+  padding: 4px 5px;
+  overflow: hidden;
+  line-height: 20px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-bottom: 1px solid #DDD;
+}
+.backgrid th.renderable,
+.backgrid td.renderable {
+  display: table-cell;
+}
+.backgrid th {
+  font-weight: bold;
+  text-align: center;
+}
+.backgrid th.sortable a {
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.backgrid thead th {
+  vertical-align: bottom;
+  background-color: #f9f9f9;
+}
+.backgrid thead th a {
+  display: block;
+}
+.backgrid.backgrid-striped tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+.backgrid tbody tr.empty {
+  font-style: italic;
+  color: gray;
+}
+.backgrid tbody tr.empty td {
+  display: table-cell;
+  text-align: center;
+}
+.backgrid td.editor {
+  padding: 0;
+}
+.backgrid td.editor,
+.backgrid tbody tr:nth-child(odd) td.editor {
+  background-color: rgba(82, 168, 236, 0.1);
+  outline: 1px solid rgba(82, 168, 236, 0.8);
+  outline-offset: -1px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transition-duration: 200ms;
+     -moz-transition-duration: 200ms;
+       -o-transition-duration: 200ms;
+          transition-duration: 200ms;
+  -webkit-transition-property: width, outline, background-color;
+     -moz-transition-property: width, outline, background-color;
+       -o-transition-property: width, outline, background-color;
+          transition-property: width, outline, background-color;
+  -webkit-transition-timing-function: ease-in-out;
+     -moz-transition-timing-function: ease-in-out;
+       -o-transition-timing-function: ease-in-out;
+          transition-timing-function: ease-in-out;
+}
+.backgrid td.editor input[type=text] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 5px;
+  margin: 0;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+}
+.backgrid td.editor input[type=text]::-ms-clear {
+  display: none;
+}
+.backgrid td.error,
+.backgrid tbody tr:nth-child(odd) td.error {
+  background-color: rgba(255, 210, 77, 0.1);
+  outline: 1px solid #ffd24d;
+}
+.backgrid td.editor :focus,
+.backgrid th.editor :focus {
+  outline: 0;
+}
+.backgrid .sort-caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.3em;
+  border: 0;
+  content: "";
+}
+.backgrid .ascending .sort-caret {
+  vertical-align: baseline;
+  border-top: none;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #000000;
+  border-left: 4px solid transparent;
+}
+.backgrid .descending .sort-caret {
+  vertical-align: super;
+  border-top: 4px solid #000000;
+  border-right: 4px solid transparent;
+  border-bottom: none;
+  border-left: 4px solid transparent;
+}
+.backgrid .string-cell,
+.backgrid .uri-cell,
+.backgrid .email-cell,
+.backgrid .string-cell.editor input[type=text],
+.backgrid .uri-cell.editor input[type=text],
+.backgrid .email-cell.editor input[type=text] {
+  text-align: left;
+}
+.backgrid .date-cell,
+.backgrid .time-cell,
+.backgrid .datetime-cell,
+.backgrid .number-cell,
+.backgrid .integer-cell,
+.backgrid .percent-cell,
+.backgrid .date-cell.editor input[type=text],
+.backgrid .time-cell.editor input[type=text],
+.backgrid .datetime-cell.editor input[type=text],
+.backgrid .number-cell.editor input[type=text],
+.backgrid .integer-cell.editor input[type=text],
+.backgrid .percent-cell.editor input[type=text] {
+  text-align: right;
+}
+.backgrid .boolean-cell,
+.backgrid .boolean-cell.editor input[type=checkbox] {
+  text-align: center;
+}
+.backgrid .select-cell {
+  text-align: center;
+}
+.backgrid .select-cell.editor {
+  padding: 0;
+}
+.backgrid .select-cell.editor select {
+  display: block;
+  width: 100%;
+  height: 28px;
+  padding: 4px 5px;
+  margin: 0;
+  line-height: 28px;
+  vertical-align: middle;
+  background-color: white;
+  border: 0;
+  outline: 0;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.backgrid .select-cell.editor select[multiple] {
+  height: auto;
+}
+.backgrid .select-cell.editor :focus {
+  border: 0;
+  outline: 0;
+}
+.backgrid .select-cell.editor select::-moz-focus-inner,
+.backgrid .select-cell.editor optgroup::-moz-focus-inner,
+.backgrid .select-cell.editor option::-moz-focus-inner,
+.backgrid .select-cell.editor select::-o-focus-inner,
+.backgrid .select-cell.editor optgroup::-o-focus-inner,
+.backgrid .select-cell.editor option::-o-focus-inner {
+  border: 0;
+}
+/*
+  backgrid-filter
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+*/
+/*
+  Search Icon CSS derived from:
+
+  PURE CSS GUI ICONS
+  by Nicolas Gallagher
+  - http://nicolasgallagher.com/pure-css-gui-icons/
+
+  http://nicolasgallagher.com
+  http://twitter.com/necolas
+
+  Created: 29 July 2010
+  Version: 1.0.1
+
+  Dual licensed under MIT and GNU GPLv2 (c) Nicolas Gallagher
+*/
+.backgrid-filter.form-search {
+  position: relative;
+  width: 248px;
+  height: 30px;
+  margin: 20px;
+}
+/*
+  Search Icon
+*/
+.backgrid-filter .search {
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  z-index: 1000;
+  width: 10px;
+  height: 20px;
+  margin-top: -10px;
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}
+.backgrid-filter .search:before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -6px;
+  background: transparent;
+  border: 3px solid gray;
+  -webkit-border-radius: 12px;
+     -moz-border-radius: 12px;
+          border-radius: 12px;
+  content: "";
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}
+.backgrid-filter .search:after {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  width: 3px;
+  height: 7px;
+  margin-top: 2px;
+  background-color: gray;
+  content: "";
+  -webkit-transform: rotate(-45deg);
+     -moz-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+       -o-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}
+/*
+  Clear button
+ */
+.backgrid-filter .clear {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  z-index: 1000;
+  width: 10px;
+  height: 20px;
+  margin-top: -10px;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 20px;
+  color: gray;
+  text-decoration: none;
+}
+.backgrid-filter input[type="search"] {
+  position: absolute;
+  display: inline-block;
+  width: 206px;
+  height: 20px;
+  padding: 4px 6px;
+  font-weight: normal;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+     -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+       -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+          transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+/*
+  Normalize the search input box, with code borrowed from normalize.css.
+
+  https://github.com/necolas/normalize.css/
+
+  Copyright (c) Nicolas Gallagher and Jonathan Neal, MIT @license.
+ */
+/*
+ * 1. Correct font family not being inherited in all browsers.
+ * 2. Correct font size not being inherited in all browsers.
+ * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
+ * 4. Address Firefox 4+ setting `line-height` on `input` using `!important` in the UA stylesheet.
+ */
+.backgrid-filter input {
+  margin: 0;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: normal;
+}
+/*
+ * Re-set default cursor for disabled elements.
+ */
+.backgrid-filter input[disabled] {
+  cursor: default;
+}
+/*
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+.backgrid-filter input[type="search"] {
+  outline: none;
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+  -webkit-appearance: none;
+}
+/*
+ * Remove the default clear button on IE
+ */
+.backgrid-filter input[type="search"]::-ms-clear {
+  display: none;
+}
+/*
+ * Remove the default clear button on WebKit browsers
+ */
+.backgrid-filter input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+/*
+ * Remove inner padding and border in Firefox 4+.
+ */
+.backgrid-filter input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+.backgrid-filter input[type="search"] {
+  padding-right: 18px;
+  padding-left: 22px;
+}
+/*
+  backgrid-moment-cell
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+*/
+.backgrid .moment-cell {
+  text-align: right;
+}
+.backgrid .moment-cell.editor input[type=text] {
+  text-align: right;
+}
+/*
   backgrid-paginator
   http://github.com/wyuenho/backgrid
 
@@ -7133,6 +7529,17 @@ span.CodeMirror-selectedtext { background: none; }
   cursor: default;
 }
 /*
+  backgrid-select-all
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT @license.
+*/
+.backgrid .select-row-cell,
+.backgrid .select-all-header-cell {
+  text-align: center;
+}
+/*
   backgrid-select2-cell
   http://github.com/wyuenho/backgrid
 
@@ -7146,6 +7553,33 @@ span.CodeMirror-selectedtext { background: none; }
   padding: 0;
 }
 .backgrid .select2-cell.editor .select2-container {
+  width: 100%;
+}
+/*
+  backgrid-text-cell
+  http://github.com/wyuenho/backgrid
+
+  Copyright (c) 2013 Jimmy Yuen Ho Wong and contributors
+  Licensed under the MIT license.
+*/
+.backgrid .text-cell {
+  max-width: 150px;
+  overflow: hidden;
+  text-align: left;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.backgrid .text-cell.editor {
+  height: 28px;
+  max-width: 100%;
+}
+.backgrid .text-cell.editor * {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.backgrid .text-cell.editor textarea {
   width: 100%;
 }
 /* glue: 0.4 hash: 4bcd47ad34 */
