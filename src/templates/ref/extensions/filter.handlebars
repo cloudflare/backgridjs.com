@@ -40,20 +40,20 @@
         </h3>
         <p>ServerSideFilter is suitable if you have a server where you send the
           search queries to get back a result. The follow example will create a
-          collection that uses Github's excellent API to search for Github
+          collection that uses GitHub's excellent API to search for GitHub
           users. See <a
           href="http://developer.github.com/v3/search/#search-users"
-          title="Github API - Search Users">here</a> for the valid search terms
+          title="GitHub API - Search Users">here</a> for the valid search terms
           to use.</p>
         <textarea class="code-snippet" data-mode="javascript" data-eval="no">
-          // Creates a Backbone.PageableCollection to talk to Github's API.
+          // Creates a Backbone.PageableCollection to talk to GitHub's API.
 
           // While you don't have to use Backbone.PageableCollection, it is
           // recommended that you do because of its good support for querying
           // RESTful APIs that support pagination and sorting.
 
           // See https://github.com/backbone-paginator/backbone.paginator
-          var GithubUsers = Backbone.PageableCollection.extend({
+          var GitHubUsers = Backbone.PageableCollection.extend({
             url: "https://api.github.com/search/users",
 
             state: {
@@ -78,7 +78,7 @@
 
           });
 
-          var githubUsers = new GithubUsers();
+          var githubUsers = new GitHubUsers();
 
           // ... and then give the collection instance to a grid as usual ...</textarea>
         <textarea class="code-snippet" data-mode="javascript" data-eval="yes">
@@ -94,14 +94,14 @@
         <div id="server-side-filter-example-result">
           <aside class="note">
             <h3>Note:</h3>
-            <p>Github's API is <a
-              href="http://developer.github.com/v3/search/#rate-limit" title="Github
+            <p>GitHub's API is <a
+              href="http://developer.github.com/v3/search/#rate-limit" title="GitHub
               API Rate Limit">rate limited</a>, if the example doesn't work, you
               may want to try again in a few minutes.</p>
           </aside>
           <p>
             <span class="label label-info">Tip</span>
-            <a href="http://developer.github.com/v3/search/#search-users" title="Github Search User API">Github Search User API</a>
+            <a href="http://developer.github.com/v3/search/#search-users" title="GitHub Search User API">GitHub Search User API</a>
           </p>
           <div class="backgrid-container"></div>
         </div>
@@ -162,7 +162,7 @@
   {{/content}}
   {{#content "endscripts" mode="append"}}
     <script>
-      var GithubUsers = Backbone.PageableCollection.extend({
+      var GitHubUsers = Backbone.PageableCollection.extend({
         url: "https://api.github.com/search/users",
 
         state: {
@@ -187,7 +187,7 @@
 
       });
 
-      var githubUsers = new GithubUsers();
+      var githubUsers = new GitHubUsers();
 
       var serverGrid = new Backgrid.Grid({
         columns: [{
