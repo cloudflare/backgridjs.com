@@ -5,7 +5,7 @@ How to build
 ============
 
 ```sh
-# Build for developement
+# Build for development
 $ npm run build
 
 # Start the Webpack dev server
